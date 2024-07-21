@@ -1,5 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.controller;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service.GriddingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,14 @@ public class GriddingController {
         this.griddingService = griddingService;
     }
 
-    @PostMapping("/griding")
-    public ResponseEntity<String> griding(@RequestBody String signups) {
+    @PostMapping("/gridding")
+    public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord signUpGoogleSheet) {
 
-        griddingService.gridSignups(signups);
-        return ResponseEntity.ok("");
+        GriddingResultRecord griddingResult = griddingService.gridSignups(signUpGoogleSheet.googleSheet());
+
+        if (griddingResult.errorMessage().isEmpty())
+            return ResponseEntity.ok(griddingResult);
+
+        return ResponseEntity.internalServerError().body(griddingResult);
     }
 }

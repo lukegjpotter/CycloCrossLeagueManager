@@ -1,35 +1,31 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.controller;
 
-import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service.GriddingService;
-import org.junit.jupiter.api.BeforeEach;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.restassured.RestAssured.baseURI;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.contains;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class GriddingControllerTest {
 
-    @InjectMocks
-    GriddingController griddingController;
-    @Mock
-    GriddingService griddingService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @BeforeAll
+    static void beforeClass() {
+        baseURI = "http://localhost:8080/lotto";
     }
 
     @Test
     void gridRace() {
-        String signups = "";
-        Mockito.doNothing().when(griddingService).gridSignups(signups);
-
-        String expected = "";
-        String actual = griddingController.griding(signups).getBody();
-
-        assertEquals(expected, actual);
+        given()
+                .body(new GriddingRequestRecord("docs.google.com/spreadsheet/123"))
+                .when()
+                .post("/gridding")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("googleSheet", contains("docs.google.com/spreadsheet/456"));
     }
 }
