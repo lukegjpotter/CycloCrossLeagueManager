@@ -2,7 +2,7 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.common.service;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.TransformedResults;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.results.service.ResultsExtractorService;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.service.StandingsLoaderService;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.service.StandingsUpdaterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ class ResultsAndStandingsServiceTest {
     @Mock
     ResultsExtractorService resultsExtractorService;
     @Mock
-    StandingsLoaderService standingsLoaderService;
+    StandingsUpdaterService standingsUpdaterService;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +31,7 @@ class ResultsAndStandingsServiceTest {
         String resultsUrl = "";
         TransformedResults transformedResults = new TransformedResults();
         Mockito.when(resultsExtractorService.extract(resultsUrl)).thenReturn(transformedResults);
-        Mockito.doNothing().when(standingsLoaderService).load(transformedResults);
+        Mockito.doNothing().when(standingsUpdaterService).load(transformedResults);
 
         String expected = "";
         String actual = resultsAndStandingsService.performETL(resultsUrl);

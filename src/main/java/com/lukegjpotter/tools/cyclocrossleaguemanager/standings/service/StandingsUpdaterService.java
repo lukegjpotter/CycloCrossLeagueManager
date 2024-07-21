@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StandingsLoaderService {
+public class StandingsUpdaterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StandingsLoaderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(StandingsUpdaterService.class);
 
     public void load(TransformedResults transformedResults) {
     }
