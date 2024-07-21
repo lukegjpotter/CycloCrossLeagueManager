@@ -7,9 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class ResultsAndStandingsControllerTest {
 
     @InjectMocks
@@ -24,6 +26,8 @@ class ResultsAndStandingsControllerTest {
 
     @Test
     void raceResults() {
+        // ToDo: Replace with RestAssured.
+
         String urlInput = "";
         Mockito.when(resultsAndStandingsService.performETL(urlInput)).thenReturn("");
 

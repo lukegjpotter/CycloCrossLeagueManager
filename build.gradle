@@ -21,8 +21,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.jsoup:jsoup:1.18.1'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-	
+
+	// Place the RestAssured dependencies above the SpringBoot Test, so the correct Matchers are used.
+	testImplementation 'io.rest-assured:rest-assured:5.4.0'
+	testImplementation 'io.rest-assured:json-schema-validator:5.4.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

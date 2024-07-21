@@ -3,11 +3,13 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.common.model;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class TransformedResultsTest {
 
     TransformedResults transformedResults;

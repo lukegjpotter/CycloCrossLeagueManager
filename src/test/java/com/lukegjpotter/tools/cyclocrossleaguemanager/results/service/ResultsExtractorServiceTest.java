@@ -4,9 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
+@SpringBootTest
 class ResultsExtractorServiceTest {
 
     @InjectMocks
@@ -22,6 +24,7 @@ class ResultsExtractorServiceTest {
         String expected = "";
         String actual = resultsExtractorService.extract("").getRound();
 
-        assertEquals(expected, actual, "Expected: " + expected + ", but got: " + actual);
+        //assertEquals(expected, actual, "Expected: " + expected + ", but got: " + actual);
+        fail("Not Implemented");
     }
 }
