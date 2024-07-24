@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: CycloCrossLeagueManager
+    runtime: docker
+    repo: https://github.com/lukegjpotter/CycloCrossLeagueManager
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    region: frankfurt
+    plan: free
+    healthCheckPath: /health
+    numInstances: 1
+    autoDeploy: false
+    envVars:
+      - key: GOOGLE_SHEETS_API_KEY
+        sync: false
+version: "1"

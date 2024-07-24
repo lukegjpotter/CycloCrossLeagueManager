@@ -4,8 +4,15 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
+
+import static java.util.Optional.ofNullable;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "CycloCross League Manager API", version = "0.0.1",
@@ -14,9 +21,26 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CycloCrossLeagueManagerApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(CycloCrossLeagueManagerApplication.class);
+    @Autowired
+    private Environment env;
 
     public static void main(String[] args) {
         SpringApplication.run(CycloCrossLeagueManagerApplication.class, args);
+        logger.info("Application Started");
     }
 
+    @Bean
+    public CommandLineRunner checkEnvironmentVariables(ApplicationContext applicationContext) {
+        return args -> {
+            logger.info("Checking Environment Variables");
+            // Big deal if not specified.
+            String googleSheetsApiKeyEnv = ofNullable(env.getProperty("GOOGLE_SHEETS_API_KEY")).orElse("");
+            if (googleSheetsApiKeyEnv.isBlank())
+                logger.error("GOOGLE_SHEETS_API_KEY is not set, please follow ReadMe instructions.");
+            else
+                logger.info("GOOGLE_SHEETS_API_KEY: {}", String.format("%s...%s",
+                        googleSheetsApiKeyEnv.substring(0, 3),
+                        googleSheetsApiKeyEnv.substring(googleSheetsApiKeyEnv.length() - 3)));
+        };
+    }
 }
