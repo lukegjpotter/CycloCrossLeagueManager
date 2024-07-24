@@ -9,10 +9,16 @@ import java.util.List;
 @Repository
 public class GriddingRepository {
 
+    private String gridding;
+
     public GriddingResultRecord saveAll(List<RiderGriddingPositionRecord> ridersInGriddedOrder) {
 
         // ToDo: Write ridersInGriddedOrder to Google Sheet.
 
-        return new GriddingResultRecord("docs.google.com/spreadsheet/456", "");
+        return new GriddingResultRecord(gridding, "");
+    }
+
+    public void setOutputGriddingGoogleSheet(String gridding) {
+        this.gridding = gridding;
     }
 }

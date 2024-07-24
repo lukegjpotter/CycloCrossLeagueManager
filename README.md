@@ -28,6 +28,7 @@ none
 ### APIs in Development
 
 `/gridding` to handle the gridding for a round.
+
 `/raceresults` to handle updating the standings after a round.
 
 ### Build and Run
@@ -40,6 +41,11 @@ As this project uses Spring Boot 3, you need Java 17 to run it.
 This project uses port 8080 by default, so ensure that it's free when you're trying to run it.
 
 `ToDo:` How to generate the Google Sheets API Key????
+
+#### Application Properties
+
+Be sure to set the `application.properties` for the Google Sheets for the Current Season, Previous Season and the Year
+of the upcoming World Championships. Please update these before each new season.
 
 Build and Run the software in the following ways:
 
@@ -86,14 +92,18 @@ Optional: Install JSON to format/pretty print the Response.
 
 To run the Gridding endpoint, use the following:
 
-    curl -X POST localhost:8080/route \
+    curl -X POST localhost:8080/gridding \
      -H 'Content-type:application/json' \
-     -d '{"...": "..."} | json
+     -d '{
+             "signups" : "https://docs.google.com/spreadsheets/456",
+             "gridding" : "https://docs.google.com/spreadsheets/789",
+             "roundNumber" : 1
+         }' | json
 
 Then it will return
 
     {
-        "..."  : "https://www.docs.google.com/spreadsheets/123",
+        "gridding"  : "https://www.docs.google.com/spreadsheets/123",
         "errorMessage" : ""
     }
 
@@ -102,10 +112,12 @@ Then it will return
 There is a PostMan Collection that has the prefilled JSON Bodies. Be sure to set the Environment, as there'll be
 localhost and Render supplied Environments.
 
-Coming Soon: [PostMan Collection](#).
+PostMan
+Collection: [CycloCross League Manager](https://www.postman.com/bold-moon-552911/workspace/cyclocrossleaguemanager/collection/3947605-8ef74542-9ee1-4d3e-b0dc-8e2fa3788ce8?action=share&creator=3947605&active-environment=3947605-0c8caa03-52fc-4d0f-9b75-1de68e9cffab).
 
 ### Spring Doc Open API
 
 Formerly known as Swagger-UI, you can append the `/swagger-ui/index.html` to your URL.
 
-Links: [localhost](http://localhost:8080/swagger-ui/index.html) or [Render coming soon](#).
+Links: [localhost](http://localhost:8080/swagger-ui/index.html)
+or [Render coming soon](https://cyclocrossleaguemanager.onrender.com/swagger-ui/index.html).

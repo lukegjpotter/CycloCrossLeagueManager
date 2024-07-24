@@ -24,7 +24,7 @@ public class LeagueStandingsRepository {
         return new ArrayList<>();
     }
 
-    public List<RiderGriddingPositionRecord> findSignups(List<BookingReportRowRecord> signups) {
+    public List<RiderGriddingPositionRecord> findSignups(List<BookingReportRowRecord> signups, int roundNumber) {
         return new ArrayList<>();
     }
 }

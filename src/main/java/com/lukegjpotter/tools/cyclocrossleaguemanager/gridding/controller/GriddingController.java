@@ -21,9 +21,9 @@ public class GriddingController {
     }
 
     @PostMapping("/gridding")
-    public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord signUpGoogleSheet) {
+    public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord griddingRequestRecord) {
 
-        GriddingResultRecord griddingResult = griddingService.gridSignups(signUpGoogleSheet.googleSheet());
+        GriddingResultRecord griddingResult = griddingService.gridSignups(griddingRequestRecord);
 
         if (griddingResult.errorMessage().isEmpty())
             return ResponseEntity.ok(griddingResult);

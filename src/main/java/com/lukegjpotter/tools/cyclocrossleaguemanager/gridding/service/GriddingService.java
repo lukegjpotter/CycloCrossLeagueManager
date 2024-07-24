@@ -1,5 +1,6 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.BookingReportRepository;
@@ -28,15 +29,16 @@ public class GriddingService {
         this.griddingRepository = griddingRepository;
     }
 
-    public GriddingResultRecord gridSignups(String signUpsGoogleSheet) {
+    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
 
-        bookingReportRepository.loadDataFromSignUpsGoogleSheet(signUpsGoogleSheet);
+        bookingReportRepository.loadDataFromSignUpsGoogleSheet(griddingRequestRecord.signups());
+        griddingRepository.setOutputGriddingGoogleSheet(griddingRequestRecord.gridding());
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
         // Remove ridersWithUciPoints from ridersSignedUp, so they are not double counted.
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = uciPointsRepository.extractSignUps(bookingReportRepository.findAll());
 
         // Check the Standings position of each remaining ridersSignedUp, add them to RidersInGriddedOrder.
-        ridersInGriddedOrder.addAll(leagueStandingsRepository.findSignups(bookingReportRepository.findAll()));
+        ridersInGriddedOrder.addAll(leagueStandingsRepository.findSignups(bookingReportRepository.findAll(), griddingRequestRecord.roundNumber()));
 
         return griddingRepository.saveAll(ridersInGriddedOrder);
     }
