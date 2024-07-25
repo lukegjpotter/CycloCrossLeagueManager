@@ -5,7 +5,6 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheet
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Component
@@ -17,26 +16,18 @@ public class SheetsQuickstart {
         this.googleSheetsService = googleSheetsService;
     }
 
-    /**
-     * Prints the names and majors of students in a sample spreadsheet:
-     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-     */
-    public String namesAndMajors() throws IOException, GeneralSecurityException {
-        final String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
+    public String namesAndMajors() throws IOException {
+        final String googleSpreadSheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
         final String range = "Class Data!A2:E2";
 
-        ValueRange response = googleSheetsService.getGoogleSheets().spreadsheets().values()
-                .get(spreadsheetId, range)
-                .execute();
+        ValueRange response = googleSheetsService.spreadsheetValuesInRange(googleSpreadSheetId, range);
 
         List<List<Object>> values = response.getValues();
-        StringBuilder namesAndMajors = new StringBuilder();
+        StringBuilder namesAndMajors = new StringBuilder("Name, Major\n");
         if (values == null || values.isEmpty()) {
             return "No data found.";
         } else {
-            namesAndMajors.append("Name, Major\n");
-
-            for (List row : values) {
+            for (List<Object> row : values) {
                 // Print columns A and E, which correspond to indices 0 and 4.
                 namesAndMajors.append(String.format("%s, %s\n", row.get(0), row.get(4)));
             }

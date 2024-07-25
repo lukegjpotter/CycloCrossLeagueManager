@@ -12,6 +12,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.component.SheetsQuickstart;
 import org.springframework.stereotype.Service;
 
@@ -27,36 +28,35 @@ public class GoogleSheetsService {
 
     public GoogleSheetsService() throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
-        final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
-        final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-        final String TOKENS_DIRECTORY_PATH = "./src/main/resources/";
-        final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
-        final String CREDENTIALS_FILE_PATH = "/credentials.json";
+        final String applicationName = "CycloCross League Manager";
+        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+        final String tokensDirectoryPath = "./src/main/resources/";
+        final List<String> scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+        final String credentialsFilePath = "/credentials.json";
 
         // Load client secrets.
-        InputStream in = SheetsQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-        if (in == null) throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+        InputStream in = SheetsQuickstart.class.getResourceAsStream(credentialsFilePath);
+        if (in == null) throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
 
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+                httpTransport, jsonFactory, clientSecrets, scopes)
+                .setDataStoreFactory(new FileDataStoreFactory(new File(tokensDirectoryPath)))
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
 
         Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 
-        this.googleSheets = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
+        this.googleSheets = new Sheets.Builder(httpTransport, jsonFactory, credential)
+                .setApplicationName(applicationName)
                 .build();
     }
 
-    public Sheets getGoogleSheets() {
-        return googleSheets;
+    public ValueRange spreadsheetValuesInRange(final String googleSpreadSheetId, final String range) throws IOException {
+        return googleSheets.spreadsheets().values().get(googleSpreadSheetId, range).execute();
     }
 }
