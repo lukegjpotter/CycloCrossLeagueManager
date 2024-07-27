@@ -24,12 +24,12 @@ class GriddingControllerTest {
     void gridRace() {
         given()
                 .contentType(ContentType.JSON)
-                .body(new GriddingRequestRecord("docs.google.com/spreadsheet/123", "docs.google.com/spreadsheet/456", 1))
+                .body(new GriddingRequestRecord("docs.google.com/spreadsheet/123", "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit?usp=sharing", 2))
                 .when()
                 .post("/gridding")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("gridding", equalTo("docs.google.com/spreadsheet/456"),
+                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"),
                         "errorMessage", emptyString());
     }
 }

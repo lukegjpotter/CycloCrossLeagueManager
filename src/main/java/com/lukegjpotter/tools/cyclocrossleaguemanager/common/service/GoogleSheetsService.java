@@ -13,7 +13,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.component.SheetsQuickstart;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -30,12 +29,12 @@ public class GoogleSheetsService {
         final String applicationName = "CycloCross League Manager";
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-        final String tokensDirectoryPath = "./src/main/resources/tokens";
+        final String tokensDirectoryPath = "./src/main/resources/tokens"; // ToDo: May need to be on Project level, for Docker deployment.
         final List<String> scopes = List.of(SheetsScopes.SPREADSHEETS);
         final String credentialsFilePath = "/credentials.json";
 
         // Load client secrets.
-        InputStream in = SheetsQuickstart.class.getResourceAsStream(credentialsFilePath);
+        InputStream in = GoogleSheetsService.class.getResourceAsStream(credentialsFilePath);
         if (in == null) throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
 
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
