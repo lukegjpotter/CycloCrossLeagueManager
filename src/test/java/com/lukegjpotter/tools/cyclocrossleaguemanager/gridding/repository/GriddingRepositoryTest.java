@@ -18,7 +18,7 @@ class GriddingRepositoryTest {
     }
 
     @Test
-    void saveAll() {
+    void writeGriddingToGoogleSheet() {
         fail("Not Implemented");
     }
 }

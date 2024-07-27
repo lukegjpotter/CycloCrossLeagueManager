@@ -44,7 +44,7 @@ public class GoogleSheetsService {
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 httpTransport, jsonFactory, clientSecrets, scopes)
                 .setDataStoreFactory(new FileDataStoreFactory(new File(tokensDirectoryPath)))
-                .setAccessType("offline")
+                .setAccessType("offline") // ToDo: May need to update this to "online" and create new Credientials for WebApplication on GCP.
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
 
