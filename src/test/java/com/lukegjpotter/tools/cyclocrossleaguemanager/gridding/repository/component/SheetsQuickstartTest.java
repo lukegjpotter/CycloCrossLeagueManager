@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,12 +15,22 @@ class SheetsQuickstartTest {
     SheetsQuickstart sheetsQuickstart;
 
     @Test
-    void namesAndMajors() throws GeneralSecurityException, IOException {
+    void namesAndMajors() throws IOException {
         String actual = sheetsQuickstart.namesAndMajors();
         String expected = """
-                Name, Major
-                Alexandra, English
+                Name, Gender
+                Alexandra, Female
                 """;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void writeExample() throws IOException {
+        String actual = sheetsQuickstart.writeExample(false);
+        String expected = "'Class Data'!A2:B2";
+
+        sheetsQuickstart.writeExample(true);
+
         assertEquals(expected, actual);
     }
 }

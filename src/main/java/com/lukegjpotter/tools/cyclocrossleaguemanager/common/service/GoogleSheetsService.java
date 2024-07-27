@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,8 +30,8 @@ public class GoogleSheetsService {
         final String applicationName = "CycloCross League Manager";
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-        final String tokensDirectoryPath = "./src/main/resources/";
-        final List<String> scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+        final String tokensDirectoryPath = "./src/main/resources/tokens";
+        final List<String> scopes = List.of(SheetsScopes.SPREADSHEETS);
         final String credentialsFilePath = "/credentials.json";
 
         // Load client secrets.
@@ -56,7 +55,12 @@ public class GoogleSheetsService {
                 .build();
     }
 
-    public ValueRange spreadsheetValuesInRange(final String googleSpreadSheetId, final String range) throws IOException {
+    public ValueRange readSpreadsheetValuesInRange(final String googleSpreadSheetId, final String range) throws IOException {
         return googleSheets.spreadsheets().values().get(googleSpreadSheetId, range).execute();
+    }
+
+    public String writeValuesToSpreadsheetFromCell(final String googleSpreadSheetId, final String startCell, final ValueRange body) throws IOException {
+        return googleSheets.spreadsheets().values().update(googleSpreadSheetId, startCell, body)
+                .setValueInputOption("RAW").execute().getUpdatedRange();
     }
 }

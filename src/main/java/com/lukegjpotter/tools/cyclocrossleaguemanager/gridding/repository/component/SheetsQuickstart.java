@@ -17,21 +17,38 @@ public class SheetsQuickstart {
     }
 
     public String namesAndMajors() throws IOException {
-        final String googleSpreadSheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
+        final String googleSpreadSheetId = "1rxpqZjL_Dvy62K2QqoeISvE7NF0pfpMGNqq9qsqeNOk";
         final String range = "Class Data!A2:E2";
 
-        ValueRange response = googleSheetsService.spreadsheetValuesInRange(googleSpreadSheetId, range);
+        ValueRange response = googleSheetsService.readSpreadsheetValuesInRange(googleSpreadSheetId, range);
 
         List<List<Object>> values = response.getValues();
-        StringBuilder namesAndMajors = new StringBuilder("Name, Major\n");
+        StringBuilder namesAndMajors = new StringBuilder("Name, Gender\n");
         if (values == null || values.isEmpty()) {
             return "No data found.";
         } else {
             for (List<Object> row : values) {
                 // Print columns A and E, which correspond to indices 0 and 4.
-                namesAndMajors.append(String.format("%s, %s\n", row.get(0), row.get(4)));
+                namesAndMajors.append(String.format("%s, %s\n", row.get(0), row.get(1)));
             }
         }
         return namesAndMajors.toString();
+    }
+
+    public String writeExample(final boolean revert) throws IOException {
+        final String googleSpreadSheetId = "1rxpqZjL_Dvy62K2QqoeISvE7NF0pfpMGNqq9qsqeNOk";
+        final String range = "Class Data!A2";
+
+        ValueRange body = new ValueRange();
+        if (!revert) {
+            body.setValues(List.of(
+                    List.of("Alexander", "Male")));
+        }
+        if (revert) {
+            body.setValues(List.of(
+                    List.of("Alexandra", "Female")));
+        }
+
+        return googleSheetsService.writeValuesToSpreadsheetFromCell(googleSpreadSheetId, range, body);
     }
 }
