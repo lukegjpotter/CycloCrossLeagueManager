@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,5 +62,14 @@ public class GoogleSheetsService {
     public String writeValuesToSpreadsheetFromCell(final String googleSpreadSheetId, final String startCell, final ValueRange body) throws IOException {
         return googleSheets.spreadsheets().values().update(googleSpreadSheetId, startCell, body)
                 .setValueInputOption("RAW").execute().getUpdatedRange();
+    }
+
+    public List<String> getSpreadsheetHeaders(String googleSpreadSheetId, String sheetName) throws IOException {
+        List<String> headers = new ArrayList<>();
+        ValueRange valueRange = readSpreadsheetValuesInRange(googleSpreadSheetId, sheetName + "!A1:1");
+        List<List<Object>> spreadsheetHeaders = valueRange.getValues();
+        spreadsheetHeaders.forEach(headerRows -> headerRows.forEach(headerRow -> headers.add(String.valueOf(headerRow))));
+
+        return headers;
     }
 }

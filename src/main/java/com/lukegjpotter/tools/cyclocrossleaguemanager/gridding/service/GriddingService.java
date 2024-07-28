@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -31,6 +32,11 @@ public class GriddingService {
     public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
 
         bookingReportRepository.loadDataFromSignUpsGoogleSheet(griddingRequestRecord.signups());
+        try {
+            leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(griddingRequestRecord.roundNumber());
+        } catch (IOException e) {
+            return new GriddingResultRecord(griddingRequestRecord.gridding(), "Error when Loading League Standings. Error: " + e.getMessage());
+        }
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
         // Remove ridersWithUciPoints from ridersSignedUp, so they are not double counted.
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = uciPointsRepository.extractSignUps(bookingReportRepository.findAll());

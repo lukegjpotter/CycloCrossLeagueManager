@@ -1,12 +1,20 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.common.service;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.GriddingRaceType;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsHeader;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class GoogleSheetsSchemaService {
+
+    private final LeagueStandingsHeader leagueStandingsHeader;
+
+    public GoogleSheetsSchemaService() {
+        leagueStandingsHeader = new LeagueStandingsHeader("Name", "Club", "Total");
+    }
 
     public List<GriddingRaceType> griddingSchema() {
         return List.of(
@@ -19,6 +27,23 @@ public class GoogleSheetsSchemaService {
                 new GriddingRaceType("Boy's U14", "B42", 8),
                 new GriddingRaceType("Girl's U14", "E42", 8),
                 new GriddingRaceType("Girl's U12", "H42", 8));
+    }
+
+    public List<LeagueStandingsRaceType> leagueStandingsSchema() {
+        return List.of(
+                new LeagueStandingsRaceType("A-Race"),
+                new LeagueStandingsRaceType("Women"),
+                new LeagueStandingsRaceType("B-Race"),
+                new LeagueStandingsRaceType("U16 Male"),
+                new LeagueStandingsRaceType("U16 Female"),
+                new LeagueStandingsRaceType("U14 Male"),
+                new LeagueStandingsRaceType("U14 Female"),
+                new LeagueStandingsRaceType("U12 Male"),
+                new LeagueStandingsRaceType("U12 Female"));
+    }
+
+    public LeagueStandingsHeader leagueStandingsHeaders() {
+        return leagueStandingsHeader;
     }
 }
 
