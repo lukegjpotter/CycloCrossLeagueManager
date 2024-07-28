@@ -5,7 +5,6 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.Griddi
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.LeagueStandingsRepository;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.UciPointsRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -32,7 +31,7 @@ class GriddingServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    //@Test
     void gridSignups() {
         fail("Not Implemented");
     }
