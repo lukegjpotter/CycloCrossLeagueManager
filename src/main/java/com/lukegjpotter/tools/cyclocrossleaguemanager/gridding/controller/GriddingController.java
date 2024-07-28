@@ -22,7 +22,10 @@ public class GriddingController {
 
     @PostMapping("/gridding")
     public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord griddingRequestRecord) {
+        logger.debug("Grid Signups Called with: {}", griddingRequestRecord);
 
+        // ToDo: If Gridding Sheet is not set, create sheet.
+        // ToDo: Handle Championship Event.
         GriddingResultRecord griddingResult = griddingService.gridSignups(griddingRequestRecord);
 
         if (griddingResult.errorMessage().isEmpty())
