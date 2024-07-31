@@ -1,38 +1,43 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
-import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderUciPointRecord;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 class UciPointsRepositoryTest {
 
-    @InjectMocks
+    @Autowired
     UciPointsRepository uciPointsRepository;
-    @Mock
-    List<RiderUciPointRecord> ridersWithUciPoints;
-    @Mock
-    BookingReportRepository bookingReportRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     //@Test
-    void findAll() {
+    void findRidersWithUciPointsWhoAreSignedUp_NoneAreSignedUp() {
         fail("Not Implemented");
     }
 
-    //@Test
-    void extractSignUps() {
-        fail("Not Implemented");
+    @Test
+    void findRidersWithUciPointsWhoAreSignedUp_FiveAreSignedUp() {
+        List<RiderGriddingPositionRecord> actual = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(List.of(
+                new BookingReportRowRecord("A-Race", "Dean Harvey", "Trinity Racing"),
+                new BookingReportRowRecord("A-Race", "Kevin McCambridge", "Inspired Cycling"),
+                new BookingReportRowRecord("A-Race", "Darnell Moore", "McCovey Cycles"),
+                new BookingReportRowRecord("Womens", "Aliyah Rafferty", "Tifosi"),
+                new BookingReportRowRecord("Womens", "Roisin Lally", "Loughbourgh Lightning")));
+
+        List<RiderGriddingPositionRecord> expected = List.of(
+                new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", "Trinity Racing"),
+                new RiderGriddingPositionRecord("A-Race", 2, "Kevin McCambridge", "Inspired Cycling"),
+                new RiderGriddingPositionRecord("A-Race", 3, "Darnell Moore", "McCovey Cycles"),
+                new RiderGriddingPositionRecord("Womens", 1, "Aliyah Rafferty", "Tifosi"),
+                new RiderGriddingPositionRecord("Womens", 2, "Roisin Lally", "Loughbourgh Lightning"));
+
+        assertEquals(expected, actual);
     }
 }

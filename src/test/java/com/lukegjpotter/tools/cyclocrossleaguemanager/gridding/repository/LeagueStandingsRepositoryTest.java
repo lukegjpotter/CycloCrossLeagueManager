@@ -38,7 +38,7 @@ class LeagueStandingsRepositoryTest {
     }
 
     //@Test
-    void findSignups() {
+    void findLeaguePositionOfAllUngriddedSignups() {
         fail("Not Implemented");
     }
 }

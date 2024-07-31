@@ -72,7 +72,7 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
-    public List<RiderGriddingPositionRecord> findSignups(List<BookingReportRowRecord> signups, int roundNumber) {
+    public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(List<BookingReportRowRecord> signups, List<RiderGriddingPositionRecord> ridersInGriddedOrder, int roundNumber) {
         return new ArrayList<>();
     }
 }

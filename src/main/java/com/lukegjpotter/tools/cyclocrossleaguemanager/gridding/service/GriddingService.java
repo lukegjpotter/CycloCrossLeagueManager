@@ -31,19 +31,21 @@ public class GriddingService {
 
     public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
 
+        logger.trace("Gridding Sign Ups.");
         bookingReportRepository.loadDataFromSignUpsGoogleSheet(griddingRequestRecord.signups());
         try {
             leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(griddingRequestRecord.roundNumber());
         } catch (IOException e) {
+            logger.error("Error when Loading League Standings. Error: {}", e.getMessage());
             return new GriddingResultRecord(griddingRequestRecord.gridding(), "Error when Loading League Standings. Error: " + e.getMessage());
         }
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
         // Remove ridersWithUciPoints from ridersSignedUp, so they are not double counted.
-        List<RiderGriddingPositionRecord> ridersInGriddedOrder = uciPointsRepository.extractSignUps(bookingReportRepository.findAll());
-        ridersInGriddedOrder.addAll(youthNationalChampionsRepository.findAll(bookingReportRepository.findAll()));
+        List<RiderGriddingPositionRecord> ridersInGriddedOrder = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(bookingReportRepository.findAll());
+        ridersInGriddedOrder.addAll(youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(bookingReportRepository.findAll()));
 
         // Check the Standings position of each remaining ridersSignedUp, add them to RidersInGriddedOrder.
-        ridersInGriddedOrder.addAll(leagueStandingsRepository.findSignups(bookingReportRepository.findAll(), griddingRequestRecord.roundNumber()));
+        ridersInGriddedOrder.addAll(leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(bookingReportRepository.findAll(), ridersInGriddedOrder, griddingRequestRecord.roundNumber()));
 
         return griddingRepository.writeGriddingToGoogleSheet(ridersInGriddedOrder, griddingRequestRecord.gridding());
     }

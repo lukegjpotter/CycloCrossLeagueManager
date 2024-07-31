@@ -18,41 +18,41 @@ class YouthNationalChampionsRepositoryTest {
     YouthNationalChampionsRepository youthNationalChampionsRepository;
 
     @Test
-    void findAll_AllAreRacing() {
+    void findYouthNationalChampionsWhoAreSignedUp_AllAreRacing() {
         List<RiderGriddingPositionRecord> expected = List.of(
                 new RiderGriddingPositionRecord("Boy's U16", 1, "Curtis McKee", "Spellman-Dublin Port"),
                 new RiderGriddingPositionRecord("Boy's U14", 1, "James Cunningham", "Orwell Wheelers Cycling Club"),
                 new RiderGriddingPositionRecord("Girl's U16", 1, "Emer Heverin", "Kinning Cycles Cycling Club"),
                 new RiderGriddingPositionRecord("Girl's U14", 1, "Katie Turner", "Orwell Wheelers Cycling Club"));
-        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findAll(new ArrayList<>(List.of(
+        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("Boy's U16", "Curtis McKee", "Spellman-Dublin Port"),
                 new BookingReportRowRecord("Boy's U14", "James Cunningham", "Orwell Wheelers Cycling Club"),
                 new BookingReportRowRecord("Girl's U16", "Emer Heverin", "Kinning Cycles Cycling Club"),
-                new BookingReportRowRecord("Girl's U14", "Katie Turner", "Orwell Wheelers Cycling Club"))));
+                new BookingReportRowRecord("Girl's U14", "Katie Turner", "Orwell Wheelers Cycling Club")));
 
         assertEquals(expected, actual);
     }
 
     @Test
-    void findAll_SomeAreRacing() {
+    void findYouthNationalChampionsWhoAreSignedUp_SomeAreRacing() {
         List<RiderGriddingPositionRecord> expected = List.of(
                 new RiderGriddingPositionRecord("Boy's U16", 1, "Curtis McKee", "Spellman-Dublin Port"),
                 new RiderGriddingPositionRecord("Girl's U14", 1, "Katie Turner", "Orwell Wheelers Cycling Club"));
-        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findAll(new ArrayList<>(List.of(
+        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "John McIntosh", "Round Wheelers"),
                 new BookingReportRowRecord("Boy's U16", "Curtis McKee", "Spellman-Dublin Port"),
                 new BookingReportRowRecord("Girl's U14", "Katie Turner", "Orwell Wheelers Cycling Club"),
-                new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers"))));
+                new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers")));
 
         assertEquals(expected, actual);
     }
 
     @Test
-    void findAll_NoneAreRacing() {
+    void findYouthNationalChampionsWhoAreSignedUp_NoneAreRacing() {
         List<RiderGriddingPositionRecord> expected = new ArrayList<>();
-        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findAll(new ArrayList<>(List.of(
+        List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "John McIntosh", "Round Wheelers"),
-                new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers"))));
+                new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers")));
 
         assertEquals(expected, actual);
     }

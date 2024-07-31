@@ -15,9 +15,9 @@ import java.util.List;
 @Repository
 public class YouthNationalChampionsRepository {
 
-    public List<RiderGriddingPositionRecord> findAll(List<BookingReportRowRecord> signupsBookingReportList) {
+    public List<RiderGriddingPositionRecord> findYouthNationalChampionsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
-        List<RiderGriddingPositionRecord> youthNationalChampions = new ArrayList<>();
+        final List<RiderGriddingPositionRecord> youthNationalChampions = new ArrayList<>();
 
         try (CSVReader csvReader = new CSVReaderBuilder(new FileReader("src/main/resources/YouthNationalChampions.csv")).withSkipLines(1).build()) {
             String[] lineInArray;

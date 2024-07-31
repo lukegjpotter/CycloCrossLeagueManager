@@ -18,11 +18,6 @@ class BookingReportRepositoryTest {
     }
 
     //@Test
-    void deleteUciRiders() {
-        fail("Not Implemented");
-    }
-
-    //@Test
     void loadDataFromSignUpsGoogleSheet() {
         fail("Not Implemented");
     }

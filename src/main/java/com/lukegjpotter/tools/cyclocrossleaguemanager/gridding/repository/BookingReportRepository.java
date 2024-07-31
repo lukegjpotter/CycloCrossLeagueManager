@@ -23,9 +23,6 @@ public class BookingReportRepository {
         return new ArrayList<>();
     }
 
-    public void deleteUciRiders(ArrayList<BookingReportRowRecord> bookingReportRowRecords) {
-    }
-
     public void loadDataFromSignUpsGoogleSheet(String signUpsGoogleSheet) {
         // ToDo: Load the data from the Booking Report Excel file.
     }
