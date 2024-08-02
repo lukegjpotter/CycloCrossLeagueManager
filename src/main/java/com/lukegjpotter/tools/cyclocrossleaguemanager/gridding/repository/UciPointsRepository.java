@@ -70,19 +70,23 @@ public class UciPointsRepository {
         ridersWithUciPoints.forEach(riderUciPointRecord -> {
             String raceCategory = switch (riderUciPointRecord.uciCategory()) {
                 case "ME", "MJ" -> "A-Race";
-                case "WE" -> "Women";
+                case "WE" -> "Womens";
                 default -> throw new IllegalStateException("Unexpected value: " + riderUciPointRecord.uciCategory());
             };
 
-            int gridPosition = griddedRidersWithUciPoints.stream()
+            List<RiderGriddingPositionRecord> ridersinGriddedOrderForRaceCategory = griddedRidersWithUciPoints.stream()
                     .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().equals(raceCategory))
                     .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
-                    .toList().get(0).gridPosition() + 1;
+                    .toList();
 
-            if (signupsBookingReportList.contains(
-                    new BookingReportRowRecord(raceCategory, riderUciPointRecord.fullName(), "")))
-                griddedRidersWithUciPoints.add(
-                        new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
+            int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
+
+            for (BookingReportRowRecord signup : signupsBookingReportList) {
+                if (signup.raceCategory().equals(raceCategory) && signup.fullName().equals(riderUciPointRecord.fullName())) {
+                    griddedRidersWithUciPoints.add(
+                            new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
+                }
+            }
         });
 
         return griddedRidersWithUciPoints;

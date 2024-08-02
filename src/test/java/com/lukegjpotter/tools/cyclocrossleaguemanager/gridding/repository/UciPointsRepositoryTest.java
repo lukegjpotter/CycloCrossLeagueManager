@@ -32,11 +32,11 @@ class UciPointsRepositoryTest {
                 new BookingReportRowRecord("Womens", "Roisin Lally", "Loughbourgh Lightning")));
 
         List<RiderGriddingPositionRecord> expected = List.of(
-                new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", "Trinity Racing"),
-                new RiderGriddingPositionRecord("A-Race", 2, "Kevin McCambridge", "Inspired Cycling"),
-                new RiderGriddingPositionRecord("A-Race", 3, "Darnell Moore", "McCovey Cycles"),
-                new RiderGriddingPositionRecord("Womens", 1, "Aliyah Rafferty", "Tifosi"),
-                new RiderGriddingPositionRecord("Womens", 2, "Roisin Lally", "Loughbourgh Lightning"));
+                new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", ""),
+                new RiderGriddingPositionRecord("A-Race", 2, "Kevin McCambridge", ""),
+                new RiderGriddingPositionRecord("A-Race", 3, "Darnell Moore", ""),
+                new RiderGriddingPositionRecord("Womens", 1, "Aliyah Rafferty", ""),
+                new RiderGriddingPositionRecord("Womens", 2, "Roisin Lally", ""));
 
         assertEquals(expected, actual);
     }
