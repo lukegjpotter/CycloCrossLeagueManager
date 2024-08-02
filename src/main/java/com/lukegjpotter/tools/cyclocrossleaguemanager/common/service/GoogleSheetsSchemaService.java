@@ -1,5 +1,6 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.common.service;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.BookingReportHeader;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.GriddingRaceType;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsHeader;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
@@ -11,9 +12,12 @@ import java.util.List;
 public class GoogleSheetsSchemaService {
 
     private final LeagueStandingsHeader leagueStandingsHeader;
+    private final BookingReportHeader bookingreportHeader;
 
     public GoogleSheetsSchemaService() {
         leagueStandingsHeader = new LeagueStandingsHeader("Name", "Club", "Total");
+        // ToDo: Populate Header, possibly 30 columns.
+        bookingreportHeader = new BookingReportHeader("", "", "", "", "");
     }
 
     public List<GriddingRaceType> griddingSchema() {
@@ -44,6 +48,10 @@ public class GoogleSheetsSchemaService {
 
     public LeagueStandingsHeader leagueStandingsHeaders() {
         return leagueStandingsHeader;
+    }
+
+    public BookingReportHeader bookingReportHeaders() {
+        return bookingreportHeader;
     }
 }
 

@@ -36,7 +36,7 @@ public class LeagueStandingsRepository {
         String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
                 lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
 
-        // Set the Indices of the .
+        // Set the Indices of the important columns.
         List<LeagueStandingsRaceType> leagueStandingsRaceTypes = googleSheetsSchemaService.leagueStandingsSchema();
         List<String> spreadsheetHeaders = googleSheetsService.getSpreadsheetHeaders(
                 leagueStandingsSpreadSheetId, leagueStandingsRaceTypes.get(0).raceType());
@@ -61,8 +61,7 @@ public class LeagueStandingsRepository {
                             leagueStandingsRaceType.raceType(),
                             String.valueOf(values.get(fullNameIndex - 1)),
                             String.valueOf(values.get(clubIndex - 1)),
-                            Integer.parseInt(String.valueOf(values.get(totalPointsIndex - 1)))))
-            );
+                            Integer.parseInt(String.valueOf(values.get(totalPointsIndex - 1))))));
         }
 
         // Ensure that the Standings are sorted on Total Points, and not accidentally on the Adjusted Total (Best X of Y).
@@ -72,7 +71,9 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
-    public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(List<BookingReportRowRecord> signups, List<RiderGriddingPositionRecord> ridersInGriddedOrder, int roundNumber) {
+    public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
+            List<LeagueStandingsRowRecord> leagueStandings, List<BookingReportRowRecord> signups, List<RiderGriddingPositionRecord> ridersInGriddedOrder, int roundNumber) {
+        // ToDo: Implement
         return new ArrayList<>();
     }
 }

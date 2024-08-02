@@ -13,12 +13,8 @@ class BookingReportRepositoryTest {
     }
 
     //@Test
-    void findAll() {
-        fail("Not Implemented");
-    }
-
-    //@Test
-    void loadDataFromSignUpsGoogleSheet() {
+    void getDataFromSignUpsGoogleSheet() {
+        // ToDo: Implement
         fail("Not Implemented");
     }
 }
