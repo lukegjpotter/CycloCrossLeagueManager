@@ -70,7 +70,7 @@ public class UciPointsRepository {
         ridersWithUciPoints.forEach(riderUciPointRecord -> {
             String raceCategory = switch (riderUciPointRecord.uciCategory()) {
                 case "ME", "MJ" -> "A-Race";
-                case "WE" -> "Womens";
+                case "WE" -> "Women";
                 default -> throw new IllegalStateException("Unexpected value: " + riderUciPointRecord.uciCategory());
             };
 
@@ -82,7 +82,7 @@ public class UciPointsRepository {
             int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
 
             for (BookingReportRowRecord signup : signupsBookingReportList) {
-                if (signup.raceCategory().equals(raceCategory) && signup.fullName().equals(riderUciPointRecord.fullName())) {
+                if (signup.raceCategory().equals(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
                     griddedRidersWithUciPoints.add(
                             new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
                 }
