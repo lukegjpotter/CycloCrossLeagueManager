@@ -5,7 +5,6 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.CycloCross2
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderUciPointRecord;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,29 +24,43 @@ public class UciPointsRepository {
 
         // Find ME, MJ and WE UCI Points from Website with jSoup.
         final List<RiderUciPointRecord> ridersWithUciPoints = new ArrayList<>();
-        List.of(
+        List.of( // ToDo: make the "2023-2024" part of the URL a property.
                         new CycloCross24Record("ME", "https://cyclocross24.com/uciranking/2023-2024/ME/?country=Ireland"),
                         new CycloCross24Record("MJ", "https://cyclocross24.com/uciranking/2023-2024/MJ/?country=Ireland"),
                         new CycloCross24Record("WE", "https://cyclocross24.com/uciranking/2023-2024/WE/?country=Ireland"))
                 .forEach(cycloCross24Record -> {
                     try {
-                        Document cycloCross24 = Jsoup.connect(cycloCross24Record.standingsUrl()).get();
-                        Elements uciPointsStandingsTableRows = cycloCross24.select("table").get(0).getElementsByTag("tbody").get(0).getElementsByTag("tr");
-                        uciPointsStandingsTableRows.forEach(tableRow -> {
-                            // ToDo: Open rider Profile Page, and get their correctly formatted name.
-                            List<String> riderNameTokenized = new ArrayList<>(Arrays.stream(tableRow.getElementsByTag("td").get(3).text().trim().split(" ")).toList());
-                            int uciPoints = Integer.parseInt(tableRow.getElementsByTag("td").get(6).text().trim());
+                        Jsoup.connect(cycloCross24Record.standingsUrl()).get().selectFirst("table")
+                                .getElementsByTag("tbody").get(0).getElementsByTag("tr")
+                                .forEach(tableRow -> {
 
-                            riderNameTokenized.add(0, riderNameTokenized.get(riderNameTokenized.size() - 1));
-                            riderNameTokenized.remove(riderNameTokenized.size() - 1);
-                            StringBuilder riderNameFormatted = new StringBuilder();
-                            riderNameTokenized.forEach(token -> riderNameFormatted.append(token).append(" "));
+                                    String riderFullName = "";
+                                    String cyclocross24BaseUrl = "https://cyclocross24.com";
+                                    String urlSlugToRiderProfile = tableRow.getElementsByTag("td").get(3)
+                                            .getElementsByTag("a").get(0).attribute("href").getValue();
+                                    try {
+                                        Elements riderProfilePageAttributes = Jsoup.connect(
+                                                        cyclocross24BaseUrl + urlSlugToRiderProfile).get()
+                                                .getElementsByClass("riderinfo-table").get(0)
+                                                .getElementsByTag("tbody").get(0)
+                                                .getElementsByTag("td");
 
-                            ridersWithUciPoints.add(new RiderUciPointRecord(cycloCross24Record.uciCode(), riderNameFormatted.toString().trim(), uciPoints));
-                        });
+                                        riderFullName = riderProfilePageAttributes.get(0).text().trim()
+                                                + " "
+                                                + riderProfilePageAttributes.get(1).text().trim();
+                                    } catch (IOException e) {
+                                        logger.error("Error on Rider Profile Page. Error: {}", e.getMessage());
+                                    }
+
+                                    int uciPoints = Integer.parseInt(tableRow.getElementsByTag("td").get(6)
+                                            .text().trim());
+
+                                    ridersWithUciPoints.add(new RiderUciPointRecord(
+                                            cycloCross24Record.uciCode(), riderFullName, uciPoints));
+                                });
 
                     } catch (IOException e) {
-                        logger.error("Error getting Men's Elite UCI Points. Error: {}", e.getMessage());
+                        logger.error("Error getting UCI Points. Error: {}", e.getMessage());
                     }
                 });
 
@@ -67,8 +79,10 @@ public class UciPointsRepository {
                     .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
                     .toList().get(0).gridPosition() + 1;
 
-            if (signupsBookingReportList.contains(new BookingReportRowRecord(raceCategory, riderUciPointRecord.fullName(), "")))
-                griddedRidersWithUciPoints.add(new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
+            if (signupsBookingReportList.contains(
+                    new BookingReportRowRecord(raceCategory, riderUciPointRecord.fullName(), "")))
+                griddedRidersWithUciPoints.add(
+                        new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
         });
 
         return griddedRidersWithUciPoints;
