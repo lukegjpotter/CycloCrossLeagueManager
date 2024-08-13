@@ -42,14 +42,16 @@ public class GriddingService {
             String signupsBookingReportGoogleSheetsId = new URL(griddingRequestRecord.signups()).getPath().split("/")[3];
             allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId);
         } catch (IOException e) {
-            logger.error("Error when Loading Signups from Booking Report. Error: {}", e.getMessage());
-            return new GriddingResultRecord(griddingRequestRecord.gridding(), "Error when Loading League Standings. Error: " + e.getMessage());
+            String errorMessage = "Error when Loading Signups from Booking Report,";
+            logger.error("{} Error: {}", errorMessage, e.getMessage());
+            return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
         }
         try {
             leagueStandings = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(griddingRequestRecord.roundNumber());
         } catch (IOException e) {
-            logger.error("Error when Loading League Standings. Error: {}", e.getMessage());
-            return new GriddingResultRecord(griddingRequestRecord.gridding(), "Error when Loading League Standings. Error: " + e.getMessage());
+            String errorMessage = "Error when Loading League Standings.";
+            logger.error("{} Error: {}", errorMessage, e.getMessage());
+            return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
         }
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
         // Remove ridersWithUciPoints from ridersSignedUp, so they are not double counted.
