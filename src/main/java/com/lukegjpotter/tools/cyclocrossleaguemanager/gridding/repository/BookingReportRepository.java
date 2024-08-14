@@ -22,8 +22,8 @@ public class BookingReportRepository {
         this.googleSheetsSchemaService = googleSheetsSchemaService;
     }
 
-    public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId) throws IOException {
-        String sheetName = "Sheet 1";
+    public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId, boolean isOutputSorted) throws IOException {
+        String sheetName = "Report";
 
         // Set the Indices of the important columns.
         List<String> spreadsheetHeaders = googleSheetsService.getSpreadsheetHeaders(signUpsGoogleSheetId, sheetName);
@@ -35,34 +35,37 @@ public class BookingReportRepository {
 
         // Build the Range.
         StringBuilder range = new StringBuilder(sheetName).append("!");
-        // ToDo: Resume here and Build the Range.
+        List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+                "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH");
+        range.append(alphabet.get(raceCategoryIndex)).append("2:").append(alphabet.get(teamIndex));
 
         // Read the Sheet.
         List<BookingReportRowRecord> signupsFromBookingReport = new ArrayList<>();
 
         ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(signUpsGoogleSheetId, range.toString());
-        List<List<Object>> standingsValues = valueRange.getValues();
+        List<List<Object>> bookingReportValues = valueRange.getValues();
+        int cellsToShiftLeft = raceCategoryIndex; // Should be 5 cells.
 
-        standingsValues.forEach(values -> {
-            String fullName = new StringBuilder(String.valueOf(values.get(firstNameIndex - 1)))
-                    .append(" ")
-                    .append(values.get(surnameIndex - 1)).toString();
+        bookingReportValues.forEach(values -> {
+            String fullName = values.get(firstNameIndex - cellsToShiftLeft) + " " + values.get(surnameIndex - cellsToShiftLeft);
 
-            String teamName = String.valueOf(values.get(teamIndex - 1));
-            String clubOrTeam = (!teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - 1));
+            String teamName = "";
+            if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - cellsToShiftLeft));
+            String clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - cellsToShiftLeft));
 
             signupsFromBookingReport.add(
                     new BookingReportRowRecord(
-                            String.valueOf(values.get(raceCategoryIndex - 1)),
+                            String.valueOf(values.get(raceCategoryIndex - cellsToShiftLeft)),
                             fullName,
                             clubOrTeam));
         });
 
-
         // Maybe: Ensure Signups are sorted on Race Category and Full Name.
-        signupsFromBookingReport.sort(Comparator
-                .comparing(BookingReportRowRecord::raceCategory)
-                .thenComparing(BookingReportRowRecord::fullName));
+        if (isOutputSorted) {
+            signupsFromBookingReport.sort(Comparator
+                    .comparing(BookingReportRowRecord::raceCategory)
+                    .thenComparing(BookingReportRowRecord::fullName));
+        }
 
         return signupsFromBookingReport;
     }

@@ -40,7 +40,7 @@ public class GriddingService {
 
         try {
             String signupsBookingReportGoogleSheetsId = new URL(griddingRequestRecord.signups()).getPath().split("/")[3];
-            allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId);
+            allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId, true);
         } catch (IOException e) {
             String errorMessage = "Error when Loading Signups from Booking Report,";
             logger.error("{} Error: {}", errorMessage, e.getMessage());

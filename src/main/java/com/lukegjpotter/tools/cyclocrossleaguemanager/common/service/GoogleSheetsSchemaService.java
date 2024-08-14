@@ -16,8 +16,7 @@ public class GoogleSheetsSchemaService {
 
     public GoogleSheetsSchemaService() {
         leagueStandingsHeader = new LeagueStandingsHeader("Name", "Club", "Total");
-        // ToDo: Populate Header, possibly 30 columns.
-        bookingreportHeader = new BookingReportHeader("", "", "", "", "");
+        bookingreportHeader = new BookingReportHeader("TicketType", "First Name", "Last Name", "Club", "Team");
     }
 
     public List<GriddingRaceType> griddingSchema() {
