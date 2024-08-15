@@ -44,18 +44,17 @@ public class BookingReportRepository {
 
         ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(signUpsGoogleSheetId, range.toString());
         List<List<Object>> bookingReportValues = valueRange.getValues();
-        int cellsToShiftLeft = raceCategoryIndex; // Should be 5 cells.
 
         bookingReportValues.forEach(values -> {
-            String fullName = values.get(firstNameIndex - cellsToShiftLeft) + " " + values.get(surnameIndex - cellsToShiftLeft);
+            String fullName = values.get(firstNameIndex - raceCategoryIndex) + " " + values.get(surnameIndex - raceCategoryIndex);
 
             String teamName = "";
-            if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - cellsToShiftLeft));
-            String clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - cellsToShiftLeft));
+            if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
+            String clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - raceCategoryIndex));
 
             signupsFromBookingReport.add(
                     new BookingReportRowRecord(
-                            String.valueOf(values.get(raceCategoryIndex - cellsToShiftLeft)),
+                            String.valueOf(values.get(0)), // This is the RaceCategoryIndex.
                             fullName,
                             clubOrTeam));
         });
