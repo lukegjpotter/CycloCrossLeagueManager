@@ -34,13 +34,19 @@ public class GriddingRepository {
             griddingGoogleSheetId = griddingGoogleSheetURL.getPath().split("/")[3];
             // Strip query string from griddingGoogleSheet.
             String[] urlPath = griddingGoogleSheetURL.getPath().split("/");
-            griddingGoogleSheetUrlStringWithoutQueryString = griddingGoogleSheetURL.getProtocol() + "://" + griddingGoogleSheetURL.getHost() + "/" + urlPath[1] + "/" + urlPath[2] + "/" + urlPath[3] + "/";
+            griddingGoogleSheetUrlStringWithoutQueryString = griddingGoogleSheetURL.getProtocol() + "://"
+                    + griddingGoogleSheetURL.getHost() + "/"
+                    + urlPath[1] + "/"
+                    + urlPath[2] + "/"
+                    + urlPath[3] + "/";
         } catch (MalformedURLException e) {
             return new GriddingResultRecord(griddingGoogleSheet, "Malformed URL Exception: " + e.getMessage());
         }
 
         // Sort the sheet, so common races are grouped, and gridding is in order.
-        ridersInGriddedOrder.sort(Comparator.comparing(RiderGriddingPositionRecord::raceCategory).thenComparingInt(RiderGriddingPositionRecord::gridPosition));
+        ridersInGriddedOrder.sort(Comparator
+                .comparing(RiderGriddingPositionRecord::raceCategory)
+                .thenComparingInt(RiderGriddingPositionRecord::gridPosition));
 
         // Write ridersInGriddedOrder to Google Sheet.
         List<GriddingRaceType> griddingSchema = googleSheetsSchemaService.griddingSchema();
@@ -57,7 +63,10 @@ public class GriddingRepository {
                     ridersAndClubs.add(List.of(rider.fullName(), rider.clubName()));
                 }
 
-                googleSheetsService.writeValuesToSpreadsheetFromCell(griddingGoogleSheetId, griddingRaceType.startCell(), new ValueRange().setValues(ridersAndClubs));
+                googleSheetsService.writeValuesToSpreadsheetFromCell(
+                        griddingGoogleSheetId,
+                        griddingRaceType.startCell(),
+                        new ValueRange().setValues(ridersAndClubs));
             }
         } catch (IOException e) {
             return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "IO Exception: " + e.getMessage());

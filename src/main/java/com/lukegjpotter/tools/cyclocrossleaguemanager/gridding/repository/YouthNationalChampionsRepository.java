@@ -23,8 +23,16 @@ public class YouthNationalChampionsRepository {
             String[] lineInArray;
 
             while ((lineInArray = csvReader.readNext()) != null) {
-                RiderGriddingPositionRecord youthNationalChampion = new RiderGriddingPositionRecord(lineInArray[0].trim(), 1, lineInArray[1].trim(), lineInArray[2].trim());
-                if (signupsBookingReportList.contains(new BookingReportRowRecord(youthNationalChampion.raceCategory(), youthNationalChampion.fullName(), youthNationalChampion.clubName())))
+                RiderGriddingPositionRecord youthNationalChampion = new RiderGriddingPositionRecord(
+                        lineInArray[0].trim(),
+                        1,
+                        lineInArray[1].trim(),
+                        lineInArray[2].trim());
+
+                if (signupsBookingReportList.contains(new BookingReportRowRecord(
+                        youthNationalChampion.raceCategory(),
+                        youthNationalChampion.fullName(),
+                        youthNationalChampion.clubName())))
                     youthNationalChampions.add(youthNationalChampion);
             }
         } catch (IOException | CsvValidationException e) {

@@ -38,6 +38,7 @@ public class GriddingService {
         List<LeagueStandingsRowRecord> leagueStandings;
         List<BookingReportRowRecord> allSignups;
 
+        // Get the Signups from the Booking Report. The Booking Report has to be changed from XLS to an actual Google Sheet.
         try {
             String signupsBookingReportGoogleSheetsId = new URL(griddingRequestRecord.signups()).getPath().split("/")[3];
             allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId, true);
@@ -46,6 +47,7 @@ public class GriddingService {
             logger.error("{} Error: {}", errorMessage, e.getMessage());
             return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
         }
+        // Get the League Standings from the correct Standing Sheet. The sheets are properties in the application.properties.
         try {
             leagueStandings = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(griddingRequestRecord.roundNumber());
         } catch (IOException e) {
