@@ -62,7 +62,7 @@ public class GriddingService {
 
         // Check the Standings position of each remaining ridersSignedUp, add them to RidersInGriddedOrder.
         ridersInGriddedOrder.addAll(leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(
-                leagueStandings, allSignups, ridersInGriddedOrder, griddingRequestRecord.roundNumber()));
+                leagueStandings, allSignups, ridersInGriddedOrder));
 
         return griddingRepository.writeGriddingToGoogleSheet(ridersInGriddedOrder, griddingRequestRecord.gridding());
     }

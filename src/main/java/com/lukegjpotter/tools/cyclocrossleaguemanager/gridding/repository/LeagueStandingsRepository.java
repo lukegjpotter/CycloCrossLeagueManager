@@ -72,8 +72,44 @@ public class LeagueStandingsRepository {
     }
 
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
-            List<LeagueStandingsRowRecord> leagueStandings, List<BookingReportRowRecord> signups, List<RiderGriddingPositionRecord> ridersInGriddedOrder, int roundNumber) {
-        // ToDo: Implement
-        return new ArrayList<>();
+            final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
+
+        List<RiderGriddingPositionRecord> ridersInGriddedOrder = new ArrayList<>();
+        // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the updated grid positions from ridersInGriddedOrder.
+        List<RiderGriddingPositionRecord> latestGriddingOrder = new ArrayList<>(alreadyGriddedRidersInOrder);
+
+        // Iterate through League Standings
+        // If an entry in league standings is in the signups.
+        // Add the rider to ridersInGriddedOrder in the appropriate position.
+        for (LeagueStandingsRowRecord riderInLeagueStandings : leagueStandings) {
+            if (signups.contains(new BookingReportRowRecord(riderInLeagueStandings.raceCategory(), riderInLeagueStandings.fullName(), riderInLeagueStandings.Club()))) {
+                // Is the rider already gridded? If yes, then break this loop.
+                boolean isRiderAlreadyGridded = false;
+                for (RiderGriddingPositionRecord griddedRider : latestGriddingOrder) {
+                    if (griddedRider.raceCategory().equals(riderInLeagueStandings.raceCategory())
+                            && griddedRider.fullName().equals(riderInLeagueStandings.fullName())
+                            && griddedRider.clubName().equals(riderInLeagueStandings.Club())) {
+                        isRiderAlreadyGridded = true;
+                        break;
+                    }
+                }
+
+                if (!isRiderAlreadyGridded) {
+
+                    List<RiderGriddingPositionRecord> ridersinGriddedOrderForRaceCategory = latestGriddingOrder.stream()
+                            .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().equals(riderInLeagueStandings.raceCategory()))
+                            .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
+                            .toList();
+
+                    int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
+
+                    RiderGriddingPositionRecord newRiderToGrid = new RiderGriddingPositionRecord(riderInLeagueStandings.raceCategory(), gridPosition, riderInLeagueStandings.fullName(), riderInLeagueStandings.Club());
+                    ridersInGriddedOrder.add(newRiderToGrid);
+                    latestGriddingOrder.add(newRiderToGrid);
+                }
+            }
+        }
+
+        return ridersInGriddedOrder;
     }
 }
