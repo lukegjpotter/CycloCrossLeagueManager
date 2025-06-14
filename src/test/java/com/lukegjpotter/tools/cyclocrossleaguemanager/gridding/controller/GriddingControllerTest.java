@@ -4,6 +4,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingReque
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static io.restassured.RestAssured.baseURI;
@@ -19,11 +20,12 @@ class GriddingControllerTest {
         baseURI = "http://localhost:8080/";
     }
 
-    //@Test fixme this test is failing as it is an unimplemented Integration Test.
+    @Test
     void gridRace() {
+        // TODO Use better Data, as none of the riders in the SignUps sheet are in the League, Youth National Champs or UCI listing.
         given()
                 .contentType(ContentType.JSON)
-                .body(new GriddingRequestRecord("docs.google.com/spreadsheet/123", "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit?usp=sharing", 2))
+                .body(new GriddingRequestRecord("https://docs.google.com/spreadsheets/d/1tQCo5fMjuTVzHUkKvJO9T5BMu9n_Pb0dGgu0Rz-zVpE/", "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/", 2))
                 .when()
                 .post("/gridding")
                 .then()

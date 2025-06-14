@@ -29,6 +29,7 @@ public class CycloCrossLeagueManagerApplication {
         logger.info("Application Started");
     }
 
+    // todo Probably remove this, as this property is not needed.
     @Bean
     public CommandLineRunner checkEnvironmentVariables(ApplicationContext applicationContext) {
         return args -> {
