@@ -26,11 +26,15 @@ public class GriddingController {
 
         // ToDo: If Gridding Sheet is not set, create sheet.
         // ToDo: Handle Championship Event.
-        GriddingResultRecord griddingResult = griddingService.gridSignups(griddingRequestRecord);
+        try {
+            GriddingResultRecord griddingResult = griddingService.gridSignups(griddingRequestRecord);
 
-        if (griddingResult.errorMessage().isEmpty())
-            return ResponseEntity.ok(griddingResult);
+            if (griddingResult.errorMessage().isEmpty())
+                return ResponseEntity.ok(griddingResult);
 
-        return ResponseEntity.internalServerError().body(griddingResult);
+            return ResponseEntity.badRequest().body(griddingResult);
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body(new GriddingResultRecord(null, "Error in Gridding"));
+        }
     }
 }
