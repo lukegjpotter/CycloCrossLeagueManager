@@ -35,17 +35,17 @@ class UciPointsRepositoryTest {
     void findRidersWithUciPointsWhoAreSignedUp_FiveAreSignedUp() {
         List<RiderGriddingPositionRecord> actual = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "Dean Harvey", "Trinity Racing"),
-                new BookingReportRowRecord("A-Race", "Kevin McCambridge", "Inspired Cycling"),
+                new BookingReportRowRecord("A-Race", "Travis Harkness", "Inspired Cycling"),
                 new BookingReportRowRecord("A-Race", "Darnell Moore", "McCovey Cycles"),
-                new BookingReportRowRecord("Women", "Aliyah Rafferty", "Tifosi"),
-                new BookingReportRowRecord("Women", "Roisin Lally", "Loughbourgh Lightning")));
+                new BookingReportRowRecord("Women", "Greta Lawless", "Team WORC"),
+                new BookingReportRowRecord("Women", "Esther Wong", "Shipden Apex")));
 
         List<RiderGriddingPositionRecord> expected = List.of(
                 new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", ""),
-                new RiderGriddingPositionRecord("A-Race", 2, "Kevin McCambridge", ""),
-                new RiderGriddingPositionRecord("A-Race", 3, "Darnell Moore", ""),
-                new RiderGriddingPositionRecord("Women", 1, "Aliyah Rafferty", ""),
-                new RiderGriddingPositionRecord("Women", 2, "Roisin Lally", ""));
+                new RiderGriddingPositionRecord("A-Race", 2, "Darnell Moore", ""),
+                new RiderGriddingPositionRecord("A-Race", 3, "Travis Harkness", ""),
+                new RiderGriddingPositionRecord("Women", 1, "Esther Wong", ""),
+                new RiderGriddingPositionRecord("Women", 2, "Greta Lawless", ""));
 
         assertEquals(expected, actual);
     }

@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -19,15 +20,19 @@ import java.util.List;
 public class UciPointsRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(UciPointsRepository.class);
+    @Value("${gridding.ucirankingsyear}")
+    private String uciRankingsYear;
 
     public List<RiderGriddingPositionRecord> findRidersWithUciPointsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
         // Find ME, MJ and WE UCI Points from Website with jSoup.
         final List<RiderUciPointRecord> ridersWithUciPoints = new ArrayList<>();
-        List.of( // ToDo: make the "2023-2024" part of the URL a property.
-                        new CycloCross24Record("ME", "https://cyclocross24.com/uciranking/2023-2024/ME/?country=Ireland"),
-                        new CycloCross24Record("MJ", "https://cyclocross24.com/uciranking/2023-2024/MJ/?country=Ireland"),
-                        new CycloCross24Record("WE", "https://cyclocross24.com/uciranking/2023-2024/WE/?country=Ireland"))
+        final String uciRankingsUrlStub = "https://cyclocross24.com/uciranking/";
+
+        List.of(
+                        new CycloCross24Record("ME", uciRankingsUrlStub + uciRankingsYear + "/ME/?country=Ireland"),
+                        new CycloCross24Record("MJ", uciRankingsUrlStub + uciRankingsYear + "/MJ/?country=Ireland"),
+                        new CycloCross24Record("WE", uciRankingsUrlStub + uciRankingsYear + "/WE/?country=Ireland"))
                 .forEach(cycloCross24Record -> {
                     try {
                         Jsoup.connect(cycloCross24Record.standingsUrl()).get().selectFirst("table")
