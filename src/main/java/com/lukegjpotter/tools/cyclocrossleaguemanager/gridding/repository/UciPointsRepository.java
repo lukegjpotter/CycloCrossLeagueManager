@@ -25,6 +25,8 @@ public class UciPointsRepository {
 
     public List<RiderGriddingPositionRecord> findRidersWithUciPointsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
+        logger.trace("Finding Riders with UCI Points who are signed up.");
+
         // Find ME, MJ and WE UCI Points from Website with jSoup.
         final List<RiderUciPointRecord> ridersWithUciPoints = new ArrayList<>();
         final String uciRankingsUrlStub = "https://cyclocross24.com/uciranking/";
@@ -72,6 +74,8 @@ public class UciPointsRepository {
         // Are the UCI Pointed Riders in the list of signups?
         final List<RiderGriddingPositionRecord> griddedRidersWithUciPoints = new ArrayList<>();
 
+        logger.trace("Riders with UCI Points: {}", ridersWithUciPoints.size());
+
         ridersWithUciPoints.forEach(riderUciPointRecord -> {
             String raceCategory = switch (riderUciPointRecord.uciCategory()) {
                 case "ME", "MJ" -> "A-Race";
@@ -85,7 +89,7 @@ public class UciPointsRepository {
                     .toList();
 
             int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
-
+            // fixme: not finding Ronan or Tadhg
             for (BookingReportRowRecord signup : signupsBookingReportList) {
                 if (signup.raceCategory().equals(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
                     griddedRidersWithUciPoints.add(
@@ -93,6 +97,8 @@ public class UciPointsRepository {
                 }
             }
         });
+
+        logger.trace("Signed Up riders with UCI Points: {}.", griddedRidersWithUciPoints);
 
         return griddedRidersWithUciPoints;
     }

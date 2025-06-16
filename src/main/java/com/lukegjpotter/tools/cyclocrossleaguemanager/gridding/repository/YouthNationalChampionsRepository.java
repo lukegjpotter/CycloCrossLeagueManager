@@ -5,6 +5,8 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddi
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileReader;
@@ -15,7 +17,11 @@ import java.util.List;
 @Repository
 public class YouthNationalChampionsRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(YouthNationalChampionsRepository.class);
+
     public List<RiderGriddingPositionRecord> findYouthNationalChampionsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
+
+        logger.trace("Finding Youth National Champions who are signed up.");
 
         final List<RiderGriddingPositionRecord> youthNationalChampions = new ArrayList<>();
 
@@ -38,6 +44,8 @@ public class YouthNationalChampionsRepository {
         } catch (IOException | CsvValidationException e) {
             return youthNationalChampions;
         }
+
+        logger.trace("Youth National Champs who are signed up: {}.", youthNationalChampions);
 
         return youthNationalChampions;
     }

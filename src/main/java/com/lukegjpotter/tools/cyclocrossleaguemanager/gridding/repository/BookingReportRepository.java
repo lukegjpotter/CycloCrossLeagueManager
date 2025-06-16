@@ -4,6 +4,8 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.util.List;
 @Repository
 public class BookingReportRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(BookingReportRepository.class);
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
 
@@ -23,6 +26,8 @@ public class BookingReportRepository {
     }
 
     public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId, boolean isOutputSorted) throws IOException {
+
+        logger.trace("Getting Data from Sign Ups Google Sheet.");
         String sheetName = "Report";
 
         // Set the Indices of the important columns.
@@ -65,6 +70,8 @@ public class BookingReportRepository {
                     .comparing(BookingReportRowRecord::raceCategory)
                     .thenComparing(BookingReportRowRecord::fullName));
         }
+
+        logger.trace("Number of Signups: {}.", signupsFromBookingReport.size());
 
         return signupsFromBookingReport;
     }

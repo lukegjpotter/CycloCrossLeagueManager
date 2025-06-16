@@ -6,6 +6,8 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheet
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.List;
 @Repository
 public class GriddingRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(GriddingRepository.class);
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final GoogleSheetsService googleSheetsService;
 
@@ -27,7 +30,10 @@ public class GriddingRepository {
     }
 
     public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) {
-        // Convert gridding sheet to URL, and extract Sheet ID.
+
+        logger.trace("Writing Gridding to Google Sheet.");
+
+        // Convert Gridding Sheet to URL, and extract Sheet ID.
         String griddingGoogleSheetId, griddingGoogleSheetUrlStringWithoutQueryString;
         try {
             URL griddingGoogleSheetURL = new URL(griddingGoogleSheet);
@@ -42,6 +48,9 @@ public class GriddingRepository {
         } catch (MalformedURLException e) {
             return new GriddingResultRecord(griddingGoogleSheet, "Malformed URL Exception: " + e.getMessage());
         }
+
+        logger.trace("Riders in Gridded Order Size: {}.", ridersInGriddedOrder.size());
+        logger.trace("Riders in Gridded order contains: {}", ridersInGriddedOrder.subList(0, 5));
 
         // Sort the sheet, so common races are grouped, and gridding is in order.
         ridersInGriddedOrder.sort(Comparator
@@ -72,6 +81,7 @@ public class GriddingRepository {
             return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "IO Exception: " + e.getMessage());
         }
 
+        logger.trace("Gridding written to Google Sheet.");
         return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "");
     }
 }

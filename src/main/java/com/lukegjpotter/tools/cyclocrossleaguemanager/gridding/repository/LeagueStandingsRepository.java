@@ -7,6 +7,8 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheet
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStandingsRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @Repository
 public class LeagueStandingsRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(LeagueStandingsRepository.class);
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     @Value("${gridding.currentseason.standings}")
@@ -32,6 +35,7 @@ public class LeagueStandingsRepository {
 
     public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(int roundNumber) throws IOException {
 
+        logger.trace("Loading data from League Standings Google Sheet.");
         // Decide which year's League Standings to use.
         String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
                 lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
@@ -68,11 +72,15 @@ public class LeagueStandingsRepository {
         leagueStandings.sort(Comparator.comparing(LeagueStandingsRowRecord::raceCategory).reversed()
                 .thenComparingInt(LeagueStandingsRowRecord::totalPoints).reversed());
 
+        logger.trace("League Standings Size: {}.", leagueStandings.size());
+
         return leagueStandings;
     }
 
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
             final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
+
+        logger.trace("Finding League Position of all Ungridded Signups.");
 
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = new ArrayList<>();
         // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the updated grid positions from ridersInGriddedOrder.
@@ -96,12 +104,12 @@ public class LeagueStandingsRepository {
 
                 if (!isRiderAlreadyGridded) {
 
-                    List<RiderGriddingPositionRecord> ridersinGriddedOrderForRaceCategory = latestGriddingOrder.stream()
+                    List<RiderGriddingPositionRecord> ridersInGriddedOrderForRaceCategory = latestGriddingOrder.stream()
                             .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().equals(riderInLeagueStandings.raceCategory()))
                             .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
                             .toList();
 
-                    int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
+                    int gridPosition = (ridersInGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersInGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
 
                     RiderGriddingPositionRecord newRiderToGrid = new RiderGriddingPositionRecord(riderInLeagueStandings.raceCategory(), gridPosition, riderInLeagueStandings.fullName(), riderInLeagueStandings.Club());
                     ridersInGriddedOrder.add(newRiderToGrid);
@@ -110,6 +118,7 @@ public class LeagueStandingsRepository {
             }
         }
 
+        logger.trace("Gridded rider based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, 5));
         return ridersInGriddedOrder;
     }
 }
