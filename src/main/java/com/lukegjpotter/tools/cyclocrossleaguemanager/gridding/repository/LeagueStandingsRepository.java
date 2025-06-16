@@ -92,6 +92,8 @@ public class LeagueStandingsRepository {
         for (LeagueStandingsRowRecord riderInLeagueStandings : leagueStandings) {
             if (signups.contains(new BookingReportRowRecord(riderInLeagueStandings.raceCategory(), riderInLeagueStandings.fullName(), riderInLeagueStandings.Club()))) {
                 // Is the rider already gridded? If yes, then break this loop.
+                // fixme: double counting Tadhg
+                // fixme: not including Ronan and Tadgh's club name.
                 boolean isRiderAlreadyGridded = false;
                 for (RiderGriddingPositionRecord griddedRider : latestGriddingOrder) {
                     if (griddedRider.raceCategory().equals(riderInLeagueStandings.raceCategory())

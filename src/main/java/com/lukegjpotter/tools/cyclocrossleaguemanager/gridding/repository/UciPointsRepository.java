@@ -71,7 +71,7 @@ public class UciPointsRepository {
                     }
                 });
 
-        // Are the UCI Pointed Riders in the list of signups?
+        // Are the riders with UCI Points in the list of signups?
         final List<RiderGriddingPositionRecord> griddedRidersWithUciPoints = new ArrayList<>();
 
         logger.trace("Riders with UCI Points: {}", ridersWithUciPoints.size());
@@ -84,14 +84,14 @@ public class UciPointsRepository {
             };
 
             List<RiderGriddingPositionRecord> ridersinGriddedOrderForRaceCategory = griddedRidersWithUciPoints.stream()
-                    .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().equals(raceCategory))
+                    .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().startsWith(raceCategory))
                     .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
                     .toList();
 
             int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
-            // fixme: not finding Ronan or Tadhg
+
             for (BookingReportRowRecord signup : signupsBookingReportList) {
-                if (signup.raceCategory().equals(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
+                if (signup.raceCategory().startsWith(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
                     griddedRidersWithUciPoints.add(
                             new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
                 }
