@@ -23,14 +23,15 @@ class BookingReportRepositoryTest {
 
     @Test
     void getDataFromSignUpsGoogleSheet() throws IOException {
-        List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1tQCo5fMjuTVzHUkKvJO9T5BMu9n_Pb0dGgu0Rz-zVpE", false).subList(0, 5);
+        List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", false).subList(0, 6);
 
         List<BookingReportRowRecord> expected = List.of(
                 new BookingReportRowRecord("A race", "Andy Aracer", "Sponsored Team"),
                 new BookingReportRowRecord("B race", "Billy Bracer", "Shamrock Cycling Club"),
                 new BookingReportRowRecord("B race Junior", "Johnny Junior", "Celtic Pedalers"),
                 new BookingReportRowRecord("Women", "Wanda Wracer", "Gael Riders"),
-                new BookingReportRowRecord("Women", "Martha Matherson", "Dublin Spinners"));
+                new BookingReportRowRecord("Women", "Martha Matherson", "Dublin Spinners"),
+                new BookingReportRowRecord("Under 12s Female", "Aoife O'Sullivan", "Claddagh Cyclists"));
 
         assertEquals(expected, actual);
     }

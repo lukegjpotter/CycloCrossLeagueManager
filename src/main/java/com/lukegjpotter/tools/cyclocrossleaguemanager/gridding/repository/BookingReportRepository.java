@@ -35,6 +35,7 @@ public class BookingReportRepository {
         int raceCategoryIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().raceCategory());
         int firstNameIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().firstName());
         int surnameIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().surname());
+        int genderIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().gender());
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
         int teamIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().team());
 
@@ -53,15 +54,17 @@ public class BookingReportRepository {
         bookingReportValues.forEach(values -> {
             String fullName = values.get(firstNameIndex - raceCategoryIndex) + " " + values.get(surnameIndex - raceCategoryIndex);
 
+            // Differentiate between Male and Female Underage riders.
+            // Tickets could be called "Under 16" or "U16".
+            String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex));
+            String ticketType = values.get(0).toString();
+            String raceCategory = (ticketType.startsWith("U")) ? ticketType + " " + gender : ticketType;
+
             String teamName = "";
             if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
             String clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - raceCategoryIndex));
 
-            signupsFromBookingReport.add(
-                    new BookingReportRowRecord(
-                            String.valueOf(values.get(0)), // This is the RaceCategoryIndex.
-                            fullName,
-                            clubOrTeam));
+            signupsFromBookingReport.add(new BookingReportRowRecord(raceCategory, fullName, clubOrTeam));
         });
 
         // Maybe: Ensure Signups are sorted on Race Category and Full Name.

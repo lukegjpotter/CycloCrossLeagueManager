@@ -118,7 +118,8 @@ public class LeagueStandingsRepository {
             }
         }
 
-        logger.trace("Gridded rider based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, 5));
+        int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : ridersInGriddedOrder.size() - 1;
+        logger.trace("Gridded rider based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
         return ridersInGriddedOrder;
     }
 }
