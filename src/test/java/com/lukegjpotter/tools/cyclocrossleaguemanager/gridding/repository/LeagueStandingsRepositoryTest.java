@@ -27,7 +27,7 @@ class LeagueStandingsRepositoryTest {
     @Test
     void loadDataFromLeagueStandingsGoogleSheet_CurrentYear_TopResult() throws IOException {
         LeagueStandingsRowRecord actual = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(2).get(0);
-        LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Javan Nulty", "Un-Attached Leinster", 268);
+        LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Tadhg Killeen", "Kilcullen Cycling Club Murphy Geospacial", 235);
 
         assertEquals(expected, actual);
     }
@@ -35,7 +35,7 @@ class LeagueStandingsRepositoryTest {
     @Test
     void loadDataFromLeagueStandingsGoogleSheet_LastYear_TopTotal_NotAdjustedTotal() throws IOException {
         LeagueStandingsRowRecord actual = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(1).get(0);
-        LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Ronan Killeen", "Lucan Cycling Road Club", 255);
+        LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Javan Nulty", "Un-Attached Leinster", 268);
 
         assertEquals(expected, actual);
     }
