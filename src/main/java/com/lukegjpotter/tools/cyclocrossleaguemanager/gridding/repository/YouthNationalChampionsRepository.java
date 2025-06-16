@@ -35,7 +35,6 @@ public class YouthNationalChampionsRepository {
                         lineInArray[1].trim(),
                         lineInArray[2].trim());
 
-                // fixme: not finding Youth National Champion here or in Ungridded.
                 if (signupsBookingReportList.contains(new BookingReportRowRecord(
                         youthNationalChampion.raceCategory(),
                         youthNationalChampion.fullName(),
