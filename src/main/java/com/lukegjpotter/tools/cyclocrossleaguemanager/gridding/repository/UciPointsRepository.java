@@ -73,10 +73,13 @@ public class UciPointsRepository {
 
         // Are the riders with UCI Points in the list of signups?
         final List<RiderGriddingPositionRecord> griddedRidersWithUciPoints = new ArrayList<>();
+        final List<String> namesOfRidersSignedUp = signupsBookingReportList.stream().map(BookingReportRowRecord::fullName).toList();
 
         logger.trace("Riders with UCI Points: {}", ridersWithUciPoints.size());
 
-        ridersWithUciPoints.forEach(riderUciPointRecord -> {
+        for (RiderUciPointRecord riderUciPointRecord : ridersWithUciPoints) {
+            if (!namesOfRidersSignedUp.contains(riderUciPointRecord.fullName())) continue;
+
             String raceCategory = switch (riderUciPointRecord.uciCategory()) {
                 case "ME", "MJ" -> "A-Race";
                 case "WE" -> "Women";
@@ -93,10 +96,10 @@ public class UciPointsRepository {
             for (BookingReportRowRecord signup : signupsBookingReportList) {
                 if (signup.raceCategory().startsWith(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
                     griddedRidersWithUciPoints.add(
-                            new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), ""));
+                            new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), signup.clubName()));
                 }
             }
-        });
+        }
 
         logger.trace("Signed Up riders with UCI Points: {}.", griddedRidersWithUciPoints);
 

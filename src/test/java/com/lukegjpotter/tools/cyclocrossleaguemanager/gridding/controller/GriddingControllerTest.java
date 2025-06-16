@@ -5,7 +5,6 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddi
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.GriddingRepository;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ class GriddingControllerTest {
     }
 
     // ToDo: Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
-    @AfterEach
+    //@AfterEach
     void tearDown() {
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
