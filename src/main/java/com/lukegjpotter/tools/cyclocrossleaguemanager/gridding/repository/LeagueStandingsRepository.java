@@ -96,7 +96,7 @@ public class LeagueStandingsRepository {
             for (BookingReportRowRecord signup : signups) {
                 if (riderInLeagueStandings.raceCategory().equals(raceCategoryWithoutSuffix)
                         && riderInLeagueStandings.fullName().equals(signup.fullName())
-                        && riderInLeagueStandings.Club().equals(signup.clubName())) {
+                        && riderInLeagueStandings.club().equals(signup.clubName())) {
                     isSignedUpRiderInLeague = true;
                     break;
                 }
@@ -108,7 +108,7 @@ public class LeagueStandingsRepository {
                 for (RiderGriddingPositionRecord griddedRider : latestGriddingOrder) {
                     if (griddedRider.raceCategory().startsWith(riderInLeagueStandings.raceCategory())
                             && griddedRider.fullName().equals(riderInLeagueStandings.fullName())
-                            && griddedRider.clubName().equals(riderInLeagueStandings.Club())) {
+                            && griddedRider.clubName().equals(riderInLeagueStandings.club())) {
                         isRiderAlreadyGridded = true;
                         break;
                     }
@@ -123,7 +123,7 @@ public class LeagueStandingsRepository {
 
                     int gridPosition = (ridersInGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersInGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
 
-                    RiderGriddingPositionRecord newRiderToGrid = new RiderGriddingPositionRecord(riderInLeagueStandings.raceCategory(), gridPosition, riderInLeagueStandings.fullName(), riderInLeagueStandings.Club());
+                    RiderGriddingPositionRecord newRiderToGrid = new RiderGriddingPositionRecord(riderInLeagueStandings.raceCategory(), gridPosition, riderInLeagueStandings.fullName(), riderInLeagueStandings.club());
                     ridersInGriddedOrder.add(newRiderToGrid);
                     latestGriddingOrder.add(newRiderToGrid);
                 }
