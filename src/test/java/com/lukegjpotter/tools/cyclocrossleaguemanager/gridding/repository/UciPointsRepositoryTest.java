@@ -42,7 +42,7 @@ class UciPointsRepositoryTest {
 
         List<RiderGriddingPositionRecord> expected = List.of(
                 new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", "Trinity Racing"),
-                new RiderGriddingPositionRecord("A-Race", 2, "Darnell Moore", "McCovey Cycle"),
+                new RiderGriddingPositionRecord("A-Race", 2, "Darnell Moore", "McCovey Cycles"),
                 new RiderGriddingPositionRecord("A-Race", 3, "Travis Harkness", "Inspired Cycling"),
                 new RiderGriddingPositionRecord("Women", 1, "Esther Wong", "Shipden Apex"),
                 new RiderGriddingPositionRecord("Women", 2, "Greta Lawless", "Team WORC"));
