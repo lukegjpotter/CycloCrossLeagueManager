@@ -34,19 +34,51 @@ class GriddingRepositoryTest {
     void tearDown() {
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
-                        new RiderGriddingPositionRecord("Women's Race", 2, "", ""),
-                        new RiderGriddingPositionRecord("Women's Race", 1, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 3, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 2, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 3, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 7, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 1, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 2, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 3, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 7, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 1, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 2, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 3, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 7, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 1, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 2, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 3, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 4, "", ""),
-                        new RiderGriddingPositionRecord("Boy's U16", 5, "", ""),
-                        new RiderGriddingPositionRecord("Boy's U16", 6, "", ""),
-                        new RiderGriddingPositionRecord("Boy's U16", 7, "", ""),
-                        new RiderGriddingPositionRecord("Boy's U16", 8, "", ""))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit");
+                        new RiderGriddingPositionRecord("Boy's U14", 1, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U14", 2, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U14", 3, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U14", 4, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U12", 1, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U12", 2, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U12", 3, "", ""),
+                        new RiderGriddingPositionRecord("Boy's U12", 4, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U16", 1, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U16", 2, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U16", 3, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U16", 4, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U14", 1, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U14", 2, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U14", 3, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U14", 4, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U12", 1, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U12", 2, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U12", 3, "", ""),
+                        new RiderGriddingPositionRecord("Girl's U12", 4, "", ""))),
+                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
     }
 
     @Test
@@ -54,8 +86,8 @@ class GriddingRepositoryTest {
     void writeGriddingToGoogleSheet_CompareReturns() {
         GriddingResultRecord actual = griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
-                        new RiderGriddingPositionRecord("Women's Race", 2, "League Leader", "Club Clubbers"),
-                        new RiderGriddingPositionRecord("Women's Race", 1, "UCI Points Holder", "Team Pro"),
+                        new RiderGriddingPositionRecord("Women", 2, "League Leader", "Club Clubbers"),
+                        new RiderGriddingPositionRecord("Women", 1, "UCI Points Holder", "Team Pro"),
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit?usp=sharing");
@@ -68,8 +100,8 @@ class GriddingRepositoryTest {
     void writeGriddingToGoogleSheet_CompareValues() throws IOException {
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
-                        new RiderGriddingPositionRecord("Women's Race", 2, "League Leader", "Club Clubbers"),
-                        new RiderGriddingPositionRecord("Women's Race", 1, "UCI Points Holder", "Team Pro"),
+                        new RiderGriddingPositionRecord("Women", 2, "League Leader", "Club Clubbers"),
+                        new RiderGriddingPositionRecord("Women", 1, "UCI Points Holder", "Team Pro"),
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
@@ -103,16 +135,16 @@ class GriddingRepositoryTest {
         // Given and When
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(
-                        new RiderGriddingPositionRecord("Boy's U16", 1, "LeagueLeader", "Team Sponsor"),
-                        new RiderGriddingPositionRecord("Boy's U16", 2, "Second", "Club Clubbers"),
-                        new RiderGriddingPositionRecord("Boy's U16", 3, "Third", "Team Pro"),
-                        new RiderGriddingPositionRecord("Boy's U16", 4, "Fourth", "Speedy CC"),
-                        new RiderGriddingPositionRecord("Boy's U16", 5, "Fifth", "National CC"),
-                        new RiderGriddingPositionRecord("Boy's U16", 6, "Sixth", "Team Pro"),
-                        new RiderGriddingPositionRecord("Boy's U16", 7, "Seventh", "Speedy CC"),
-                        new RiderGriddingPositionRecord("Boy's U16", 8, "Eighth", "National CC"),
-                        new RiderGriddingPositionRecord("Boy's U16", 9, "Ninth No Grid", "Speedy CC"),
-                        new RiderGriddingPositionRecord("Boy's U16", 10, "Tenth No Grid", "National CC"))),
+                        new RiderGriddingPositionRecord("Under 16s Male", 1, "LeagueLeader", "Team Sponsor"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 2, "Second", "Club Clubbers"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 3, "Third", "Team Pro"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 4, "Fourth", "Speedy CC"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 5, "Fifth", "National CC"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 6, "Sixth", "Team Pro"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 7, "Seventh", "Speedy CC"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 8, "Eighth", "National CC"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 9, "Ninth No Grid", "Speedy CC"),
+                        new RiderGriddingPositionRecord("Under 16s Male", 10, "Tenth No Grid", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
 
         // Then - Compare Values

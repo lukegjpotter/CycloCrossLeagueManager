@@ -24,12 +24,12 @@ public class GoogleSheetsSchemaService {
                 new GriddingRaceType("A-Race", "B4", 24),
                 new GriddingRaceType("Women", "E4", 24),
                 new GriddingRaceType("B-Race", "H4", 24),
-                new GriddingRaceType("Boy's U16", "B31", 8),
-                new GriddingRaceType("Girl's U16", "E31", 8),
-                new GriddingRaceType("Boy's U12", "H31", 8),
-                new GriddingRaceType("Boy's U14", "B42", 8),
-                new GriddingRaceType("Girl's U14", "E42", 8),
-                new GriddingRaceType("Girl's U12", "H42", 8));
+                new GriddingRaceType("Under 16s Male", "B31", 8),
+                new GriddingRaceType("Under 16s Female", "E31", 8),
+                new GriddingRaceType("Under 14s Male", "B42", 8),
+                new GriddingRaceType("Under 14s Female", "E42", 8),
+                new GriddingRaceType("Under 12s Male", "H31", 8),
+                new GriddingRaceType("Under 12s Female", "H42", 8));
     }
 
     public List<LeagueStandingsRaceType> leagueStandingsSchema() {

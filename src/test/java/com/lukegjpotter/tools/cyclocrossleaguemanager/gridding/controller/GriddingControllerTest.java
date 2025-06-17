@@ -5,6 +5,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddi
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.GriddingRepository;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +31,30 @@ class GriddingControllerTest {
     }
 
     // ToDo: Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
-    //@AfterEach
+    @AfterEach
     void tearDown() {
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 2, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 3, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 7, "", ""),
                         new RiderGriddingPositionRecord("B-Race", 1, "", ""),
                         new RiderGriddingPositionRecord("B-Race", 2, "", ""),
                         new RiderGriddingPositionRecord("B-Race", 3, "", ""),
                         new RiderGriddingPositionRecord("B-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 7, "", ""),
                         new RiderGriddingPositionRecord("Women's Race", 1, "", ""),
                         new RiderGriddingPositionRecord("Women's Race", 2, "", ""),
                         new RiderGriddingPositionRecord("Women's Race", 3, "", ""),
                         new RiderGriddingPositionRecord("Women's Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("Women's Race", 7, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 1, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 2, "", ""),
                         new RiderGriddingPositionRecord("Boy's U16", 3, "", ""),
@@ -69,7 +79,7 @@ class GriddingControllerTest {
                         new RiderGriddingPositionRecord("Girl's U12", 2, "", ""),
                         new RiderGriddingPositionRecord("Girl's U12", 3, "", ""),
                         new RiderGriddingPositionRecord("Girl's U12", 4, "", ""))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit");
+                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
     }
 
     @Test

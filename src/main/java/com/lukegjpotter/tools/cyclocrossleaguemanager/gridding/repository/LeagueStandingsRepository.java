@@ -60,9 +60,15 @@ public class LeagueStandingsRepository {
             ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(
                     leagueStandingsSpreadSheetId, leagueStandingsRaceType.raceType() + range);
             List<List<Object>> standingsValues = valueRange.getValues();
+
+            // Map the league race type to the gridding output race type.
+            String raceType = leagueStandingsRaceType.raceType();
+            int raceTypeIndex = leagueStandingsRaceTypes.indexOf(new LeagueStandingsRaceType(raceType));
+            String raceCategory = googleSheetsSchemaService.griddingSchema().get(raceTypeIndex).raceCategory();
+
             standingsValues.forEach(values -> leagueStandings.add(
                     new LeagueStandingsRowRecord(
-                            leagueStandingsRaceType.raceType(),
+                            raceCategory,
                             String.valueOf(values.get(fullNameIndex - 1)),
                             String.valueOf(values.get(clubIndex - 1)),
                             Integer.parseInt(String.valueOf(values.get(totalPointsIndex - 1))))));
