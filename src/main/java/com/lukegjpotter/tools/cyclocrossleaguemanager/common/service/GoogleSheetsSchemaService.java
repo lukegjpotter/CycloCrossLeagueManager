@@ -22,7 +22,7 @@ public class GoogleSheetsSchemaService {
     public List<GriddingRaceType> griddingSchema() {
         return List.of(
                 new GriddingRaceType("A-Race", "B4", 24),
-                new GriddingRaceType("Women's Race", "E4", 24),
+                new GriddingRaceType("Women", "E4", 24),
                 new GriddingRaceType("B-Race", "H4", 24),
                 new GriddingRaceType("Boy's U16", "B31", 8),
                 new GriddingRaceType("Girl's U16", "E31", 8),
