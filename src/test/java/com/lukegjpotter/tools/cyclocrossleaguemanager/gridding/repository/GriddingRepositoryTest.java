@@ -4,6 +4,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -24,6 +25,8 @@ class GriddingRepositoryTest {
     GriddingRepository griddingRepository;
     @Autowired
     GoogleSheetsService googleSheetsService;
+    @Autowired
+    TestUtils testUtils;
 
     @BeforeEach
     void setUp() {
@@ -32,53 +35,7 @@ class GriddingRepositoryTest {
     // ToDo: Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
     @AfterEach
     void tearDown() {
-        griddingRepository.writeGriddingToGoogleSheet(
-                new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 2, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 3, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 4, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 5, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 6, "", ""),
-                        new RiderGriddingPositionRecord("A-Race", 7, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 1, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 2, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 3, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 4, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 5, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 6, "", ""),
-                        new RiderGriddingPositionRecord("B-Race", 7, "", ""),
-                        new RiderGriddingPositionRecord("Women", 1, "", ""),
-                        new RiderGriddingPositionRecord("Women", 2, "", ""),
-                        new RiderGriddingPositionRecord("Women", 3, "", ""),
-                        new RiderGriddingPositionRecord("Women", 4, "", ""),
-                        new RiderGriddingPositionRecord("Women", 5, "", ""),
-                        new RiderGriddingPositionRecord("Women", 6, "", ""),
-                        new RiderGriddingPositionRecord("Women", 7, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Male", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Male", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Male", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Male", 4, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Male", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Male", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Male", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Male", 4, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Male", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Male", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Male", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Male", 4, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Female", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Female", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Female", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 16s Female", 4, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Female", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Female", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Female", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 14s Female", 4, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Female", 1, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Female", 2, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Female", 3, "", ""),
-                        new RiderGriddingPositionRecord("Under 12s Female", 4, "", ""))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
+        testUtils.wipeGriddingSheet("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
     }
 
     @Test
@@ -90,7 +47,7 @@ class GriddingRepositoryTest {
                         new RiderGriddingPositionRecord("Women", 1, "UCI Points Holder", "Team Pro"),
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/edit?usp=sharing");
+                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
         GriddingResultRecord expected = new GriddingResultRecord("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/", "");
 
         assertEquals(expected, actual);
@@ -106,18 +63,8 @@ class GriddingRepositoryTest {
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
 
-        // Compare Values
-        StringBuilder actualRaceGridding = new StringBuilder();
-        ValueRange actualARaceValueRangeResponse = googleSheetsService.readSpreadsheetValuesInRange("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec", "Gridding!B4:C6");
-        List<List<Object>> actualARaceValues = actualARaceValueRangeResponse.getValues();
-        for (List<Object> row : actualARaceValues) {
-            actualRaceGridding.append(String.format("%s, %s\n", row.get(0), row.get(1)));
-        }
-        ValueRange actualWomensRaceValueRangeResponse = googleSheetsService.readSpreadsheetValuesInRange("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec", "Gridding!E4:F5");
-        List<List<Object>> actualWomensRaceValues = actualWomensRaceValueRangeResponse.getValues();
-        for (List<Object> row : actualWomensRaceValues) {
-            actualRaceGridding.append(String.format("%s, %s\n", row.get(0), row.get(1)));
-        }
+        String actualRaceGridding = testUtils.aRaceGriddingToString("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec")
+                + testUtils.womensRaceGriddingToString("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
 
         String expectedRaceGridding = """
                 UCI Points Leader, Team Sponsor
@@ -127,12 +74,11 @@ class GriddingRepositoryTest {
                 League Leader, Club Clubbers
                 """;
 
-        assertEquals(expectedRaceGridding, actualRaceGridding.toString());
+        assertEquals(expectedRaceGridding, actualRaceGridding);
     }
 
     @Test
     void writeGriddingToGoogleSheet_ExceedMaxAllowableGridded() throws IOException {
-        // Given and When
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(
                         new RiderGriddingPositionRecord("Under 16s Male", 1, "LeagueLeader", "Team Sponsor"),
@@ -147,9 +93,10 @@ class GriddingRepositoryTest {
                         new RiderGriddingPositionRecord("Under 16s Male", 10, "Tenth No Grid", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
 
-        // Then - Compare Values
         StringBuilder actualRaceGridding = new StringBuilder();
 
+        // No need to replace with the TestUtils U16Boys Race Gridding method, as we're checking that the excess of
+        // U16s does not overwrite the header for the next section to be gridded.
         ValueRange actualU16RaceValueRangeResponse = googleSheetsService.readSpreadsheetValuesInRange("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec", "Gridding!B31:C40");
         List<List<Object>> actualU16RaceValues = actualU16RaceValueRangeResponse.getValues();
         for (List<Object> row : actualU16RaceValues) {

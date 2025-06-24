@@ -2,10 +2,13 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.testutils;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.GriddingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -13,6 +16,59 @@ public class TestUtils {
 
     @Autowired
     GoogleSheetsService googleSheetsService;
+    @Autowired
+    GriddingRepository griddingRepository;
+
+    public void wipeGriddingSheet(String griddingGoogleSheetId) {
+
+        griddingRepository.writeGriddingToGoogleSheet(
+                new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 2, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 3, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("A-Race", 7, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 1, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 2, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 3, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 4, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 5, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 6, "", ""),
+                        new RiderGriddingPositionRecord("B-Race", 7, "", ""),
+                        new RiderGriddingPositionRecord("Women", 1, "", ""),
+                        new RiderGriddingPositionRecord("Women", 2, "", ""),
+                        new RiderGriddingPositionRecord("Women", 3, "", ""),
+                        new RiderGriddingPositionRecord("Women", 4, "", ""),
+                        new RiderGriddingPositionRecord("Women", 5, "", ""),
+                        new RiderGriddingPositionRecord("Women", 6, "", ""),
+                        new RiderGriddingPositionRecord("Women", 7, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Male", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Male", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Male", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Male", 4, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Male", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Male", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Male", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Male", 4, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Male", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Male", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Male", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Male", 4, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Female", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Female", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Female", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 16s Female", 4, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Female", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Female", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Female", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 14s Female", 4, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Female", 1, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Female", 2, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Female", 3, "", ""),
+                        new RiderGriddingPositionRecord("Under 12s Female", 4, "", ""))),
+                "https://docs.google.com/spreadsheets/d/" + griddingGoogleSheetId + "/");
+    }
 
     public String aRaceGriddingToString(String griddingGoogleSheetId) throws IOException {
         return griddingSheetAndRangeToString(griddingGoogleSheetId, "Gridding!B4:C27");
