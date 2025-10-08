@@ -48,39 +48,57 @@ class GriddingControllerTest {
                         "errorMessage", emptyString());
 
         String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
-        String actualRaceGridding = testUtils.aRaceGriddingToString(griddingGoogleSheetId)
+        String actualRaceGridding = "A-Race Gridding:\n"
+                + testUtils.aRaceGriddingToString(griddingGoogleSheetId)
+                + "Women's Race Gridding:\n"
                 + testUtils.womensRaceGriddingToString(griddingGoogleSheetId)
+                + "B-Race Gridding:\n"
                 + testUtils.bRaceGriddingToString(griddingGoogleSheetId)
+                + "U16 Boys Gridding:\n"
                 + testUtils.u16BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U16 Girls Gridding:\n"
                 + testUtils.u16GirlsRaceGriddingToString(griddingGoogleSheetId)
+                + "U14 Boys Gridding:\n"
                 + testUtils.u14BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U14 Girls Gridding:\n"
                 + testUtils.u14GirlsRaceGriddingToString(griddingGoogleSheetId)
+                + "U12 Boys Gridding:\n"
                 + testUtils.u12BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U12 Girls Gridding:\n"
                 + testUtils.u12GirlsRaceGriddingToString(griddingGoogleSheetId);
 
         String expectedRaceGridding = """
+                A-Race Gridding:
                 Tadhg Killeen, Kilcullen Cycling Club Murphy Geospacial
                 Ronan O'Flynn, Orwell Wheelers Cycling Club
                 Francis Yates, Un-Attached Leinster
                 John Jordan, Un-Attached Leinster
+                Women's Race Gridding:
                 Esther Wong, Shipden Apex
                 Hannah McClorey, Hess CT
                 Doireann Killeen, Kilcullen Cycling Club Murphy Geospacial
                 Grace O'Rourke, Spellman-Dublin Port
                 Deirdre O Toole, VC Beechwood
+                B-Race Gridding:
                 John Slater, Castleknock Cycling Club
                 Bob Maye, Clonard RC
                 Matthew Boughton, Lucan Cycling Road Club
                 Tommy Buckley, Naomh Barrog Cycling Club
                 Matt Lynch, Orwell Wheelers Cycling Club
+                U16 Boys Gridding:
+                U16 Girls Gridding:
                 Emer Heverin, All human/VeloRevolution Racing Team
                 Katie Turner, Orwell Wheelers Cycling Club
+                U14 Boys Gridding:
                 J-Jay O'Brien, Bohermeen CC
                 Kealan Doherty, Foyle CC
+                U14 Girls Gridding:
                 Ciara O'Connor, Drogheda Wheelers
                 Laoise Crinion, IMBRC
+                U12 Boys Gridding:
                 Benjamin Cunningham, Orwell Wheelers Cycling Club
                 Logan McAreavey, Bellurgan Wheelers
+                U12 Girls Gridding:
                 Amelia Finnegan, Square Wheels
                 """;
 

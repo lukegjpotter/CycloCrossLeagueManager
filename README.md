@@ -69,9 +69,14 @@ Be wary not to commit the updated file to a public Git Repo. Consider adding it 
 
 #### IDE
 
-You can run this in your IDE by adding the Environment Variable to your Run Configurations.
+You can run this in your IDE by adding the Environment Variable to all of your Run Configurations.
 
     GOOGLE_SHEETS_API_KEY = 123456789
+
+And the following to your Test Run Configuration.
+
+    GOOGLE_SHEETS_API_KEY = 123456789    
+    spring.profiles.active=test
 
 #### Cloud Hosting Service
 

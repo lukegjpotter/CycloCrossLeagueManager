@@ -83,6 +83,7 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
+    // ToDo: Ensure that Riders are gridded in the race where they have the ticket, and not in a lower age race category. Example a U16 Riding the B-Race.
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
             final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
 
