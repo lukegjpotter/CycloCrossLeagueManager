@@ -11,7 +11,7 @@ Coming soon: AWS, Railways, Heroku
 
 ### Detailed explanation
 
-This is in essence an ETL Tool.
+This is, in essence, an ETL Tool.
 
 The Results processor will extract results from a RaceResults webpage, Google Sheet, or a CSV, to determine the results
 of the race.
@@ -33,26 +33,26 @@ none
 
 ### Build and Run
 
-This services relies on a Google API Key that has privileges to access Google Sheets. As the CycloCross League is
-expected to run on Google Sheets for Sign-ups, Gridding and Standings. So the ways to Build and Run detail ways to set
-the `GOOGLE_SHEETS_API_KEY` environment variable.
+This service relies on a Google `StoredCredential` that has privileges to access Google Sheets. As the CycloCross League
+is
+expected to run on Google Sheets for Sign-ups, Gridding, and Standings.
 
 As this project uses Spring Boot 3, you need Java 17 to run it.  
 This project uses port 8080 by default, so ensure that it's free when you're trying to run it.
 
-`ToDo:` How to generate the Google Sheets API Key????
-
 #### Application Properties
 
-Be sure to set the `application.properties` for the Google Sheets for the Current Season, Previous Season and the Year
+Be sure to set the `application.properties` for the Google Sheets for the Current Season, Previous Season, and the Year
 of the upcoming World Championships. Please update these before each new season.
+
+Be sure to also update the `application-test.properties` with links to Google Sheets with test data.
 
 Build and Run the software in the following ways:
 
 #### Command Line
 
 You can run this in your Terminal by editing the `setEnvironmentalVariables.sh` or `setEnvironmentalVariables.bat`
-files to set the Environmental Variable to your API Key.  
+files to set the Environmental Variable as needed.  
 Be wary not to commit the updated file to a public Git Repo. Consider adding it to the `.gitignore` file.
 
     source setEnvironmentalVariables.sh
@@ -64,24 +64,18 @@ Be wary not to commit the updated file to a public Git Repo. Consider adding it 
     
     docker run --name cyclocross_league_manager \
            -p 8080:8080 \
-           --env=GOOGLE_SHEETS_API_KEY='123456789' \
            -d --rm cyclocross-league-manager:latest
 
 #### IDE
 
-You can run this in your IDE by adding the Environment Variable to all of your Run Configurations.
+You can run this in your IDE by adding the Sprint Profile Environment Variable to all of your Test Run Configurations.
 
-    GOOGLE_SHEETS_API_KEY = 123456789
-
-And the following to your Test Run Configuration.
-
-    GOOGLE_SHEETS_API_KEY = 123456789    
     spring.profiles.active=test
 
 #### Cloud Hosting Service
 
-The configuration files for the Cloud Hosting Providers will contain a preset for the `GOOGLE_SHEETS_API_KEY`
-Environment Variable. Be sure to set or change this value as needed.
+The configuration files for the Cloud Hosting Providers will contain a preset for any Environment Variable. Be sure to
+set or change this value as needed.
 
 ### Operate or Test
 

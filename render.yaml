@@ -10,7 +10,4 @@ services:
     healthCheckPath: /health
     numInstances: 1
     autoDeploy: false
-    envVars:
-      - key: GOOGLE_SHEETS_API_KEY
-        sync: false
 version: "1"
