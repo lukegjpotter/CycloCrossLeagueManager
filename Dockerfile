@@ -4,14 +4,14 @@
 #
 # Use Gradle runtime as a parent image. Gradle Zip is already on this Image, but the Deamon still takes time to start.
 # The version of Gradle should match the version listed in the distributionUrl in the gradle/wrapper/gradle-wrapper.properties.
-FROM gradle:8.14-jdk17-alpine AS buildstage
+FROM eclipse-temurin:17-jdk-alpine AS buildstage
 ENV APP_HOME=/app
 # Set the working directory to /app.
 WORKDIR $APP_HOME
 # Copy the Source code files to the Build Stage Container.
 COPY . $APP_HOME/
 # Build the project with the Image's Gradle.
-RUN gradle clean build -x test
+RUN ./gradlew clean build -x test
 
 #
 # Run stage
