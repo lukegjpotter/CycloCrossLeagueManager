@@ -33,7 +33,7 @@ public class GriddingService {
     }
 
     public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
-        logger.trace("Gridding Sign Ups.");
+        logger.info("Gridding Sign Ups.");
 
         List<LeagueStandingsRowRecord> leagueStandings;
         List<BookingReportRowRecord> allSignups;
@@ -56,7 +56,7 @@ public class GriddingService {
             return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
         }
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
-        // Remove ridersWithUciPoints from ridersSignedUp, so they are not double counted.
+        // Remove ridersWithUciPoints from ridersSignedUp, so they are not double-counted.
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(allSignups);
         ridersInGriddedOrder.addAll(youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(allSignups));
 

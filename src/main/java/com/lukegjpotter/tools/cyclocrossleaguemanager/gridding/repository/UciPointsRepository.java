@@ -25,7 +25,7 @@ public class UciPointsRepository {
 
     public List<RiderGriddingPositionRecord> findRidersWithUciPointsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
-        logger.trace("Finding Riders with UCI Points who are signed up.");
+        logger.info("Finding Riders with UCI Points who are signed up.");
 
         // Find ME, MJ and WE UCI Points from Website with jSoup.
         final List<RiderUciPointRecord> ridersWithUciPoints = new ArrayList<>();
@@ -106,6 +106,7 @@ public class UciPointsRepository {
             }
         }
 
+        logger.info("Riders with UCI Points who are signed up: {}.", griddedRidersWithUciPoints.size());
         logger.trace("Signed Up riders with UCI Points: {}.", griddedRidersWithUciPoints);
 
         return griddedRidersWithUciPoints;

@@ -21,7 +21,7 @@ public class YouthNationalChampionsRepository {
 
     public List<RiderGriddingPositionRecord> findYouthNationalChampionsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
-        logger.trace("Finding Youth National Champions who are signed up.");
+        logger.info("Finding Youth National Champions who are signed up.");
 
         final List<RiderGriddingPositionRecord> youthNationalChampions = new ArrayList<>();
 
@@ -45,6 +45,7 @@ public class YouthNationalChampionsRepository {
             return youthNationalChampions;
         }
 
+        logger.info("Youth National Champions who are signed up: {}.", youthNationalChampions.size());
         logger.trace("Youth National Champs who are signed up: {}.", youthNationalChampions);
 
         return youthNationalChampions;

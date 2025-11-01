@@ -22,6 +22,7 @@ public class GriddingController {
 
     @PostMapping("/gridding")
     public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord griddingRequestRecord) {
+        logger.info("Gridding called.");
         logger.debug("Grid Signups Called with: {}", griddingRequestRecord);
 
         // ToDo: If Gridding Sheet is not set, create sheet.

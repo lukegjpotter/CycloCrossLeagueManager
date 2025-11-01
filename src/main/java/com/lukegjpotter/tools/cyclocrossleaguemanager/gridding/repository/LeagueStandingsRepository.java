@@ -35,7 +35,7 @@ public class LeagueStandingsRepository {
 
     public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(int roundNumber) throws IOException {
 
-        logger.trace("Loading data from League Standings Google Sheet.");
+        logger.info("Loading data from League Standings Google Sheet.");
         // Decide which year's League Standings to use.
         String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
                 lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
@@ -87,7 +87,7 @@ public class LeagueStandingsRepository {
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
             final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
 
-        logger.trace("Finding League Position of all Ungridded Signups.");
+        logger.info("Finding League Position of all Ungridded Signups.");
 
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = new ArrayList<>();
         // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the updated grid positions from ridersInGriddedOrder.

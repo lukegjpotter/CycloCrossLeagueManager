@@ -32,7 +32,7 @@ public class GriddingRepository {
     public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) {
 
         // fixme: Not printing Underage or Women Masters.
-        logger.trace("Writing Gridding to Google Sheet.");
+        logger.info("Writing Gridding to Google Sheet.");
 
         // Convert Gridding Sheet to URL, and extract Sheet ID.
         String griddingGoogleSheetId, griddingGoogleSheetUrlStringWithoutQueryString;
@@ -82,7 +82,7 @@ public class GriddingRepository {
             return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "IO Exception: " + e.getMessage());
         }
 
-        logger.trace("Gridding written to Google Sheet.");
+        logger.info("Gridding written to Google Sheet.");
         return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "");
     }
 }

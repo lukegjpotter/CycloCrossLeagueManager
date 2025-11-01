@@ -27,7 +27,7 @@ public class BookingReportRepository {
 
     public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId, boolean isOutputSorted) throws IOException {
 
-        logger.trace("Getting Data from Sign Ups Google Sheet.");
+        logger.info("Getting Data from Sign Ups Google Sheet.");
         String sheetName = "Report";
 
         // Set the Indices of the important columns.
@@ -105,7 +105,7 @@ public class BookingReportRepository {
                     .thenComparing(BookingReportRowRecord::fullName));
         }
 
-        logger.trace("Number of Signups: {}.", signupsFromBookingReport.size());
+        logger.info("Number of Signups: {}.", signupsFromBookingReport.size());
 
         return signupsFromBookingReport;
     }
