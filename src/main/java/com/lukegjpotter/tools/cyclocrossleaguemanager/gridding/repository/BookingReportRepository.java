@@ -57,17 +57,18 @@ public class BookingReportRepository {
         List<List<Object>> bookingReportValues = valueRange.getValues();
 
         bookingReportValues.forEach(values -> {
-            String fullName = values.get(firstNameIndex - raceCategoryIndex) + " " + values.get(surnameIndex - raceCategoryIndex);
+            String fullName = values.get(firstNameIndex - raceCategoryIndex).toString().trim() + " " + values.get(surnameIndex - raceCategoryIndex).toString().trim();
 
             // Differentiate between Male and Female Underage riders.
             // Tickets could be called "Under 16" or "U16".
-            String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex));
+            String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex)).trim();
             // Remove the "(non licence)" suffix.
             String ticketType = values.get(0).toString()
                     .replace(" (non licence)", "")
                     .replace(" (non-licence)", "")
                     .replace(" (leisure licence)", "")
-                    .replace(" Fun race", "");
+                    .replace(" Fun race", "")
+                    .trim();
             // Change "Youth U12 (2014-2015)" to "Under 12s".
             if (ticketType.startsWith("Youth")) {
                 ticketType = ticketType.replace("Youth ", "").substring(0, 3).trim();
@@ -89,7 +90,7 @@ public class BookingReportRepository {
             try {
                 String teamName = "";
                 if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
-                clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - raceCategoryIndex));
+                clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName.trim() : String.valueOf(values.get(clubIndex - raceCategoryIndex)).trim();
             } catch (IndexOutOfBoundsException e) {
                 clubOrTeam = "Un-Attached";
             }
