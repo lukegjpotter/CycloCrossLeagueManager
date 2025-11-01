@@ -52,9 +52,13 @@ public class UciPointsRepository {
                                                 .getElementsByTag("tbody").get(0)
                                                 .getElementsByTag("td");
 
-                                        riderFullName = riderProfilePageAttributes.get(0).text().trim()
-                                                + " "
-                                                + riderProfilePageAttributes.get(1).text().trim();
+                                        String firstName = riderProfilePageAttributes.get(0).text().trim();
+                                        // Convert CX24's Surnames to CyclingIreland's Surnames.
+                                        String surname = riderProfilePageAttributes.get(1).text().replace("'", " ").trim();
+                                        if (surname.startsWith("Mc")) {
+                                            surname = "Mc " + surname.substring(2);
+                                        }
+                                        riderFullName = firstName + " " + surname;
                                     } catch (IOException e) {
                                         logger.error("Error on Rider Profile Page. Error: {}", e.getMessage());
                                     }
@@ -79,6 +83,7 @@ public class UciPointsRepository {
 
         for (RiderUciPointRecord riderUciPointRecord : ridersWithUciPoints) {
             if (!namesOfRidersSignedUp.contains(riderUciPointRecord.fullName())) continue;
+            logger.trace("Rider with UCI Points: {}", riderUciPointRecord.fullName());
 
             String raceCategory = switch (riderUciPointRecord.uciCategory()) {
                 case "ME", "MJ" -> "A-Race";
@@ -86,12 +91,12 @@ public class UciPointsRepository {
                 default -> throw new IllegalStateException("Unexpected value: " + riderUciPointRecord.uciCategory());
             };
 
-            List<RiderGriddingPositionRecord> ridersinGriddedOrderForRaceCategory = griddedRidersWithUciPoints.stream()
+            List<RiderGriddingPositionRecord> ridersInGriddedOrderForRaceCategory = griddedRidersWithUciPoints.stream()
                     .filter(riderGriddingPositionRecord -> riderGriddingPositionRecord.raceCategory().startsWith(raceCategory))
                     .sorted(Comparator.comparingInt(RiderGriddingPositionRecord::gridPosition).reversed())
                     .toList();
 
-            int gridPosition = (ridersinGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersinGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
+            int gridPosition = (ridersInGriddedOrderForRaceCategory.isEmpty()) ? 1 : ridersInGriddedOrderForRaceCategory.get(0).gridPosition() + 1;
 
             for (BookingReportRowRecord signup : signupsBookingReportList) {
                 if (signup.raceCategory().startsWith(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {

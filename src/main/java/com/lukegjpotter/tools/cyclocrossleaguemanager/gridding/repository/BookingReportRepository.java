@@ -37,13 +37,18 @@ public class BookingReportRepository {
         int surnameIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().surname());
         int genderIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().gender());
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
-        int teamIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().team());
+        // ToDo: Remove Team, as it's been removed by the Booking Report.
+        int teamIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
+
+        List<Integer> indices = List.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex, teamIndex);
+        int minIndex = indices.stream().min(Integer::compareTo).get();
+        int maxIndex = indices.stream().max(Integer::compareTo).get();
 
         // Build the Range.
         StringBuilder range = new StringBuilder(sheetName).append("!");
         List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                 "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH");
-        range.append(alphabet.get(raceCategoryIndex)).append("2:").append(alphabet.get(teamIndex));
+        range.append(alphabet.get(minIndex)).append("2:").append(alphabet.get(maxIndex));
 
         // Read the Sheet.
         List<BookingReportRowRecord> signupsFromBookingReport = new ArrayList<>();
@@ -57,17 +62,43 @@ public class BookingReportRepository {
             // Differentiate between Male and Female Underage riders.
             // Tickets could be called "Under 16" or "U16".
             String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex));
-            String ticketType = values.get(0).toString();
-            String raceCategory = (ticketType.startsWith("U")) ? ticketType + " " + gender : ticketType;
+            // Remove the "(non licence)" suffix.
+            String ticketType = values.get(0).toString()
+                    .replace(" (non licence)", "")
+                    .replace(" (non-licence)", "")
+                    .replace(" (leisure licence)", "")
+                    .replace(" Fun race", "");
+            // Change "Youth U12 (2014-2015)" to "Under 12s".
+            if (ticketType.startsWith("Youth")) {
+                ticketType = ticketType.replace("Youth ", "").substring(0, 3).trim();
+            }
+            // raceCategory or ticketType need to be renamed from "A race..." to "A-Race", and "B race..." to "B-Race".
+            ticketType = ticketType
+                    .replace("A race", "A-Race")
+                    .replace("A Race", "A-Race")
+                    .replace("B race", "B-Race")
+                    .replace("B Race", "B-Race")
+                    .replace("a race", "A-Race")
+                    .replace("a Race", "A-Race")
+                    .replace("b race", "B-Race")
+                    .replace("b Race", "B-Race")
+                    .trim();
+            String raceCategory = ((ticketType.startsWith("U")) ? ticketType + " " + gender : ticketType).trim();
 
-            String teamName = "";
-            if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
-            String clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - raceCategoryIndex));
+            String clubOrTeam;
+            try {
+                String teamName = "";
+                if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
+                clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName : String.valueOf(values.get(clubIndex - raceCategoryIndex));
+            } catch (IndexOutOfBoundsException e) {
+                clubOrTeam = "Un-Attached";
+            }
 
+            logger.trace("Booking Report Row: {}.", new BookingReportRowRecord(raceCategory, fullName, clubOrTeam));
             signupsFromBookingReport.add(new BookingReportRowRecord(raceCategory, fullName, clubOrTeam));
         });
 
-        // Maybe: Ensure Signups are sorted on Race Category and Full Name.
+        // Ensure Signups are sorted on Race Category and Full Name.
         if (isOutputSorted) {
             signupsFromBookingReport.sort(Comparator
                     .comparing(BookingReportRowRecord::raceCategory)
