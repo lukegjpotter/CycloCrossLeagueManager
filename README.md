@@ -23,11 +23,9 @@ This tool can also provide Griding for Races. It takes in a Start List, and Grid
 
 ### Active APIs
 
-none
+`/gridding` to handle the gridding for a round.
 
 ### APIs in Development
-
-`/gridding` to handle the gridding for a round.
 
 `/raceresults` to handle updating the standings after a round.
 
@@ -39,6 +37,13 @@ expected to run on Google Sheets for Sign-ups, Gridding, and Standings.
 
 As this project uses Spring Boot 3, you need Java 17 to run it.  
 This project uses port 8080 by default, so ensure that it's free when you're trying to run it.
+
+#### Build.Gradle Dependencies Version Updates
+
+To ensure that you have the latest versions of the dependencies, run the following command, and update the versions in
+the `build.gradle` file:
+
+    ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain --no-parallel
 
 #### Application Properties
 
