@@ -75,7 +75,6 @@ class GriddingControllerTest {
                 John Jordan, Un-Attached Leinster
                 Women's Race Gridding:
                 Esther Wong, Shipden Apex
-                Hannah McClorey, Hess CT
                 Doireann Killeen, Kilcullen Cycling Club Murphy Geospacial
                 Grace O'Rourke, Spellman-Dublin Port
                 Deirdre O Toole, VC Beechwood

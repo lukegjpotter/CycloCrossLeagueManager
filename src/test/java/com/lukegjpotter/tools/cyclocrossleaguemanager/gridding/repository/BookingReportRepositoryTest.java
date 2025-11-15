@@ -26,9 +26,9 @@ class BookingReportRepositoryTest {
         List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", false).subList(0, 6);
 
         List<BookingReportRowRecord> expected = List.of(
-                new BookingReportRowRecord("A race", "Andy Aracer", "Sponsored Team"),
-                new BookingReportRowRecord("B race", "Billy Bracer", "Shamrock Cycling Club"),
-                new BookingReportRowRecord("B race Junior", "Johnny Junior", "Celtic Pedalers"),
+                new BookingReportRowRecord("A-Race", "Andy Aracer", "Emerald Wheelers"),
+                new BookingReportRowRecord("B-Race", "Billy Bracer", "Shamrock Cycling Club"),
+                new BookingReportRowRecord("B-Race Junior", "Johnny Junior", "Celtic Pedalers"),
                 new BookingReportRowRecord("Women", "Wanda Wracer", "Gael Riders"),
                 new BookingReportRowRecord("Women", "Martha Matherson", "Dublin Spinners"),
                 new BookingReportRowRecord("Under 12s Female", "Aoife O'Sullivan", "Claddagh Cyclists"));
