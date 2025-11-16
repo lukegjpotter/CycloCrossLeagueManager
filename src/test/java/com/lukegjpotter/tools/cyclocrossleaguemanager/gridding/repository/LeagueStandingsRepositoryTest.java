@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 class LeagueStandingsRepositoryTest {
@@ -116,7 +117,7 @@ class LeagueStandingsRepositoryTest {
                         new LeagueStandingsRowRecord("Women", "Barbie Brannagh", "Anti-Cycle Cycle Club", 122),
                         new LeagueStandingsRowRecord("Women", "Maria Larkin", "Donkey Label", 121),
                         new LeagueStandingsRowRecord("Women", "Mary Contrary", "Shamrock CC", 120),
-                        new LeagueStandingsRowRecord("Under 16 Female", "Mary Youth", "Shamrock CC", 120), // todo: is "Under 16 Female" correct?
+                        new LeagueStandingsRowRecord("Under 16s Female", "Mary Youth", "Shamrock CC", 120), // todo: is "Under 16 Female" correct?
                         new LeagueStandingsRowRecord("B-Race", "Billy Bracer", "Ligma CC", 123)),
 
                 List.of(new BookingReportRowRecord("A-Race M40", "John Johnson", "Wheel Wheelers"),
@@ -125,7 +126,7 @@ class LeagueStandingsRepositoryTest {
                         new BookingReportRowRecord("Women Master", "Mary Contrary", "Shamrock CC"),
                         new BookingReportRowRecord("Women M40", "Barbie Brannagh", "Anti-Cycle Cycle Club"),
                         new BookingReportRowRecord("Women Junior", "Maria Larkin", "Donkey Label"),
-                        new BookingReportRowRecord("Under 16 Female", "Mary Youth", "Shamrock CC"),
+                        new BookingReportRowRecord("Under 16s Female", "Mary Youth", "Shamrock CC"),
                         new BookingReportRowRecord("B-Race Junior", "Billy Bracer", "Ligma CC")),
 
                 List.of(new RiderGriddingPositionRecord("A-Race U23", 1, "Dean Harvey", "Trinity Racing")));
@@ -136,10 +137,15 @@ class LeagueStandingsRepositoryTest {
                 new RiderGriddingPositionRecord("Women", 1, "Barbie Brannagh", "Anti-Cycle Cycle Club"),
                 new RiderGriddingPositionRecord("Women", 2, "Maria Larkin", "Donkey Label"),
                 new RiderGriddingPositionRecord("Women", 3, "Mary Contrary", "Shamrock CC"),
-                new RiderGriddingPositionRecord("Under 16 Female", 1, "Mary Youth", "Shamrock CC"),
+                new RiderGriddingPositionRecord("Under 16s Female", 1, "Mary Youth", "Shamrock CC"),
                 new RiderGriddingPositionRecord("B-Race", 1, "Billy Bracer", "Ligma CC"));
 
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void findLeaguePositionOfAllUngriddedSignups_UpgradedAndAgedUpRiders() {
+        fail("Not Yet Implemented");
     }
 }

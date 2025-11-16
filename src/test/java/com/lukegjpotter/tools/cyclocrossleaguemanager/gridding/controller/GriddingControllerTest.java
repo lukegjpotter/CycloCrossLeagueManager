@@ -103,4 +103,55 @@ class GriddingControllerTest {
 
         assertEquals(expectedRaceGridding, actualRaceGridding);
     }
+
+    @Test
+    void gridRace_Round1_UpgradedAndAgedUpRiders() throws IOException {
+        given()
+                .contentType(ContentType.JSON)
+                .body(new GriddingRequestRecord("https://docs.google.com/spreadsheets/d/1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k/edit?usp=sharing", "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/", 1))
+                .when()
+                .post("/gridding")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"),
+                        "errorMessage", emptyString());
+
+        String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
+        String actualRaceGridding = "A-Race Gridding:\n"
+                + testUtils.aRaceGriddingToString(griddingGoogleSheetId)
+                + "Women's Race Gridding:\n"
+                + testUtils.womensRaceGriddingToString(griddingGoogleSheetId)
+                + "B-Race Gridding:\n"
+                + testUtils.bRaceGriddingToString(griddingGoogleSheetId)
+                + "U16 Boys Gridding:\n"
+                + testUtils.u16BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U16 Girls Gridding:\n"
+                + testUtils.u16GirlsRaceGriddingToString(griddingGoogleSheetId)
+                + "U14 Boys Gridding:\n"
+                + testUtils.u14BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U14 Girls Gridding:\n"
+                + testUtils.u14GirlsRaceGriddingToString(griddingGoogleSheetId)
+                + "U12 Boys Gridding:\n"
+                + testUtils.u12BoysRaceGriddingToString(griddingGoogleSheetId)
+                + "U12 Girls Gridding:\n"
+                + testUtils.u12GirlsRaceGriddingToString(griddingGoogleSheetId);
+
+        String expectedRaceGridding = """
+                A-Race Gridding:
+                Sean O Leary, Lucan Cycling Road Club
+                Women's Race Gridding:
+                Rhiannon Dolan, TC Racing
+                B-Race Gridding:
+                Luke Keogh, Lucan Cycling Road Club
+                U16 Boys Gridding:
+                U16 Girls Gridding:
+                U14 Boys Gridding:
+                U14 Girls Gridding:
+                U12 Boys Gridding:
+                Nathan Baker, Un-Attached
+                U12 Girls Gridding:
+                """;
+
+        assertEquals(expectedRaceGridding, actualRaceGridding);
+    }
 }
