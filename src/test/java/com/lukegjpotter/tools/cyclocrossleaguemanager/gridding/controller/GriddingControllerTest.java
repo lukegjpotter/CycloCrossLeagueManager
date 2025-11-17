@@ -142,13 +142,13 @@ class GriddingControllerTest {
                 Women's Race Gridding:
                 Rhiannon Dolan, TC Racing
                 B-Race Gridding:
-                Luke Keogh, Lucan Cycling Road Club
+                Luke Kehoe, Lucan Cycling Road Club
                 U16 Boys Gridding:
                 U16 Girls Gridding:
                 U14 Boys Gridding:
                 U14 Girls Gridding:
                 U12 Boys Gridding:
-                Nathan Baker, Un-Attached
+                Nathan Baker, Breffni Wheelers
                 U12 Girls Gridding:
                 """;
 

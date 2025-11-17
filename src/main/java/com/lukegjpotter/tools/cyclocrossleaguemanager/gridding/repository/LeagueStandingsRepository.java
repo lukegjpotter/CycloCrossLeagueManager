@@ -83,7 +83,6 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
-    // ToDo: Ensure that Riders are gridded in the race where they have the ticket, and not in a lower age race category. Example a U16 Riding the B-Race.
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
             final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
 
@@ -136,7 +135,7 @@ public class LeagueStandingsRepository {
             }
         }
 
-        int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size() - 1;
+        int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size();
         logger.trace("Gridded riders based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
         return ridersInGriddedOrder;
     }
