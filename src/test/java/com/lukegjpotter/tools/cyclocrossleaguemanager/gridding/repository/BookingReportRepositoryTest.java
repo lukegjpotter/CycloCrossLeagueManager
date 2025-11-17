@@ -28,7 +28,7 @@ class BookingReportRepositoryTest {
         List<BookingReportRowRecord> expected = List.of(
                 new BookingReportRowRecord("A-Race", "Andy Aracer", "Emerald Wheelers"),
                 new BookingReportRowRecord("B-Race", "Billy Bracer", "Shamrock Cycling Club"),
-                new BookingReportRowRecord("B-Race Junior", "Johnny Junior", "Celtic Pedalers"),
+                new BookingReportRowRecord("B-Race", "Johnny Junior", "Celtic Pedalers"),
                 new BookingReportRowRecord("Women", "Wanda Wracer", "Gael Riders"),
                 new BookingReportRowRecord("Women", "Martha Matherson", "Dublin Spinners"),
                 new BookingReportRowRecord("Under 12s Female", "Aoife O'Sullivan", "Claddagh Cyclists"));
@@ -38,7 +38,7 @@ class BookingReportRepositoryTest {
 
     @Test
     void getDataFromSignUpsGoogleSheet_VariousTicketTypeSpellings() throws IOException {
-        List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", false).subList(0, 8);
+        List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", false);
 
         List<BookingReportRowRecord> expected = List.of(
                 new BookingReportRowRecord("Women", "Rhiannon Dolan", "TC Racing"),
