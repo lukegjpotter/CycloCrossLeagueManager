@@ -93,15 +93,14 @@ public class LeagueStandingsRepository {
         // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the updated grid positions from ridersInGriddedOrder.
         List<RiderGriddingPositionRecord> latestGriddingOrder = new ArrayList<>(alreadyGriddedRidersInOrder);
 
-        // Iterate through League Standings
-        // If an entry in league standings is in the signups.
-        // Add the rider to ridersInGriddedOrder in the appropriate position.
+        /* Iterate through League Standings.
+         * If an entry in league standings is in the signups.
+         * Add the rider to ridersInGriddedOrder in the appropriate position. */
         for (LeagueStandingsRowRecord riderInLeagueStandings : leagueStandings) {
-            String raceCategoryWithoutSuffix = (riderInLeagueStandings.raceCategory().startsWith("Under")) ? riderInLeagueStandings.raceCategory() : riderInLeagueStandings.raceCategory().split(" ")[0];
 
             boolean isSignedUpRiderInLeague = false;
             for (BookingReportRowRecord signup : signups) {
-                if (riderInLeagueStandings.raceCategory().equals(raceCategoryWithoutSuffix)
+                if (riderInLeagueStandings.raceCategory().equals(signup.raceCategory())
                         && riderInLeagueStandings.fullName().equals(signup.fullName())
                         && riderInLeagueStandings.club().equals(signup.clubName())) {
                     isSignedUpRiderInLeague = true;
@@ -138,7 +137,7 @@ public class LeagueStandingsRepository {
         }
 
         int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size() - 1;
-        logger.trace("Gridded rider based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
+        logger.trace("Gridded riders based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
         return ridersInGriddedOrder;
     }
 }

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 class LeagueStandingsRepositoryTest {
@@ -117,19 +116,19 @@ class LeagueStandingsRepositoryTest {
                         new LeagueStandingsRowRecord("Women", "Barbie Brannagh", "Anti-Cycle Cycle Club", 122),
                         new LeagueStandingsRowRecord("Women", "Maria Larkin", "Donkey Label", 121),
                         new LeagueStandingsRowRecord("Women", "Mary Contrary", "Shamrock CC", 120),
-                        new LeagueStandingsRowRecord("Under 16s Female", "Mary Youth", "Shamrock CC", 120), // todo: is "Under 16 Female" correct?
+                        new LeagueStandingsRowRecord("Under 16s Female", "Mary Youth", "Shamrock CC", 120),
                         new LeagueStandingsRowRecord("B-Race", "Billy Bracer", "Ligma CC", 123)),
 
-                List.of(new BookingReportRowRecord("A-Race M40", "John Johnson", "Wheel Wheelers"),
-                        new BookingReportRowRecord("A-Race Junior", "James Jameson", "Willow CC"),
-                        new BookingReportRowRecord("A-Race U23", "Dean Harvey", "Trinity Racing"),
-                        new BookingReportRowRecord("Women Master", "Mary Contrary", "Shamrock CC"),
-                        new BookingReportRowRecord("Women M40", "Barbie Brannagh", "Anti-Cycle Cycle Club"),
-                        new BookingReportRowRecord("Women Junior", "Maria Larkin", "Donkey Label"),
+                List.of(new BookingReportRowRecord("A-Race", "John Johnson", "Wheel Wheelers"),
+                        new BookingReportRowRecord("A-Race", "James Jameson", "Willow CC"),
+                        new BookingReportRowRecord("A-Race", "Dean Harvey", "Trinity Racing"),
+                        new BookingReportRowRecord("Women", "Mary Contrary", "Shamrock CC"),
+                        new BookingReportRowRecord("Women", "Barbie Brannagh", "Anti-Cycle Cycle Club"),
+                        new BookingReportRowRecord("Women", "Maria Larkin", "Donkey Label"),
                         new BookingReportRowRecord("Under 16s Female", "Mary Youth", "Shamrock CC"),
-                        new BookingReportRowRecord("B-Race Junior", "Billy Bracer", "Ligma CC")),
+                        new BookingReportRowRecord("B-Race", "Billy Bracer", "Ligma CC")),
 
-                List.of(new RiderGriddingPositionRecord("A-Race U23", 1, "Dean Harvey", "Trinity Racing")));
+                List.of(new RiderGriddingPositionRecord("A-Race", 1, "Dean Harvey", "Trinity Racing")));
 
         List<RiderGriddingPositionRecord> expected = List.of(
                 new RiderGriddingPositionRecord("A-Race", 2, "James Jameson", "Willow CC"),
@@ -144,8 +143,54 @@ class LeagueStandingsRepositoryTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests Riders who have aged up, or who have been upgraded from the B-Race.
+     * It simulates The First Round of the League in the way that riders age up.
+     * It also simulates normal league operations, when B-Racers are upgraded to the A-Race.
+     */
     @Test
     void findLeaguePositionOfAllUngriddedSignups_UpgradedAndAgedUpRiders() {
-        fail("Not Yet Implemented");
+
+        List<LeagueStandingsRowRecord> leagueStandings = List.of(
+                new LeagueStandingsRowRecord("A-Race", "ARacerWith LeaguePoints", "Shamrockers", 38),
+                new LeagueStandingsRowRecord("A-Race", "NonAttender ARacer", "Sleepy CC", 30),
+                new LeagueStandingsRowRecord("B-Race", "Upgraded from B-Race", "XYZ CC", 55),
+                new LeagueStandingsRowRecord("B-Race", "BRacerWith LeaguePoints", "Setanta CC", 35),
+                new LeagueStandingsRowRecord("Women", "WomanWith LeaguePoints", "Emerald CC", 48),
+                new LeagueStandingsRowRecord("Women", "NonAttender Woman", "Turtle CC", 33),
+                new LeagueStandingsRowRecord("Under 16s Male", "FirstYear Junior", "Setanta CC", 35),
+                new LeagueStandingsRowRecord("Under 16s Male", "NonAttender U16", "Sleepy CC", 41),
+                new LeagueStandingsRowRecord("Under 16s Female", "FirstYear WomenJunior", "Setanta CC", 35),
+                new LeagueStandingsRowRecord("Under 14s Male", "FirstYear U16", "Young Lads", 60),
+                new LeagueStandingsRowRecord("Under 14s Male", "SecondYear U14", "Trailblazers", 42),
+                new LeagueStandingsRowRecord("Under 14s Female", "FirstYear WU16", "Young Lasses", 60),
+                new LeagueStandingsRowRecord("Under 14s Female", "SecondYear WU14", "Trailblazers", 42),
+                new LeagueStandingsRowRecord("Under 12s Male", "NonAttender U12", "Young Lads", 60),
+                new LeagueStandingsRowRecord("Under 12s Male", "SecondYear U12", "Turtle CC", 38));
+
+        List<BookingReportRowRecord> signups = List.of(
+                new BookingReportRowRecord("Women", "FirstYear WomenJunior", "Setanta CCC"),
+                new BookingReportRowRecord("A-Race", "Upgraded from B-Race", "XYZ CC"),
+                new BookingReportRowRecord("Women", "WomanWith LeaguePoints", "Emerald CC"),
+                new BookingReportRowRecord("A-Race", "ARacerWith LeaguePoints", "Shamrockers"),
+                new BookingReportRowRecord("B-Race", "BRacerWith LeaguePoints", "Setanta CC"),
+                new BookingReportRowRecord("B-Race", "FirstYear Junior", "Setanta CC"),
+                new BookingReportRowRecord("Under 16s Male", "FirstYear U16", "Young Lads"),
+                new BookingReportRowRecord("Under 16s Female", "FirstYear WU16", "Young Lads"),
+                new BookingReportRowRecord("Under 14s Male", "SecondYear U14", "Trailblazers"),
+                new BookingReportRowRecord("Under 14s Female", "SecondYear WU14", "Trailblazers"),
+                new BookingReportRowRecord("Under 12s Male", "SecondYear U12", "Turtle CC"));
+
+        List<RiderGriddingPositionRecord> actual = leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(leagueStandings, signups, new ArrayList<>());
+
+        List<RiderGriddingPositionRecord> expected = List.of(
+                new RiderGriddingPositionRecord("A-Race", 1, "ARacerWith LeaguePoints", "Shamrockers"),
+                new RiderGriddingPositionRecord("B-Race", 1, "BRacerWith LeaguePoints", "Setanta CC"),
+                new RiderGriddingPositionRecord("Women", 1, "WomanWith LeaguePoints", "Emerald CC"),
+                new RiderGriddingPositionRecord("Under 14s Male", 1, "SecondYear U14", "Trailblazers"),
+                new RiderGriddingPositionRecord("Under 14s Female", 1, "SecondYear WU14", "Trailblazers"),
+                new RiderGriddingPositionRecord("Under 12s Male", 1, "SecondYear U12", "Turtle CC"));
+
+        assertEquals(expected, actual);
     }
 }
