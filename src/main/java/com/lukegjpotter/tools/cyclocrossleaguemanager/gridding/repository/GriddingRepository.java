@@ -32,6 +32,7 @@ public class GriddingRepository {
     public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) {
 
         // fixme: Not printing Underage or Women Masters.
+        // fixme: Seems to be being logged twice.
         logger.info("Writing Gridding to Google Sheet.");
 
         // Convert Gridding Sheet to URL, and extract Sheet ID.
@@ -51,7 +52,8 @@ public class GriddingRepository {
         }
 
         logger.trace("Riders in Gridded Order Size: {}.", ridersInGriddedOrder.size());
-        logger.trace("Riders in Gridded order contains: {}", ridersInGriddedOrder.subList(0, 5));
+        int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size() - 1;
+        logger.trace("Riders in Gridded order contains: {}", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
 
         // Sort the sheet, so common races are grouped, and gridding is in order.
         ridersInGriddedOrder.sort(Comparator
