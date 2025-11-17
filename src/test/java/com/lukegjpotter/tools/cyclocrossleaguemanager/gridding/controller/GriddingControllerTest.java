@@ -29,7 +29,7 @@ class GriddingControllerTest {
         baseURI = "http://localhost:8080/";
     }
 
-    // ToDo: Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
+    // Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
     @AfterEach
     void tearDown() {
         testUtils.wipeGriddingSheet("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");

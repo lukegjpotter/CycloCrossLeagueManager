@@ -31,7 +31,6 @@ public class GriddingRepository {
 
     public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) {
 
-        // fixme: Not printing Underage or Women Masters.
         logger.info("Writing Gridding to Google Sheet.");
 
         // Convert Gridding Sheet to URL, and extract Sheet ID.

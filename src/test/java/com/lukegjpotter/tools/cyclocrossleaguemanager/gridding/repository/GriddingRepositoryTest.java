@@ -32,7 +32,7 @@ class GriddingRepositoryTest {
     void setUp() {
     }
 
-    // ToDo: Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
+    // Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
     @AfterEach
     void tearDown() {
         testUtils.wipeGriddingSheet("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
@@ -79,7 +79,6 @@ class GriddingRepositoryTest {
 
     @Test
     void writeGriddingToGoogleSheet_ExceedMaxAllowableGridded() throws IOException {
-        // ToDo: This test is not cleaning up after itself.
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(
                         new RiderGriddingPositionRecord("Under 16s Male", 1, "LeagueLeader", "Team Sponsor"),

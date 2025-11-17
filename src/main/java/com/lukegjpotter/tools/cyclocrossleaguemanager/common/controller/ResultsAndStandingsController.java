@@ -17,8 +17,8 @@ public class ResultsAndStandingsController {
         this.resultsAndStandingsService = resultsAndStandingsService;
     }
 
-    @PostMapping("/raceresults")
-    public String raceResults(@RequestBody String raceResultsUrl) {
+    @PostMapping("/updatestandings")
+    public String updateStandings(@RequestBody String raceResultsUrl) {
         resultsAndStandingsService.performETL(raceResultsUrl);
 
         // ToDo: Return Response Code and Status.

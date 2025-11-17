@@ -25,14 +25,14 @@ class ResultsAndStandingsControllerTest {
     }
 
     @Test
-    void raceResults() {
+    void updateStandings() {
         // ToDo: Replace with RestAssured.
 
         String urlInput = "";
         Mockito.when(resultsAndStandingsService.performETL(urlInput)).thenReturn("");
 
         String expected = "";
-        String actual = resultsAndStandingsController.raceResults(urlInput);
+        String actual = resultsAndStandingsController.updateStandings(urlInput);
 
         assertEquals(expected, actual);
     }

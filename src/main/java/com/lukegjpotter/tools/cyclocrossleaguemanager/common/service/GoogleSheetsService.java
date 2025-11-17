@@ -30,7 +30,8 @@ public class GoogleSheetsService {
         final String applicationName = "CycloCross League Manager";
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-        final String tokensDirectoryPath = "./src/main/resources/tokens"; // ToDo: May need to be on Project level, for Docker deployment.
+        // ToDo: May need to be on Project level, for Docker deployment.
+        final String tokensDirectoryPath = "./src/main/resources/tokens";
         final List<String> scopes = List.of(SheetsScopes.SPREADSHEETS);
         final String credentialsFilePath = "/credentials.json";
 
