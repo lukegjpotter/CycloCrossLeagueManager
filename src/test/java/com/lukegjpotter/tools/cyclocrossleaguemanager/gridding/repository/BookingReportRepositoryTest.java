@@ -43,7 +43,7 @@ class BookingReportRepositoryTest {
         List<BookingReportRowRecord> expected = List.of(
                 new BookingReportRowRecord("Women", "Rhiannon Dolan", "TC Racing"),
                 new BookingReportRowRecord("A-Race", "Sean O Leary", "Lucan Cycling Road Club"),
-                new BookingReportRowRecord("B-Race", "Luke Keogh", "Lucan Cycling Road Club"),
+                new BookingReportRowRecord("B-Race", "Luke Kehoe", "Lucan Cycling Road Club"),
                 new BookingReportRowRecord("A-Race", "Peter Boaden", "Gorey Cycling Club"),
                 new BookingReportRowRecord("A-Race", "William Brown", "Un-Attached"),
                 new BookingReportRowRecord("Under 16s Male", "James Cunningham", "Pinergy Orwell Wheelers"),
