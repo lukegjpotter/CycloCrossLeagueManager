@@ -7,7 +7,7 @@ Standings and also Provides Griding based on the Standings.
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/lukegjpotter/CycloCrossLeagueManager)
 
-Coming soon: AWS, Railways, Heroku
+Coming soon: GCP Run, AWS, Railways, Heroku
 
 ### Detailed explanation
 
@@ -27,13 +27,12 @@ This tool can also provide Griding for Races. It takes in a Start List, and Grid
 
 ### APIs in Development
 
-`/raceresults` to handle updating the standings after a round.
+`/updatestandings` to handle updating the standings after a round.
 
 ### Build and Run
 
 This service relies on a Google `StoredCredential` that has privileges to access Google Sheets. As the CycloCross League
-is
-expected to run on Google Sheets for Sign-ups, Gridding, and Standings.
+is expected to run on Google Sheets for Sign-ups, Gridding, and Standings.
 
 As this project uses Spring Boot 3, you need Java 17 to run it.  
 This project uses port 8080 by default, so ensure that it's free when you're trying to run it.
@@ -60,22 +59,28 @@ You can run this in your Terminal by editing the `setEnvironmentalVariables.sh` 
 files to set the Environmental Variable as needed.  
 Be wary not to commit the updated file to a public Git Repo. Consider adding it to the `.gitignore` file.
 
-    source setEnvironmentalVariables.sh
-    ./gradlew build bootRun
+```bash
+source setEnvironmentalVariables.sh
+./gradlew build bootRun
+```
 
 #### Docker
 
-    docker build --pull -t cyclocross-league-manager:latest .
+```bash
+docker build --pull -t cyclocross-league-manager:latest .
     
-    docker run --name cyclocross_league_manager \
-           -p 8080:8080 \
-           -d --rm cyclocross-league-manager:latest
+docker run --name cyclocross_league_manager \
+    -p 8080:8080 \
+    -d --rm cyclocross-league-manager:latest
+```
 
 #### IDE
 
-You can run this in your IDE by adding the Sprint Profile Environment Variable to all of your Test Run Configurations.
+You can run this in your IDE by adding the Spring Profile Environment Variable to all of your Test Run Configurations.
 
-    spring.profiles.active=test
+```bash
+spring.profiles.active=test
+```
 
 #### Cloud Hosting Service
 
@@ -92,28 +97,34 @@ Use Curl to provide the input to the running service.
 
 Optional: Install JSON to format/pretty print the Response.
 
-    sudo npm i -g json
+```bash
+sudo npm i -g json
+```
 
 To run the Gridding endpoint, use the following:
 
-    curl -X POST localhost:8080/gridding \
-     -H 'Content-type:application/json' \
-     -d '{
-             "signups" : "https://docs.google.com/spreadsheets/456",
-             "gridding" : "https://docs.google.com/spreadsheets/789",
-             "roundNumber" : 1
-         }' | json
+```bash
+curl -X POST localhost:8080/gridding \
+ -H 'Content-type:application/json' \
+ -d '{
+       "signups" : "https://docs.google.com/spreadsheets/456",
+       "gridding" : "https://docs.google.com/spreadsheets/789",
+       "roundNumber" : 1
+     }' | json
+```
 
 Then it will return
 
-    {
-        "gridding"  : "https://www.docs.google.com/spreadsheets/123",
-        "errorMessage" : ""
-    }
+```json
+{
+  "gridding": "https://www.docs.google.com/spreadsheets/789",
+  "errorMessage": ""
+}
+```
 
 #### PostMan
 
-There is a PostMan Collection that has the prefilled JSON Bodies. Be sure to set the Environment, as there'll be
+There is a PostMan Bodies. BCollection that has the prefilled JSONe sure to set the Environment, as there'll be
 localhost and Render supplied Environments.
 
 PostMan
