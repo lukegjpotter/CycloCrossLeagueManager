@@ -33,7 +33,7 @@ class ResultsAndStandingsServiceTest {
         String resultsUrl = "";
         TransformedResults transformedResults = new TransformedResults();
         Mockito.when(resultsExtractorService.extract(resultsUrl)).thenReturn(transformedResults);
-        Mockito.doNothing().when(standingsUpdaterService).load(transformedResults);
+        //Mockito.doNothing().when(standingsUpdaterService).load(transformedResults);
 
         String expected = "";
         String actual = resultsAndStandingsService.performETL(resultsUrl);

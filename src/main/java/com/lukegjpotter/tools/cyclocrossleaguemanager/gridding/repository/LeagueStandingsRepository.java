@@ -23,7 +23,7 @@ public class LeagueStandingsRepository {
     private static final Logger logger = LoggerFactory.getLogger(LeagueStandingsRepository.class);
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
-    @Value("${gridding.currentseason.standings}")
+    @Value("${common.currentseason.standings}")
     private String currentSeasonLeagueStandingsSpreadSheetId;
     @Value("${gridding.lastseason.standings}")
     private String lastSeasonLeagueStandingsSpreadSheetId;

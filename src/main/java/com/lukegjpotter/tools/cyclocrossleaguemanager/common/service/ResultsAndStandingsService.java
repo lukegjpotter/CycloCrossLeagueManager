@@ -24,7 +24,7 @@ public class ResultsAndStandingsService {
         // ToDo: Convert to URL
 
         TransformedResults transformedResults = resultsExtractorService.extract(raceResultsUrl);
-        standingsUpdaterService.load(transformedResults);
+        //standingsUpdaterService.load(transformedResults);
 
         return "";
     }

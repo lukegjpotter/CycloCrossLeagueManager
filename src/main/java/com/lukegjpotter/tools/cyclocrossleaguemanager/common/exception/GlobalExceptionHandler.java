@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.common.exception;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.exception.UpdateStandingsException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -19,6 +20,22 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(UpdateStandingsException.class)
+    public ProblemDetail handleUpdateStandingsException(UpdateStandingsException updateStandingsException) {
+
+        logger.error(updateStandingsException.getMessage(), updateStandingsException);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                updateStandingsException.getMessage()
+        );
+
+        problemDetail.setTitle("Update Standings Error");
+        problemDetail.setProperty("errorCode", "UPDATE_STANDINGS_ERROR");
+
+        return problemDetail;
+    }
 
     @ExceptionHandler(GriddingException.class)
     public ProblemDetail handleGriddingException(GriddingException griddingException) {
