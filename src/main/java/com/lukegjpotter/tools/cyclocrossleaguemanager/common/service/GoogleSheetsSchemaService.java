@@ -19,7 +19,7 @@ public class GoogleSheetsSchemaService {
 
     public GoogleSheetsSchemaService() {
         leagueStandingsHeader = new LeagueStandingsHeader("Name", "Club", "Total");
-        bookingreportHeader = new BookingReportHeader("TicketType", "First Name", "Last Name", "Gender", "CI Club", "Team");
+        bookingreportHeader = new BookingReportHeader("TicketType", "First Name", "Last Name", "Gender", "CI Club");
     }
 
     public List<GriddingRaceType> griddingSchema() {

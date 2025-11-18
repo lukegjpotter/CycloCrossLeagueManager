@@ -100,8 +100,8 @@ public class UciPointsRepository {
 
             for (BookingReportRowRecord signup : signupsBookingReportList) {
                 if (signup.raceCategory().startsWith(raceCategory) && signup.fullName().equalsIgnoreCase(riderUciPointRecord.fullName())) {
-                    griddedRidersWithUciPoints.add(
-                            new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), signup.clubName()));
+                    griddedRidersWithUciPoints.add(new RiderGriddingPositionRecord(raceCategory, gridPosition, riderUciPointRecord.fullName(), signup.clubName()));
+                    break;
                 }
             }
         }

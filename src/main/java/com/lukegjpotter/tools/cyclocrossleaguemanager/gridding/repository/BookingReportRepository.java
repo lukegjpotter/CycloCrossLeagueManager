@@ -41,10 +41,8 @@ public class BookingReportRepository {
         int surnameIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().surname());
         int genderIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().gender());
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
-        // ToDo: Remove Team, as it's been removed by the Booking Report.
-        int teamIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
 
-        List<Integer> indices = List.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex, teamIndex);
+        List<Integer> indices = List.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex);
         int minIndex = indices.stream().min(Integer::compareTo).get();
         int maxIndex = indices.stream().max(Integer::compareTo).get();
 
@@ -68,6 +66,7 @@ public class BookingReportRepository {
             String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex)).trim();
 
             // Remove the "(non licence)" suffix.
+            // Using 0 here, as it's faster than repeatedly calculating raceCategoryIndex - raceCategoryIndex.
             String ticketType = values.get(0).toString()
                     .replace(" (non licence)", "")
                     .replace(" (non-licence)", "")
@@ -99,17 +98,15 @@ public class BookingReportRepository {
             // Set Race Category and gender where required, based on TicketType.
             String raceCategory = ((ticketType.startsWith("U")) ? ticketType + " " + gender : ticketType).trim();
 
-            String clubOrTeam;
+            String club = "Un-Attached";
             try {
-                String teamName = "";
-                if (values.size() == 27) teamName = String.valueOf(values.get(teamIndex - raceCategoryIndex));
-                clubOrTeam = (!teamName.isEmpty() && !teamName.equals("null")) ? teamName.trim() : String.valueOf(values.get(clubIndex - raceCategoryIndex)).trim();
-            } catch (IndexOutOfBoundsException e) {
-                clubOrTeam = "Un-Attached";
+                club = values.get(clubIndex - raceCategoryIndex).toString().trim();
+            } catch (IndexOutOfBoundsException ignored) {
             }
 
-            logger.trace("Booking Report Row: {}.", new BookingReportRowRecord(raceCategory, fullName, clubOrTeam));
-            signupsFromBookingReport.add(new BookingReportRowRecord(raceCategory, fullName, clubOrTeam));
+            BookingReportRowRecord bookingReportRowRecord = new BookingReportRowRecord(raceCategory, fullName, club);
+            logger.trace("Booking Report Row: {}.", bookingReportRowRecord);
+            signupsFromBookingReport.add(bookingReportRowRecord);
         });
 
         // Ensure Signups are sorted on Race Category and Full Name.

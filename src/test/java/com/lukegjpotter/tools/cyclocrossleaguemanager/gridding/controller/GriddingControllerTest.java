@@ -7,6 +7,8 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,6 +25,7 @@ class GriddingControllerTest {
 
     @Autowired
     TestUtils testUtils;
+    private final Logger logger = LoggerFactory.getLogger(GriddingControllerTest.class);
 
     @BeforeAll
     static void beforeClass() {
@@ -32,6 +35,7 @@ class GriddingControllerTest {
     // Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
     @AfterEach
     void tearDown() {
+        logger.info("Cleaning up after test.");
         testUtils.wipeGriddingSheet("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
     }
 
