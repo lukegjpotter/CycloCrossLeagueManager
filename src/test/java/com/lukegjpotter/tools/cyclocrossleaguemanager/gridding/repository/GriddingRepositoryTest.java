@@ -53,7 +53,7 @@ class GriddingRepositoryTest {
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
                 "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
-        GriddingResultRecord expected = new GriddingResultRecord("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/", "");
+        GriddingResultRecord expected = new GriddingResultRecord("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
 
         assertEquals(expected, actual);
     }

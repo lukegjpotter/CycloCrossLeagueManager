@@ -1,8 +1,8 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.controller;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service.GriddingService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +21,12 @@ public class GriddingController {
     }
 
     @PostMapping("/gridding")
-    public ResponseEntity<GriddingResultRecord> gridding(@RequestBody GriddingRequestRecord griddingRequestRecord) {
+    public ResponseEntity<?> gridding(@Valid @RequestBody GriddingRequestRecord griddingRequestRecord) {
         logger.info("Gridding called.");
         logger.debug("Grid Signups Called with: {}", griddingRequestRecord);
 
         // ToDo: If Gridding Sheet is not set, create sheet.
         // ToDo: Handle Championship Event.
-        try {
-            GriddingResultRecord griddingResult = griddingService.gridSignups(griddingRequestRecord);
-
-            if (griddingResult.errorMessage().isEmpty())
-                return ResponseEntity.ok(griddingResult);
-
-            return ResponseEntity.badRequest().body(griddingResult);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(new GriddingResultRecord(null, "Error in Gridding"));
-        }
+        return ResponseEntity.ok(griddingService.gridSignups(griddingRequestRecord));
     }
 }

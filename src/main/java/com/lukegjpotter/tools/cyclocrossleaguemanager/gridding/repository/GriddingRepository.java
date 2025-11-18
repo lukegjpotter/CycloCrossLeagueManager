@@ -5,6 +5,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.GriddingRaceT
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class GriddingRepository {
         this.googleSheetsService = googleSheetsService;
     }
 
-    public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) {
+    public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) throws GriddingException {
 
         logger.info("Writing Gridding to Google Sheet.");
 
@@ -45,8 +46,8 @@ public class GriddingRepository {
                     + urlPath[1] + "/"
                     + urlPath[2] + "/"
                     + urlPath[3] + "/";
-        } catch (MalformedURLException e) {
-            return new GriddingResultRecord(griddingGoogleSheet, "Malformed URL Exception: " + e.getMessage());
+        } catch (MalformedURLException malformedURLException) {
+            throw new GriddingException("Error when stripping Gridding Sheet URL Query String.", malformedURLException);
         }
 
         logger.trace("Riders in Gridded Order Size: {}.", ridersInGriddedOrder.size());
@@ -80,11 +81,11 @@ public class GriddingRepository {
                             new ValueRange().setValues(ridersAndClubs));
                 }
             }
-        } catch (IOException e) {
-            return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "IO Exception: " + e.getMessage());
+        } catch (IOException ioException) {
+            throw new GriddingException("IO Exception when writing to Google Sheet.", ioException);
         }
 
         logger.info("Gridding written to Google Sheet.");
-        return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString, "");
+        return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString);
     }
 }

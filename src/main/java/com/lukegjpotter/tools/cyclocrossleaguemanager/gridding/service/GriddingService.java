@@ -2,6 +2,7 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStandingsRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
@@ -32,7 +33,7 @@ public class GriddingService {
         this.youthNationalChampionsRepository = youthNationalChampionsRepository;
     }
 
-    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
+    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) throws GriddingException {
         logger.info("Gridding Sign Ups.");
 
         List<LeagueStandingsRowRecord> leagueStandings;
@@ -42,18 +43,14 @@ public class GriddingService {
         try {
             String signupsBookingReportGoogleSheetsId = new URL(griddingRequestRecord.signups()).getPath().split("/")[3];
             allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId, true);
-        } catch (IOException e) {
-            String errorMessage = "Error when Loading Signups from Booking Report,";
-            logger.error("{} Error: {}", errorMessage, e.getMessage());
-            return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
+        } catch (IOException ioException) {
+            throw new GriddingException("Error when Loading Signups from Booking Report.", ioException);
         }
         // Get the League Standings from the correct Standing Sheet. The sheets are properties in the application.properties.
         try {
             leagueStandings = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(griddingRequestRecord.roundNumber());
-        } catch (IOException e) {
-            String errorMessage = "Error when Loading League Standings.";
-            logger.error("{} Error: {}", errorMessage, e.getMessage());
-            return new GriddingResultRecord(griddingRequestRecord.gridding(), errorMessage + " Error: " + e.getMessage());
+        } catch (IOException ioException) {
+            throw new GriddingException("Error when Loading League Standings.", ioException);
         }
         // Check if there are any Riders with UCI Points in the Sign-Ups, add them to RidersInGriddedOrder.
         // Remove ridersWithUciPoints from ridersSignedUp, so they are not double-counted.

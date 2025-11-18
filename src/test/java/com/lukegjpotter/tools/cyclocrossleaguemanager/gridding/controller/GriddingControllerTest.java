@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.controller;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -16,7 +17,6 @@ import java.io.IOException;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +34,7 @@ class GriddingControllerTest {
 
     // Comment out this Annotation to enable output monitoring. But remember to manually clean out the file.
     @AfterEach
-    void tearDown() {
+    void tearDown() throws GriddingException {
         logger.info("Cleaning up after test.");
         testUtils.wipeGriddingSheet("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
     }
@@ -48,8 +48,7 @@ class GriddingControllerTest {
                 .post("/gridding")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"),
-                        "errorMessage", emptyString());
+                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"));
 
         String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
         String actualRaceGridding = "A-Race Gridding:\n"
@@ -117,8 +116,7 @@ class GriddingControllerTest {
                 .post("/gridding")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"),
-                        "errorMessage", emptyString());
+                .body("gridding", equalTo("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/"));
 
         String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
         String actualRaceGridding = "A-Race Gridding:\n"
@@ -157,5 +155,34 @@ class GriddingControllerTest {
                 """;
 
         assertEquals(expectedRaceGridding, actualRaceGridding);
+    }
+
+    @Test
+    public void griddingExceptions() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(new GriddingRequestRecord("123", "456", 2))
+                .when()
+                .post("/gridding")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .body("title", equalTo("Gridding Error"))
+                .body("detail", equalTo("Error when Loading Signups from Booking Report."))
+                .body("errorCode", equalTo("GRIDDING_ERROR"));
+    }
+
+    @Test
+    public void griddingValidation() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(new GriddingRequestRecord("", "", 0))
+                .when()
+                .post("/gridding")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .body("title", equalTo("Validation Failed"))
+                .body("errors.signups", equalTo("signups must be supplied"))
+                .body("errors.gridding", equalTo("gridding must be supplied"))
+                .body("errors.roundNumber", equalTo("roundNumber must be 1, or greater"));
     }
 }

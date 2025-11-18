@@ -3,6 +3,7 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.common.controller;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.ResultsAndStandingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +19,17 @@ public class ResultsAndStandingsController {
     }
 
     @PostMapping("/updatestandings")
-    public String updateStandings(@RequestBody String raceResultsUrl) {
-        resultsAndStandingsService.performETL(raceResultsUrl);
+    public ResponseEntity<?> updateStandings(@RequestBody String raceResultsUrl) {
+        logger.info("Update Standings called");
+        logger.debug("Standings Update Request called with: {}", raceResultsUrl);
+
+        try {
+            return ResponseEntity.ok(resultsAndStandingsService.performETL(raceResultsUrl));
+        } catch (Exception exception) {
+            logger.error("Error");
+        }
 
         // ToDo: Return Response Code and Status.
-        return "";
+        return ResponseEntity.badRequest().body("\"errorMessage\":\"Error in Gridding\"");
     }
 }
