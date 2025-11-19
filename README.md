@@ -6,8 +6,10 @@ Standings and also Provides Griding based on the Standings.
 ### Deploy Buttons
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/lukegjpotter/CycloCrossLeagueManager)
+[![Run on Google
+Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/lukegjpotter/CycloCrossLeagueManager.git)
 
-Coming soon: GCP Run, AWS, Railways, Heroku
+Coming soon: AWS, Railways, Heroku
 
 ### Detailed explanation
 
