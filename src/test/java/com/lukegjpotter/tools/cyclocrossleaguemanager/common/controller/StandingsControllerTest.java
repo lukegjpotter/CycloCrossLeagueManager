@@ -51,13 +51,13 @@ class StandingsControllerTest {
     public void griddingExceptions() {
         given()
                 .contentType(ContentType.JSON)
-                .body(new UpdateStandingsRequestRecord("https://docs.google.com/spreadsheets/d/1CUxbgIU_gEIu3-ZKV0OD0nNM8TrvFZewf5PbXlf2fsA/", 69))
+                .body(new UpdateStandingsRequestRecord("https://turtle", 1))
                 .when()
                 .post("/updatestandings")
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("title", equalTo("Update Standings Error"))
-                .body("detail", equalTo("Error when updating Standings."))
+                .body("detail", equalTo("Results Google Sheet is not a valid URL."))
                 .body("errorCode", equalTo("UPDATE_STANDINGS_ERROR"));
     }
 
