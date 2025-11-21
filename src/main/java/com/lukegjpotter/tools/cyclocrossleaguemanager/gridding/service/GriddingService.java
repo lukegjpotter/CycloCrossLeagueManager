@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -33,18 +35,28 @@ public class GriddingService {
         this.youthNationalChampionsRepository = youthNationalChampionsRepository;
     }
 
-    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) throws GriddingException {
+    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
         logger.info("Gridding Sign Ups.");
 
         List<LeagueStandingsRowRecord> leagueStandings;
         List<BookingReportRowRecord> allSignups;
 
+        // Ensure that the Gridding Sheet is a valid URL. Fail Fast Principle.
+        try {
+            URL griddingSheetURL = new URI(griddingRequestRecord.gridding()).toURL();
+            griddingSheetURL.openConnection().connect();
+        } catch (URISyntaxException | IOException exception) {
+            throw new GriddingException("Error with Gridding Sheet URL.", exception);
+        }
+
         // Get the Signups from the Booking Report. The Booking Report has to be changed from XLS to an actual Google Sheet.
         try {
-            String signupsBookingReportGoogleSheetsId = new URL(griddingRequestRecord.signups()).getPath().split("/")[3];
+            URL signupsSheetURL = new URI(griddingRequestRecord.signups()).toURL();
+            signupsSheetURL.openConnection().connect();
+            String signupsBookingReportGoogleSheetsId = signupsSheetURL.getPath().split("/")[3];
             allSignups = bookingReportRepository.getDataFromSignUpsGoogleSheet(signupsBookingReportGoogleSheetsId, true);
-        } catch (IOException ioException) {
-            throw new GriddingException("Error when Loading Signups from Booking Report.", ioException);
+        } catch (URISyntaxException | IOException exception) {
+            throw new GriddingException("Error when Loading Signups from Booking Report.", exception);
         }
         // Get the League Standings from the correct Standing Sheet. The sheets are properties in the application.properties.
         try {
