@@ -4,6 +4,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStandingsRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,8 +40,14 @@ public class LeagueStandingsRepository {
 
         logger.info("Loading data from League Standings Google Sheet.");
         // Decide which year's League Standings to use.
-        String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
-                lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
+        String leagueStandingsSpreadSheetId = getLeagueStandingsSpreadSheetId(roundNumber);
+
+        // Ensure that the League Standings actually exists.
+        try {
+            new URI("https://docs.google.com/spreadsheets/d/" + leagueStandingsSpreadSheetId + "/").toURL().openConnection().connect();
+        } catch (URISyntaxException | IOException exception) {
+            throw new GriddingException("Error with League Standings Sheet.", exception);
+        }
 
         // Set the Indices of the important columns.
         List<LeagueStandingsRaceType> leagueStandingsRaceTypes = googleSheetsSchemaService.leagueStandingsSchema();
@@ -83,13 +92,28 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
+    private String getLeagueStandingsSpreadSheetId(int roundNumber) {
+        String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
+                lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
+
+        // If it's the first season of a league the previous season standings may be an empty property. In this case,
+        // there is no need to perform gridding.
+        try {
+            assert (!leagueStandingsSpreadSheetId.isEmpty());
+        } catch (AssertionError assertionError) {
+            throw new GriddingException("League Standing SpreadSheet ID is blank.", assertionError);
+        }
+        return leagueStandingsSpreadSheetId;
+    }
+
     public List<RiderGriddingPositionRecord> findLeaguePositionOfAllUngriddedSignups(
             final List<LeagueStandingsRowRecord> leagueStandings, final List<BookingReportRowRecord> signups, final List<RiderGriddingPositionRecord> alreadyGriddedRidersInOrder) {
 
         logger.info("Finding League Position of all Ungridded Signups.");
 
         List<RiderGriddingPositionRecord> ridersInGriddedOrder = new ArrayList<>();
-        // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the updated grid positions from ridersInGriddedOrder.
+        // LatestGriddingOrder is needed because the Second time of adding a rider in a race category, needs to get the
+        // updated grid positions from ridersInGriddedOrder.
         List<RiderGriddingPositionRecord> latestGriddingOrder = new ArrayList<>(alreadyGriddedRidersInOrder);
 
         /* Iterate through League Standings.
@@ -137,6 +161,7 @@ public class LeagueStandingsRepository {
 
         int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size();
         logger.trace("Gridded riders based solely on League Position includes: {}.", ridersInGriddedOrder.subList(0, maxIndexToSublistForLogMessage));
+
         return ridersInGriddedOrder;
     }
 }
