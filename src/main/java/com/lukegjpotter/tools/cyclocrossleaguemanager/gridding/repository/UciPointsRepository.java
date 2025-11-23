@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,7 @@ public class UciPointsRepository {
     private String uciRankingsYear;
     private final TextUtilsComponent textUtilsComponent;
 
+    @Autowired
     public UciPointsRepository(TextUtilsComponent textUtilsComponent) {
         this.textUtilsComponent = textUtilsComponent;
     }

@@ -7,6 +7,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.model.ResultRowR
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository.ResultsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class StandingsUpdaterService {
     private String currentSeasonLeagueStandingsSpreadSheetId;
     private final ResultsRepository resultsRepository;
 
+    @Autowired
     public StandingsUpdaterService(ResultsRepository resultsRepository) {
         this.resultsRepository = resultsRepository;
     }
@@ -52,9 +54,11 @@ public class StandingsUpdaterService {
             throw new UpdateStandingsException("League Standings Google Sheet is not a valid URL.", exception);
         }
 
+        // Get the Race Results.
         List<ResultRowRecord> resultRows = resultsRepository.getResultRowsFromResultsGoogleSheet(roundResultsGoogleSheetId);
-
+        //
         // ToDo: Write Standings updates to League Standings Google Sheet.
+        // Sort the League Standings Google Sheet.
 
         return new UpdateStandingsResponseRecord(
                 "https://docs.google.com/spreadsheets/d/"

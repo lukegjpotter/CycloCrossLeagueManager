@@ -1,5 +1,6 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import com.opencsv.CSVReader;
@@ -7,6 +8,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileReader;
@@ -18,6 +20,12 @@ import java.util.List;
 public class YouthNationalChampionsRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(YouthNationalChampionsRepository.class);
+    private final TextUtilsComponent textUtilsComponent;
+
+    @Autowired
+    public YouthNationalChampionsRepository(TextUtilsComponent textUtilsComponent) {
+        this.textUtilsComponent = textUtilsComponent;
+    }
 
     public List<RiderGriddingPositionRecord> findYouthNationalChampionsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
@@ -32,7 +40,7 @@ public class YouthNationalChampionsRepository {
                 RiderGriddingPositionRecord youthNationalChampion = new RiderGriddingPositionRecord(
                         lineInArray[0].trim(),
                         1,
-                        lineInArray[1].trim(),
+                        textUtilsComponent.toIrishFormattedNameAndTitleCase(lineInArray[1].trim()),
                         lineInArray[2].trim());
 
                 if (signupsBookingReportList.contains(new BookingReportRowRecord(

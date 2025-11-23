@@ -5,6 +5,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.service.Standing
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ public class StandingsController {
     private static final Logger logger = LoggerFactory.getLogger(StandingsController.class);
     private final StandingsUpdaterService standingsUpdaterService;
 
+    @Autowired
     public StandingsController(StandingsUpdaterService standingsUpdaterService) {
         this.standingsUpdaterService = standingsUpdaterService;
     }

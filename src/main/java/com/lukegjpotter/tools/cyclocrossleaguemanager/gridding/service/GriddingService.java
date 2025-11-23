@@ -9,6 +9,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddi
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class GriddingService {
     private final GriddingRepository griddingRepository;
     private final YouthNationalChampionsRepository youthNationalChampionsRepository;
 
+    @Autowired
     public GriddingService(LeagueStandingsRepository leagueStandingsRepository, UciPointsRepository uciPointsRepository, BookingReportRepository bookingReportRepository, GriddingRepository griddingRepository, YouthNationalChampionsRepository youthNationalChampionsRepository) {
         this.leagueStandingsRepository = leagueStandingsRepository;
         this.uciPointsRepository = uciPointsRepository;

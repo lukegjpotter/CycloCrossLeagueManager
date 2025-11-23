@@ -10,6 +10,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStand
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +32,7 @@ public class LeagueStandingsRepository {
     @Value("${gridding.lastseason.standings}")
     private String lastSeasonLeagueStandingsSpreadSheetId;
 
+    @Autowired
     public LeagueStandingsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;

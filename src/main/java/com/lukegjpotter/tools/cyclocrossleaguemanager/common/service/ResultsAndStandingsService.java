@@ -5,6 +5,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.results.service.ResultsExt
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.service.StandingsUpdaterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class ResultsAndStandingsService {
     private ResultsExtractorService resultsExtractorService;
     private StandingsUpdaterService standingsUpdaterService;
 
+    @Autowired
     public ResultsAndStandingsService(ResultsExtractorService resultsExtractorService, StandingsUpdaterService standingsUpdaterService) {
         this.resultsExtractorService = resultsExtractorService;
         this.standingsUpdaterService = standingsUpdaterService;

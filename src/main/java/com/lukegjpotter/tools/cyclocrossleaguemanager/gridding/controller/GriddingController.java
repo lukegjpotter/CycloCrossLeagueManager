@@ -5,6 +5,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.service.GriddingS
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ public class GriddingController {
     private static final Logger logger = LoggerFactory.getLogger(GriddingController.class);
     private final GriddingService griddingService;
 
+    @Autowired
     public GriddingController(GriddingService griddingService) {
         this.griddingService = griddingService;
     }

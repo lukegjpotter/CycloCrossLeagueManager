@@ -9,6 +9,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.Griddin
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class GriddingRepository {
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final GoogleSheetsService googleSheetsService;
 
+    @Autowired
     public GriddingRepository(GoogleSheetsSchemaService googleSheetsSchemaService, GoogleSheetsService googleSheetsService) {
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.googleSheetsService = googleSheetsService;
