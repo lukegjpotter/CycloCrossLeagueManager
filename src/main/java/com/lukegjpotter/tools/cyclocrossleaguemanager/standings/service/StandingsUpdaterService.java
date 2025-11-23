@@ -44,6 +44,9 @@ public class StandingsUpdaterService {
             throw new UpdateStandingsException("League Standings Google Sheet is not a valid URL.", exception);
         }
 
+        // ToDo: Ensure all names in Results are in Title Case and First Last. Some sources of names are in UpperCase, and are in the format "Surname, Firstname".
+        // ToDo: Write Standings updates to League Standings Google Sheet.
+
         return new UpdateStandingsResponseRecord(
                 "https://docs.google.com/spreadsheets/d/"
                         + currentSeasonLeagueStandingsSpreadSheetId

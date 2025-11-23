@@ -123,9 +123,9 @@ public class LeagueStandingsRepository {
 
             boolean isSignedUpRiderInLeague = false;
             for (BookingReportRowRecord signup : signups) {
-                if (riderInLeagueStandings.raceCategory().equals(signup.raceCategory())
-                        && riderInLeagueStandings.fullName().equals(signup.fullName())
-                        && riderInLeagueStandings.club().equals(signup.clubName())) {
+                if (riderInLeagueStandings.raceCategory().equalsIgnoreCase(signup.raceCategory())
+                        && riderInLeagueStandings.fullName().equalsIgnoreCase(signup.fullName())
+                        && riderInLeagueStandings.club().equalsIgnoreCase(signup.clubName())) {
                     isSignedUpRiderInLeague = true;
                     break;
                 }
@@ -136,8 +136,8 @@ public class LeagueStandingsRepository {
                 boolean isRiderAlreadyGridded = false;
                 for (RiderGriddingPositionRecord griddedRider : latestGriddingOrder) {
                     if (griddedRider.raceCategory().startsWith(riderInLeagueStandings.raceCategory())
-                            && griddedRider.fullName().equals(riderInLeagueStandings.fullName())
-                            && griddedRider.clubName().equals(riderInLeagueStandings.club())) {
+                            && griddedRider.fullName().equalsIgnoreCase(riderInLeagueStandings.fullName())
+                            && griddedRider.clubName().equalsIgnoreCase(riderInLeagueStandings.club())) {
                         isRiderAlreadyGridded = true;
                         break;
                     }

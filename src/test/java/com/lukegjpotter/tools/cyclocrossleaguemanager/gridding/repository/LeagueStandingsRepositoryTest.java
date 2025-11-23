@@ -106,6 +106,23 @@ class LeagueStandingsRepositoryTest {
     }
 
     @Test
+    void findLeaguePositionOfAllUngriddedSignups_upperCaseNames() {
+        List<RiderGriddingPositionRecord> actual = leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(
+                List.of(new LeagueStandingsRowRecord("A-Race", "James JAMESON", "Willow CC", 123),
+                        new LeagueStandingsRowRecord("A-Race", "JOHN Johnson", "Wheel Wheelers", 122)),
+
+                List.of(new BookingReportRowRecord("A-Race", "John Johnson", "Wheel Wheelers"),
+                        new BookingReportRowRecord("A-Race", "James Jameson", "Willow CC")),
+                new ArrayList<>());
+
+        List<RiderGriddingPositionRecord> expected = List.of(
+                new RiderGriddingPositionRecord("A-Race", 1, "James JAMESON", "Willow CC"),
+                new RiderGriddingPositionRecord("A-Race", 2, "JOHN Johnson", "Wheel Wheelers"));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void findLeaguePositionOfAllUngriddedSignups_withRaceCategorySuffixes() {
         List<RiderGriddingPositionRecord> actual = leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(
                 List.of(new LeagueStandingsRowRecord("A-Race", "James Jameson", "Willow CC", 123),
