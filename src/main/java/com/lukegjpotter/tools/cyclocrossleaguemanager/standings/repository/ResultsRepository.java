@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.RaceCategoryNameService;
@@ -24,12 +25,14 @@ public class ResultsRepository {
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final RaceCategoryNameService raceCategoryNameService;
+    private final TextUtilsComponent textUtilsComponent;
 
     @Autowired
-    public ResultsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService) {
+    public ResultsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.raceCategoryNameService = raceCategoryNameService;
+        this.textUtilsComponent = textUtilsComponent;
     }
 
     public List<ResultRowRecord> getResultRowsFromResultsGoogleSheet(String roundResultsGoogleSheetId) {
@@ -82,11 +85,12 @@ public class ResultsRepository {
 
             List<List<Object>> resultRowValues = valueRange.getValues().stream().filter(row -> row.size() >= 4).toList();
             resultRowValues.forEach(values -> {
-                int position = Integer.parseInt(values.get(finalPositionIndex).toString().trim());
-                // ToDo: Ensure all names in Results are in Title Case and First Last. Some sources of names are in UpperCase, and are in the format "Surname, Firstname".
-                String fullName = String.valueOf(values.get(finalFullNameIndex)).trim();
+                int position = Integer.parseInt(values.get(finalPositionIndex).toString().trim().replace(".", ""));
+                String fullName = textUtilsComponent.toIrishFormattedNameAndTitleCase(
+                        String.valueOf(values.get(finalFullNameIndex)).trim());
+
                 String club = String.valueOf(values.get(finalClubIndex)).trim();
-                String ageCategory = String.valueOf(values.get(finalAgeCategoryIndex)).trim();
+                String ageCategory = textUtilsComponent.toTitleCase(String.valueOf(values.get(finalAgeCategoryIndex)).trim());
                 // Gender is not always on every sheet.
                 String gender;
                 try {

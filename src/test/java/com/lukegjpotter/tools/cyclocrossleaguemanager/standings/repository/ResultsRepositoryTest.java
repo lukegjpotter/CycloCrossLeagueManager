@@ -27,12 +27,13 @@ class ResultsRepositoryTest {
 
     @Test
     void getResultRowsFromResultsGoogleSheet() {
-        List<ResultRowRecord> actual = resultsRepository.getResultRowsFromResultsGoogleSheet("1CUxbgIU_gEIu3-ZKV0OD0nNM8TrvFZewf5PbXlf2fsA").subList(0, 4);
+        List<ResultRowRecord> actual = resultsRepository.getResultRowsFromResultsGoogleSheet("1CUxbgIU_gEIu3-ZKV0OD0nNM8TrvFZewf5PbXlf2fsA").subList(0, 5);
         List<ResultRowRecord> expected = List.of(
-                new ResultRowRecord("A-Race", 1, "Conor REGAN", "Kilcullen Cycling Club Murphy Geospacial", "Junior", ""),
-                new ResultRowRecord("A-Race", 2, "Sean LUNDY", "UCD Cycling Club", "Senior", ""),
-                new ResultRowRecord("A-Race", 3, "Kevin KEANE", "St. Tiernan's Cycling Club", "M40", ""),
-                new ResultRowRecord("A-Race", 4, "Sean NOLAN", "Navan Road Club", "Senior", ""));
+                new ResultRowRecord("A-Race", 1, "Conor Regan", "Kilcullen Cycling Club Murphy Geospacial", "Junior", ""),
+                new ResultRowRecord("A-Race", 2, "Sean Lundy", "UCD Cycling Club", "Senior", ""),
+                new ResultRowRecord("A-Race", 3, "Kevin Keane", "St. Tiernan's Cycling Club", "M40", ""),
+                new ResultRowRecord("A-Race", 4, "Sean Nolan", "Navan Road Club", "Senior", ""),
+                new ResultRowRecord("A-Race", 5, "Darragh Mc Carter", "Spellman-Dublin Port", "M40", ""));
 
         assertEquals(expected, actual);
     }

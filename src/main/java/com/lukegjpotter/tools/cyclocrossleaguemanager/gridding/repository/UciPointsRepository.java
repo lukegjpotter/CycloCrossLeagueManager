@@ -1,5 +1,6 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.CycloCross24Record;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
@@ -22,6 +23,11 @@ public class UciPointsRepository {
     private static final Logger logger = LoggerFactory.getLogger(UciPointsRepository.class);
     @Value("${gridding.ucirankingsyear}")
     private String uciRankingsYear;
+    private final TextUtilsComponent textUtilsComponent;
+
+    public UciPointsRepository(TextUtilsComponent textUtilsComponent) {
+        this.textUtilsComponent = textUtilsComponent;
+    }
 
     public List<RiderGriddingPositionRecord> findRidersWithUciPointsWhoAreSignedUp(final List<BookingReportRowRecord> signupsBookingReportList) {
 
@@ -53,11 +59,10 @@ public class UciPointsRepository {
                                                 .getElementsByTag("td");
 
                                         String firstName = riderProfilePageAttributes.get(0).text().trim();
+
                                         // Convert CX24's Surnames to CyclingIreland's Surnames.
-                                        String surname = riderProfilePageAttributes.get(1).text().replace("'", " ").trim();
-                                        if (surname.startsWith("Mc")) {
-                                            surname = "Mc " + surname.substring(2);
-                                        }
+                                        String surname = textUtilsComponent.toIrishFormattedNameAndTitleCase(riderProfilePageAttributes.get(1).text().trim());
+
                                         riderFullName = firstName + " " + surname;
                                     } catch (IOException e) {
                                         logger.error("Error on Rider Profile Page. Error: {}", e.getMessage());
