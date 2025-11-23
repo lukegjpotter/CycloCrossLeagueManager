@@ -23,7 +23,7 @@ public class GriddingController {
     }
 
     @PostMapping("/gridding")
-    public ResponseEntity<?> gridding(@Valid @RequestBody GriddingRequestRecord griddingRequestRecord) {
+    public ResponseEntity<?> gridding(@Valid @RequestBody final GriddingRequestRecord griddingRequestRecord) {
         logger.info("Gridding called.");
         logger.debug("Grid Signups Called with: {}", griddingRequestRecord);
 

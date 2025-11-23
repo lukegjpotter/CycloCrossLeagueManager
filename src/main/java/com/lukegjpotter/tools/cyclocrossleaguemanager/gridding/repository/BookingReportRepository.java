@@ -30,7 +30,7 @@ public class BookingReportRepository {
         this.raceCategoryNameService = raceCategoryNameService;
     }
 
-    public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId, boolean isOutputSorted) throws IOException {
+    public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(final String signUpsGoogleSheetId, final boolean isOutputSorted) throws IOException {
 
         logger.info("Getting Data from Sign Ups Google Sheet.");
         String sheetName = "Report";

@@ -37,7 +37,7 @@ public class GriddingService {
         this.youthNationalChampionsRepository = youthNationalChampionsRepository;
     }
 
-    public GriddingResultRecord gridSignups(GriddingRequestRecord griddingRequestRecord) {
+    public GriddingResultRecord gridSignups(final GriddingRequestRecord griddingRequestRecord) {
         logger.info("Gridding Sign Ups.");
 
         List<LeagueStandingsRowRecord> leagueStandings;

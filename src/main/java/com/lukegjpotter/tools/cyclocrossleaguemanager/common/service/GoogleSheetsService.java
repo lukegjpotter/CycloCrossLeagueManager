@@ -65,7 +65,7 @@ public class GoogleSheetsService {
                 .setValueInputOption("RAW").execute().getUpdatedRange();
     }
 
-    public List<String> getSpreadsheetHeaders(String googleSpreadSheetId, String sheetName) throws IOException {
+    public List<String> getSpreadsheetHeaders(final String googleSpreadSheetId, final String sheetName) throws IOException {
         List<String> headers = new ArrayList<>();
         ValueRange valueRange = readSpreadsheetValuesInRange(googleSpreadSheetId, sheetName + "!A1:1");
         List<List<Object>> spreadsheetHeaders = valueRange.getValues();

@@ -23,7 +23,7 @@ public class StandingsController {
     }
 
     @PostMapping("/updatestandings")
-    public ResponseEntity<?> updateStandings(@Valid @RequestBody UpdateStandingsRequestRecord updateStandingsRequestRecord) {
+    public ResponseEntity<?> updateStandings(@Valid @RequestBody final UpdateStandingsRequestRecord updateStandingsRequestRecord) {
         logger.info("Update Standings called");
         logger.debug("Standings Update Request called with: {}", updateStandingsRequestRecord);
 

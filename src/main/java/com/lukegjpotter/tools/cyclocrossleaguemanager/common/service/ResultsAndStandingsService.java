@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 public class ResultsAndStandingsService {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultsAndStandingsService.class);
-
-    private ResultsExtractorService resultsExtractorService;
-    private StandingsUpdaterService standingsUpdaterService;
+    private final ResultsExtractorService resultsExtractorService;
+    private final StandingsUpdaterService standingsUpdaterService;
 
     @Autowired
     public ResultsAndStandingsService(ResultsExtractorService resultsExtractorService, StandingsUpdaterService standingsUpdaterService) {
@@ -22,7 +21,7 @@ public class ResultsAndStandingsService {
         this.standingsUpdaterService = standingsUpdaterService;
     }
 
-    public String performETL(String raceResultsUrl) {
+    public String performETL(final String raceResultsUrl) {
         // ToDo: Convert to URL
 
         TransformedResults transformedResults = resultsExtractorService.extract(raceResultsUrl);

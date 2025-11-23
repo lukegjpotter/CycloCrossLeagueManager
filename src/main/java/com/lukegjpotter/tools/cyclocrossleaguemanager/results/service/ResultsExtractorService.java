@@ -11,7 +11,7 @@ public class ResultsExtractorService {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultsExtractorService.class);
 
-    public TransformedResults extract(String raceResultsUrl) {
+    public TransformedResults extract(final String raceResultsUrl) {
         // TODO: Start jSoup Extracting RaceResults results webpage.
         Document document = null;
         //document = Jsoup.connect(raceResultsUrl).get();

@@ -38,7 +38,7 @@ public class LeagueStandingsRepository {
         this.googleSheetsSchemaService = googleSheetsSchemaService;
     }
 
-    public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(int roundNumber) throws IOException {
+    public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(final int roundNumber) throws IOException {
 
         logger.info("Loading data from League Standings Google Sheet.");
         // Decide which year's League Standings to use.
@@ -94,7 +94,7 @@ public class LeagueStandingsRepository {
         return leagueStandings;
     }
 
-    private String getLeagueStandingsSpreadSheetId(int roundNumber) {
+    private String getLeagueStandingsSpreadSheetId(final int roundNumber) {
         String leagueStandingsSpreadSheetId = (roundNumber == 1) ?
                 lastSeasonLeagueStandingsSpreadSheetId : currentSeasonLeagueStandingsSpreadSheetId;
 

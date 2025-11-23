@@ -35,7 +35,7 @@ public class ResultsRepository {
         this.textUtilsComponent = textUtilsComponent;
     }
 
-    public List<ResultRowRecord> getResultRowsFromResultsGoogleSheet(String roundResultsGoogleSheetId) {
+    public List<ResultRowRecord> getResultRowsFromResultsGoogleSheet(final String roundResultsGoogleSheetId) {
 
         logger.info("Getting Data from Results Google Sheet.");
         List<ResultRowRecord> resultRows = new ArrayList<>();

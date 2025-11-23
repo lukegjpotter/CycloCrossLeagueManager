@@ -32,7 +32,7 @@ public class GriddingRepository {
         this.googleSheetsService = googleSheetsService;
     }
 
-    public GriddingResultRecord writeGriddingToGoogleSheet(List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) throws GriddingException {
+    public GriddingResultRecord writeGriddingToGoogleSheet(final List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) throws GriddingException {
 
         logger.info("Writing Gridding to Google Sheet.");
 

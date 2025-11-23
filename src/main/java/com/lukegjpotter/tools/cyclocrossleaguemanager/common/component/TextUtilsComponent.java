@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class TextUtilsComponent {
 
-    public String toIrishFormattedNameAndTitleCase(String input) {
+    public String toIrishFormattedNameAndTitleCase(final String input) {
         return toTitleCase(toIrishFormattedName(input));
     }
 
-    public String toTitleCase(String input) {
+    public String toTitleCase(final String input) {
 
         StringBuilder titleCase = new StringBuilder(input.length());
         boolean nextTitleCase = true;
@@ -30,7 +30,7 @@ public class TextUtilsComponent {
         return titleCase.toString();
     }
 
-    public String toIrishFormattedName(String fullName) {
+    public String toIrishFormattedName(final String fullName) {
 
         if (fullName.contains("'")) return fullName.replace("'", " ");
 
