@@ -3,6 +3,8 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.service;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandingsRequestRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandingsResponseRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.exception.UpdateStandingsException;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.model.ResultRowRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository.ResultsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 @Service
 public class StandingsUpdaterService {
@@ -19,6 +22,11 @@ public class StandingsUpdaterService {
     private static final Logger logger = LoggerFactory.getLogger(StandingsUpdaterService.class);
     @Value("${common.currentseason.standings}")
     private String currentSeasonLeagueStandingsSpreadSheetId;
+    private final ResultsRepository resultsRepository;
+
+    public StandingsUpdaterService(ResultsRepository resultsRepository) {
+        this.resultsRepository = resultsRepository;
+    }
 
     public UpdateStandingsResponseRecord updateStandings(final UpdateStandingsRequestRecord updateStandingsRequestRecord) {
 
@@ -44,7 +52,8 @@ public class StandingsUpdaterService {
             throw new UpdateStandingsException("League Standings Google Sheet is not a valid URL.", exception);
         }
 
-        // ToDo: Ensure all names in Results are in Title Case and First Last. Some sources of names are in UpperCase, and are in the format "Surname, Firstname".
+        List<ResultRowRecord> resultRows = resultsRepository.getResultRowsFromResultsGoogleSheet(roundResultsGoogleSheetId);
+
         // ToDo: Write Standings updates to League Standings Google Sheet.
 
         return new UpdateStandingsResponseRecord(

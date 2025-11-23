@@ -18,15 +18,16 @@ import java.util.List;
 @Repository
 public class BookingReportRepository {
 
-    @Autowired
-    private RaceCategoryNameService raceCategoryNameService;
     private static final Logger logger = LoggerFactory.getLogger(BookingReportRepository.class);
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
+    private final RaceCategoryNameService raceCategoryNameService;
 
-    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService) {
+    @Autowired
+    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
+        this.raceCategoryNameService = raceCategoryNameService;
     }
 
     public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(String signUpsGoogleSheetId, boolean isOutputSorted) throws IOException {
@@ -59,6 +60,7 @@ public class BookingReportRepository {
         List<List<Object>> bookingReportValues = valueRange.getValues();
 
         bookingReportValues.forEach(values -> {
+            // FixMe: Surely these all should be subtracting the minIndex, rather than the raceCategoryIndex. It is implied that the raceCategoryIndex is the minimum ones anyway. These subtractions should be happening before this so that the code is more readable.
             String fullName = values.get(firstNameIndex - raceCategoryIndex).toString().trim() + " " + values.get(surnameIndex - raceCategoryIndex).toString().trim();
 
             // Differentiate between Male and Female Underage riders.

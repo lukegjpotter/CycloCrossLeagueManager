@@ -76,4 +76,12 @@ public class RaceCategoryNameService {
     public String under12s() {
         return "Under 12s";
     }
+
+    public String youth() {
+        return "Youth";
+    }
+
+    public String underage() {
+        return "Underage";
+    }
 }

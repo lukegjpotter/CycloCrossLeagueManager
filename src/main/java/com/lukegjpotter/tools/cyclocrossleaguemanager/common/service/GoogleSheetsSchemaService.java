@@ -1,9 +1,6 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.common.service;
 
-import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.BookingReportHeader;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.GriddingRaceType;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsHeader;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +9,17 @@ import java.util.List;
 @Service
 public class GoogleSheetsSchemaService {
 
-    @Autowired
-    private RaceCategoryNameService raceCategoryNameService;
+    private final RaceCategoryNameService raceCategoryNameService;
     private final LeagueStandingsHeader leagueStandingsHeader;
     private final BookingReportHeader bookingreportHeader;
+    private final ResultsSheetHeader resultsSheetHeader;
 
-    public GoogleSheetsSchemaService() {
+    @Autowired
+    public GoogleSheetsSchemaService(RaceCategoryNameService raceCategoryNameService) {
+        this.raceCategoryNameService = raceCategoryNameService;
         leagueStandingsHeader = new LeagueStandingsHeader("Name", "Club", "Total");
         bookingreportHeader = new BookingReportHeader("TicketType", "First Name", "Last Name", "Gender", "CI Club");
+        resultsSheetHeader = new ResultsSheetHeader("Pos.", "Name", "Club", "Category", "Gender");
     }
 
     public List<GriddingRaceType> griddingSchema() {
@@ -54,6 +54,10 @@ public class GoogleSheetsSchemaService {
 
     public BookingReportHeader bookingReportHeaders() {
         return bookingreportHeader;
+    }
+
+    public ResultsSheetHeader resultsSheetHeaders() {
+        return resultsSheetHeader;
     }
 }
 
