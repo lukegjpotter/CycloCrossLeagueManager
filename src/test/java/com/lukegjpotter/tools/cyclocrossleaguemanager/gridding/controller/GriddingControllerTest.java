@@ -161,13 +161,13 @@ class GriddingControllerTest {
     public void griddingExceptions() {
         given()
                 .contentType(ContentType.JSON)
-                .body(new GriddingRequestRecord("123", "456", 2))
+                .body(new GriddingRequestRecord("http://123", "http://456", 2))
                 .when()
                 .post("/gridding")
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("title", equalTo("Gridding Error"))
-                .body("detail", equalTo("Error when Loading Signups from Booking Report."))
+                .body("detail", equalTo("Error with Gridding Sheet URL."))
                 .body("errorCode", equalTo("GRIDDING_ERROR"));
     }
 
