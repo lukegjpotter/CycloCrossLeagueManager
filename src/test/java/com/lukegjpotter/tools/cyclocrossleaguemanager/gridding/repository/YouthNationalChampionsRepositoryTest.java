@@ -20,12 +20,12 @@ class YouthNationalChampionsRepositoryTest {
     @Test
     void findYouthNationalChampionsWhoAreSignedUp_AllAreRacing() {
         List<RiderGriddingPositionRecord> expected = List.of(
-                new RiderGriddingPositionRecord("Under 16s Male", 1, "Caleb McGreevy", "VC Glendale"),
+                new RiderGriddingPositionRecord("Under 16s Male", 1, "Caleb Mc Greevy", "VC Glendale"),
                 new RiderGriddingPositionRecord("Under 14s Male", 1, "James Cunningham", "Team WORC"),
                 new RiderGriddingPositionRecord("Under 16s Female", 1, "Emer Heverin", "All human/VeloRevolution Racing Team"),
                 new RiderGriddingPositionRecord("Under 14s Female", 1, "Ava Baker", "Breffni Wheelers"));
         List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
-                new BookingReportRowRecord("Under 16s Male", "Caleb McGreevy", "VC Glendale"),
+                new BookingReportRowRecord("Under 16s Male", "Caleb Mc Greevy", "VC Glendale"),
                 new BookingReportRowRecord("Under 14s Male", "James Cunningham", "Team WORC"),
                 new BookingReportRowRecord("Under 16s Female", "Emer Heverin", "All human/VeloRevolution Racing Team"),
                 new BookingReportRowRecord("Under 14s Female", "Ava Baker", "Breffni Wheelers")));
@@ -36,11 +36,11 @@ class YouthNationalChampionsRepositoryTest {
     @Test
     void findYouthNationalChampionsWhoAreSignedUp_SomeAreRacing() {
         List<RiderGriddingPositionRecord> expected = List.of(
-                new RiderGriddingPositionRecord("Under 16s Male", 1, "Caleb McGreevy", "VC Glendale"),
+                new RiderGriddingPositionRecord("Under 16s Male", 1, "Caleb Mc Greevy", "VC Glendale"),
                 new RiderGriddingPositionRecord("Under 14s Female", 1, "Ava Baker", "Breffni Wheelers"));
         List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "John McIntosh", "Round Wheelers"),
-                new BookingReportRowRecord("Under 16s Male", "Caleb McGreevy", "VC Glendale"),
+                new BookingReportRowRecord("Under 16s Male", "Caleb Mc Greevy", "VC Glendale"),
                 new BookingReportRowRecord("Under 14s Female", "Ava Baker", "Breffni Wheelers"),
                 new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers")));
 
@@ -51,8 +51,8 @@ class YouthNationalChampionsRepositoryTest {
     void findYouthNationalChampionsWhoAreSignedUp_NoneAreRacing() {
         List<RiderGriddingPositionRecord> expected = new ArrayList<>();
         List<RiderGriddingPositionRecord> actual = youthNationalChampionsRepository.findYouthNationalChampionsWhoAreSignedUp(List.of(
-                new BookingReportRowRecord("A-Race", "John McIntosh", "Round Wheelers"),
-                new BookingReportRowRecord("B-Race", "Turtle McIntosh", "Shell Wheelers")));
+                new BookingReportRowRecord("A-Race", "John Mc Intosh", "Round Wheelers"),
+                new BookingReportRowRecord("B-Race", "Turtle Mc Intosh", "Shell Wheelers")));
 
         assertEquals(expected, actual);
     }
