@@ -38,7 +38,7 @@ public class StandingsUpdaterService {
         try {
             URL url = new URI(updateStandingsRequestRecord.roundResultsUrl()).toURL();
             url.openConnection().connect();
-            roundResultsGoogleSheetId = url.getPath();
+            roundResultsGoogleSheetId = url.getPath().split("/")[3];
             assert (!roundResultsGoogleSheetId.isEmpty());
         } catch (URISyntaxException | IOException | AssertionError exception) {
             throw new UpdateStandingsException("Results Google Sheet is not a valid URL.", exception);

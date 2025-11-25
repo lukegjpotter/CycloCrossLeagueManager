@@ -34,13 +34,27 @@ public class TextUtilsComponent {
 
         if (fullName.contains("'")) return fullName.replace("'", " ");
 
-        String surname = fullName.split(" ", 2)[1];
+        String surname;
+        boolean isSurnameOnly;
+        try {
+            // For full names.
+            surname = fullName.split(" ", 2)[1];
+            isSurnameOnly = false;
+        } catch (ArrayIndexOutOfBoundsException indexOutOfBoundsException) {
+            // When fullName is a surname only.
+            surname = fullName;
+            isSurnameOnly = true;
+        }
+
         if (surname.toLowerCase().startsWith("mc")) {
             surname = "Mc " + surname.substring(2);
         }
         if (surname.toLowerCase().startsWith("mac")) {
             surname = "Mac " + surname.substring(3);
         }
+
+        if (isSurnameOnly)
+            return surname.replace("  ", " ");
 
         return fullName.split(" ", 2)[0]
                 + " "
