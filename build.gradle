@@ -23,7 +23,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.jsoup:jsoup:1.21.2'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0'
     implementation 'com.opencsv:opencsv:5.12.0'
 	// Google Sheets API Dependencies.
     implementation 'com.google.api-client:google-api-client:2.8.1'

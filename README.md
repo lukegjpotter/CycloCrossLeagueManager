@@ -44,7 +44,9 @@ This project uses port 8080 by default, so ensure that it's free when you're try
 To ensure that you have the latest versions of the dependencies, run the following command, and update the versions in
 the `build.gradle` file:
 
-    ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain --no-parallel
+```bash
+./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain --no-parallel
+````
 
 #### Application Properties
 
