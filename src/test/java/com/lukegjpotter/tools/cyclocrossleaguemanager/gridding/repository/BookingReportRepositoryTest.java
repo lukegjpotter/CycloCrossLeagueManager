@@ -43,7 +43,7 @@ class BookingReportRepositoryTest {
                 new BookingReportRowRecord("B-Race", "Johnny Junior", "Celtic Pedalers"),
                 new BookingReportRowRecord("Women", "Wanda Wracer", "Gael Riders"),
                 new BookingReportRowRecord("Women", "Martha Matherson", "Dublin Spinners"),
-                new BookingReportRowRecord("Under 12s Female", "Aoife O'Sullivan", "Claddagh Cyclists"));
+                new BookingReportRowRecord("Under 12s Female", "Aoife O Sullivan", "Claddagh Cyclists"));
 
         assertEquals(expected, actual);
     }
@@ -56,14 +56,14 @@ class BookingReportRepositoryTest {
         List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", false);
 
         List<BookingReportRowRecord> expected = List.of(
-                new BookingReportRowRecord("Women", "Rhiannon Dolan", "TC Racing"),
-                new BookingReportRowRecord("A-Race", "Sean O Leary", "Lucan Cycling Road Club"),
-                new BookingReportRowRecord("B-Race", "Luke Kehoe", "Lucan Cycling Road Club"),
-                new BookingReportRowRecord("A-Race", "Peter Boaden", "Gorey Cycling Club"),
-                new BookingReportRowRecord("A-Race", "William Brown", "Un-Attached"),
-                new BookingReportRowRecord("Under 16s Male", "James Cunningham", "Pinergy Orwell Wheelers"),
-                new BookingReportRowRecord("Under 14s Male", "Jake Govan", "Pinergy Orwell Wheelers"),
-                new BookingReportRowRecord("Under 12s Male", "Nathan Baker", "Breffni Wheelers"));
+                new BookingReportRowRecord("Women", "Sarah Mc Pedaler", "CT Racing"),
+                new BookingReportRowRecord("A-Race", "Sean O Chainring", "West Dublin Racing"),
+                new BookingReportRowRecord("B-Race", "Luke Bottom-Bracket", "West Dublin Racing"),
+                new BookingReportRowRecord("A-Race", "Peter Peterson", "Wicklow Pedalers"),
+                new BookingReportRowRecord("A-Race", "Billy Brown", "Un-Attached"),
+                new BookingReportRowRecord("Under 16s Male", "James Jameson", "South-Dublin Wheelers"),
+                new BookingReportRowRecord("Under 14s Male", "Jake Jakeson", "South-Dublin Wheelers"),
+                new BookingReportRowRecord("Under 12s Male", "Nathan Fillion", "Castle Wheelers"));
 
         assertEquals(expected, actual);
     }

@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.RaceCategoryNameService;
@@ -23,12 +24,14 @@ public class BookingReportRepository {
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final RaceCategoryNameService raceCategoryNameService;
+    private final TextUtilsComponent textUtilsComponent;
 
     @Autowired
-    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService) {
+    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.raceCategoryNameService = raceCategoryNameService;
+        this.textUtilsComponent = textUtilsComponent;
     }
 
     public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(final String signUpsGoogleSheetId, final boolean isOutputSorted) throws IOException {
@@ -68,7 +71,7 @@ public class BookingReportRepository {
 
         bookingReportValues.forEach(values -> {
 
-            String fullName = values.get(finalFirstNameIndex).toString().trim() + " " + values.get(finalSurnameIndex).toString().trim();
+            String fullName = values.get(finalFirstNameIndex).toString().trim() + " " + textUtilsComponent.toIrishFormattedNameAndTitleCase(values.get(finalSurnameIndex).toString().trim());
 
             // Differentiate between Male and Female Underage riders.
             // Tickets could be called "Under 16" or "U16".
