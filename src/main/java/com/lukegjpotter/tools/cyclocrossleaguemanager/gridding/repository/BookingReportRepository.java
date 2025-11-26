@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class BookingReportRepository {
@@ -43,7 +44,7 @@ public class BookingReportRepository {
         int genderIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().gender());
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
 
-        List<Integer> indices = List.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex);
+        List<Integer> indices = Stream.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex).filter(index -> index >= 0).toList();
         int minIndex = indices.stream().min(Integer::compareTo).get();
         int maxIndex = indices.stream().max(Integer::compareTo).get();
 
