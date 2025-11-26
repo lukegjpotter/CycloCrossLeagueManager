@@ -1,24 +1,35 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.component.UciPointsWebsiteScraperComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.GriddingTestMocks;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UciPointsRepositoryTest {
 
     @Autowired
     UciPointsRepository uciPointsRepository;
+    @Autowired
+    private GriddingTestMocks griddingTestMocks;
+
+    @MockitoBean
+    private UciPointsWebsiteScraperComponent uciPointsWebsiteScraperComponent;
 
     @Test
     void findRidersWithUciPointsWhoAreSignedUp_NoneAreSignedUp() {
+        when(uciPointsWebsiteScraperComponent.getIrishRidersWithUciPointsForYear("2025-2026")).thenReturn(griddingTestMocks.getUciPointsFor20252026());
+
         List<RiderGriddingPositionRecord> actual = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "John Johnson", "Trinity Racing"),
                 new BookingReportRowRecord("A-Race", "Kevin Kevinson", "Inspired Cycling"),
@@ -33,6 +44,8 @@ class UciPointsRepositoryTest {
 
     @Test
     void findRidersWithUciPointsWhoAreSignedUp_FiveAreSignedUp() {
+        when(uciPointsWebsiteScraperComponent.getIrishRidersWithUciPointsForYear("2025-2026")).thenReturn(griddingTestMocks.getUciPointsFor20252026());
+
         List<RiderGriddingPositionRecord> actual = uciPointsRepository.findRidersWithUciPointsWhoAreSignedUp(List.of(
                 new BookingReportRowRecord("A-Race", "Dean Harvey", "Trinity Racing"),
                 new BookingReportRowRecord("A-Race", "Travis Harkness", "Inspired Cycling"),

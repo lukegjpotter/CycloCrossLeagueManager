@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.testutils;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderUciPointRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -99,6 +100,40 @@ public class GriddingTestMocks {
                         List.of("Under 14s", "Jake", "Jakeson", "email@email.com", "email@email.com", "Male", "07.01.2008", "17", "", "", "", "", "", "", "", "yes", "no", "no", "", "South-Dublin Wheelers"),
                         List.of("Youth U12 (2014-2015) (non-licence)", "Nathan", "Fillion", "email@email.com", "email@email.com", "Male", "08.01.2008", "17", "", "", "", "", "", "", "", "yes", "no", "yes", "", "Castle Wheelers")
                 )
+        );
+    }
+
+    public List<RiderUciPointRecord> getUciPointsFor20252026() {
+        logger.trace("Getting Mocked Mocked UCI Points 2025-2026 Values.");
+
+        return List.of(
+                new RiderUciPointRecord("ME", "Dean Harvey", 106),
+                new RiderUciPointRecord("ME", "Darnell Moore", 90),
+                new RiderUciPointRecord("ME", "Richard Barry", 52),
+                new RiderUciPointRecord("ME", "Timothy O Regan", 41),
+                new RiderUciPointRecord("ME", "Travis Harkness", 40),
+                new RiderUciPointRecord("ME", "Tadhg Killeen", 30),
+                new RiderUciPointRecord("ME", "Paul O Reilly", 25),
+                new RiderUciPointRecord("ME", "Ronan O Flynn", 24),
+                new RiderUciPointRecord("ME", "David Montgomery", 20),
+                new RiderUciPointRecord("ME", "Graham Boyd", 10),
+                new RiderUciPointRecord("ME", "Michael Collins", 5),
+                new RiderUciPointRecord("MJ", "Fionn Killeen", 7),
+                new RiderUciPointRecord("MJ", "Ryan Daly", 1),
+                new RiderUciPointRecord("WE", "Esther Wong", 218),
+                new RiderUciPointRecord("WE", "Greta Lawless", 85),
+                new RiderUciPointRecord("WE", "Hannah Mc Clorey", 77),
+                new RiderUciPointRecord("WE", "Roisin Lally", 45),
+                new RiderUciPointRecord("WE", "Aoife O Donovan", 40),
+                new RiderUciPointRecord("WE", "Maria Larkin", 40),
+                new RiderUciPointRecord("WE", "Doireann Killeen", 39),
+                new RiderUciPointRecord("WE", "Stephanie Roche", 33),
+                new RiderUciPointRecord("WE", "Eleana Wallace", 31),
+                new RiderUciPointRecord("WE", "Ami Flavin", 30),
+                new RiderUciPointRecord("WE", "Caoimhe May", 18),
+                new RiderUciPointRecord("WE", "Freya Whiteside", 15),
+                new RiderUciPointRecord("WE", "Rachel Newell", 10),
+                new RiderUciPointRecord("WE", "Fiona Lally", 5)
         );
     }
 }
