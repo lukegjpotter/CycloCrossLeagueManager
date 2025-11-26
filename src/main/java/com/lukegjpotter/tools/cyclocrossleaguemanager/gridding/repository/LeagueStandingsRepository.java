@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class LeagueStandingsRepository {
@@ -59,11 +60,19 @@ public class LeagueStandingsRepository {
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().club());
         int totalPointsIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().totalPoints());
 
+        int minIndex = Stream.of(fullNameIndex, clubIndex, totalPointsIndex).min(Integer::compareTo).get();
+        int maxIndex = Stream.of(fullNameIndex, clubIndex, totalPointsIndex).max(Integer::compareTo).get();
+
         // Build the Range
+        // ToDo: Extract this functionality to a Helper Method.
         StringBuilder range = new StringBuilder("!");
         List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                 "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
-        range.append(alphabet.get(fullNameIndex)).append("2:").append(alphabet.get(totalPointsIndex));
+        range.append(alphabet.get(minIndex)).append("2:").append(alphabet.get(maxIndex));
+
+        final int finalFullNameIndex = fullNameIndex - minIndex;
+        final int finalClubIndex = clubIndex - minIndex;
+        final int finalTotalPointsIndex = totalPointsIndex - minIndex;
 
         // Read the sheet
         List<LeagueStandingsRowRecord> leagueStandings = new ArrayList<>();
@@ -80,9 +89,10 @@ public class LeagueStandingsRepository {
             standingsValues.forEach(values -> leagueStandings.add(
                     new LeagueStandingsRowRecord(
                             raceCategory,
-                            String.valueOf(values.get(fullNameIndex - 1)),
-                            String.valueOf(values.get(clubIndex - 1)),
-                            Integer.parseInt(String.valueOf(values.get(totalPointsIndex - 1))))));
+                            String.valueOf(values.get(finalFullNameIndex)),
+                            String.valueOf(values.get(finalClubIndex)),
+                            Integer.parseInt(String.valueOf(values.get(finalTotalPointsIndex)))
+                    )));
         }
 
         // Ensure that the Standings are sorted on Total Points, and not accidentally on the Adjusted Total (Best X of Y).

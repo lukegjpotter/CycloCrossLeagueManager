@@ -133,16 +133,23 @@ public class GriddingTestMocks {
         );
     }
 
-    public List<String> getLeagueStandingsHeaders() {
+    public List<String> getLeagueStandings2024Headers() {
         return List.of("Pos.", "Name", "Club", "Cat", "R1", "R2", "R3", "R4", "Total", "Rd 1 Total", "Rd 2 Total", "Rd 3 Total", "Rd 4 Total");
+    }
+
+    public List<String> getLeagueStandings2023Headers() {
+        return List.of("Pos.", "Name", "Club", "Cat", "R1", "R2", "R3", "R4", "R5", "R6", "Total", "Best 5 of 6", "Rd 1 Total", "Rd 2 Total", "Rd 3 Total", "Rd 4 Total", "Rd 5 Total", "Rd 6 Total");
     }
 
     public ValueRange getLeagueStandings2024() {
         return new ValueRange().setValues(List.of(
-                List.of("", "", ""),
-                List.of("", "", ""),
-                List.of("", "", ""),
-                List.of("", "", "")
+                List.of("Tadhg Killeen", "Kilcullen Cycling Club Murphy Geospacial", "U23", "60", "60", "60", "55", "235")
+        ));
+    }
+
+    public ValueRange getLeagueStandings2023() {
+        return new ValueRange().setValues(List.of(
+                List.of("Javan Nulty", "Un-Attached Leinster", "Senior", "41", "42", "46", "46", "45", "48", "268")
         ));
     }
 }

@@ -1,24 +1,34 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStandingsRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.GriddingTestMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class LeagueStandingsRepositoryTest {
 
     @Autowired
     LeagueStandingsRepository leagueStandingsRepository;
+    @Autowired
+    private GriddingTestMocks griddingTestMocks;
+
+    @MockitoBean
+    private GoogleSheetsService googleSheetsService;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +36,9 @@ class LeagueStandingsRepositoryTest {
 
     @Test
     void loadDataFromLeagueStandingsGoogleSheet_CurrentYear_TopResult() throws IOException {
+        when(googleSheetsService.getSpreadsheetHeaders(anyString(), anyString())).thenReturn(griddingTestMocks.getLeagueStandings2024Headers());
+        when(googleSheetsService.readSpreadsheetValuesInRange(anyString(), anyString())).thenReturn(griddingTestMocks.getLeagueStandings2024());
+
         LeagueStandingsRowRecord actual = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(2).get(0);
         LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Tadhg Killeen", "Kilcullen Cycling Club Murphy Geospacial", 235);
 
@@ -34,6 +47,9 @@ class LeagueStandingsRepositoryTest {
 
     @Test
     void loadDataFromLeagueStandingsGoogleSheet_LastYear_TopTotal_NotAdjustedTotal() throws IOException {
+        when(googleSheetsService.getSpreadsheetHeaders(anyString(), anyString())).thenReturn(griddingTestMocks.getLeagueStandings2023Headers());
+        when(googleSheetsService.readSpreadsheetValuesInRange(anyString(), anyString())).thenReturn(griddingTestMocks.getLeagueStandings2023());
+
         LeagueStandingsRowRecord actual = leagueStandingsRepository.loadDataFromLeagueStandingsGoogleSheet(1).get(0);
         LeagueStandingsRowRecord expected = new LeagueStandingsRowRecord("A-Race", "Javan Nulty", "Un-Attached Leinster", 268);
 
