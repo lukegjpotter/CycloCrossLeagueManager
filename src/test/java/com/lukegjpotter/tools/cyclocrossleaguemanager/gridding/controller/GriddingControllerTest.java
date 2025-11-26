@@ -73,13 +73,14 @@ class GriddingControllerTest {
         String expectedRaceGridding = """
                 A-Race Gridding:
                 Tadhg Killeen, Kilcullen Cycling Club Murphy Geospacial
-                Ronan O'Flynn, Orwell Wheelers Cycling Club
+                Ronan O Flynn, Orwell Wheelers Cycling Club
                 Francis Yates, Un-Attached Leinster
                 John Jordan, Un-Attached Leinster
                 Women's Race Gridding:
                 Esther Wong, Shipden Apex
+                Hannah Mc Clorey, Hess CT
                 Doireann Killeen, Kilcullen Cycling Club Murphy Geospacial
-                Grace O'Rourke, Spellman-Dublin Port
+                Grace O Rourke, Spellman-Dublin Port
                 Deirdre O Toole, VC Beechwood
                 B-Race Gridding:
                 John Slater, Castleknock Cycling Club
@@ -92,14 +93,14 @@ class GriddingControllerTest {
                 Emer Heverin, All human/VeloRevolution Racing Team
                 Katie Turner, Orwell Wheelers Cycling Club
                 U14 Boys Gridding:
-                J-Jay O'Brien, Bohermeen CC
+                J-Jay O Brien, Bohermeen CC
                 Kealan Doherty, Foyle CC
                 U14 Girls Gridding:
-                Ciara O'Connor, Drogheda Wheelers
+                Ciara O Connor, Drogheda Wheelers
                 Laoise Crinion, IMBRC
                 U12 Boys Gridding:
                 Benjamin Cunningham, Orwell Wheelers Cycling Club
-                Logan McAreavey, Bellurgan Wheelers
+                Logan Mc Areavey, Bellurgan Wheelers
                 U12 Girls Gridding:
                 Amelia Finnegan, Square Wheels
                 """;
