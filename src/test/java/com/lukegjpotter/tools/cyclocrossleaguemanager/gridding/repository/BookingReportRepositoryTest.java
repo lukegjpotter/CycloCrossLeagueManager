@@ -32,8 +32,8 @@ class BookingReportRepositoryTest {
 
     @Test
     void getDataFromSignUpsGoogleSheet() throws IOException {
-        when(googleSheetsService.getSpreadsheetHeaders("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", "Report")).thenReturn(griddingTestMocks.getBookingReportHeaders());
-        when(googleSheetsService.readSpreadsheetValuesInRange("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", "Report!F2:AB")).thenReturn(griddingTestMocks.getBookingReport2Values());
+        when(googleSheetsService.getSpreadsheetHeaders("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", "Report")).thenReturn(griddingTestMocks.getBookingReport2024Headers());
+        when(googleSheetsService.readSpreadsheetValuesInRange("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", "Report!F2:AB")).thenReturn(griddingTestMocks.getBookingReport2024Values());
 
         List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1yn-ws9qNVrm0H268gLsN0VRaVN5jSqjuKd2VMPCU_uc", false).subList(0, 6);
 
@@ -50,6 +50,9 @@ class BookingReportRepositoryTest {
 
     @Test
     void getDataFromSignUpsGoogleSheet_VariousTicketTypeSpellings() throws IOException {
+        when(googleSheetsService.getSpreadsheetHeaders("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", "Report")).thenReturn(griddingTestMocks.getBookingReport2025Headers());
+        when(googleSheetsService.readSpreadsheetValuesInRange("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", "Report!H2:AA")).thenReturn(griddingTestMocks.getBookingReport2025Values());
+
         List<BookingReportRowRecord> actual = bookingReportRepository.getDataFromSignUpsGoogleSheet("1GnQEL55ZMzOsxLJZodqGRygDLNpT-Q6NdCGEX1vjP0k", false);
 
         List<BookingReportRowRecord> expected = List.of(

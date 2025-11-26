@@ -108,7 +108,8 @@ public class BookingReportRepository {
 
             String club = "Un-Attached";
             try {
-                club = values.get(finalClubIndex).toString().trim();
+                String valuesClub = values.get(finalClubIndex).toString().trim();
+                if (!valuesClub.isEmpty()) club = valuesClub;
             } catch (IndexOutOfBoundsException ignored) {
             }
 
