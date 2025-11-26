@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
@@ -28,15 +29,17 @@ public class LeagueStandingsRepository {
     private static final Logger logger = LoggerFactory.getLogger(LeagueStandingsRepository.class);
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
+    private final TextUtilsComponent textUtilsComponent;
     @Value("${common.currentseason.standings}")
     private String currentSeasonLeagueStandingsSpreadSheetId;
     @Value("${gridding.lastseason.standings}")
     private String lastSeasonLeagueStandingsSpreadSheetId;
 
     @Autowired
-    public LeagueStandingsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService) {
+    public LeagueStandingsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, TextUtilsComponent textUtilsComponent) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
+        this.textUtilsComponent = textUtilsComponent;
     }
 
     public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(final int roundNumber) throws IOException {
@@ -89,7 +92,7 @@ public class LeagueStandingsRepository {
             standingsValues.forEach(values -> leagueStandings.add(
                     new LeagueStandingsRowRecord(
                             raceCategory,
-                            String.valueOf(values.get(finalFullNameIndex)),
+                            textUtilsComponent.toIrishFormattedNameAndTitleCase(String.valueOf(values.get(finalFullNameIndex))),
                             String.valueOf(values.get(finalClubIndex)),
                             Integer.parseInt(String.valueOf(values.get(finalTotalPointsIndex)))
                     )));
