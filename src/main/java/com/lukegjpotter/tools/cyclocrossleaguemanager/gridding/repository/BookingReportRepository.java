@@ -48,6 +48,12 @@ public class BookingReportRepository {
         int minIndex = indices.stream().min(Integer::compareTo).get();
         int maxIndex = indices.stream().max(Integer::compareTo).get();
 
+        final int finalFirstNameIndex = firstNameIndex - minIndex;
+        final int finalSurnameIndex = surnameIndex - minIndex;
+        final int finalGenderIndex = genderIndex - minIndex;
+        final int finalRaceCategoryIndex = raceCategoryIndex - minIndex;
+        final int finalClubIndex = clubIndex - minIndex;
+
         // Build the Range.
         StringBuilder range = new StringBuilder(sheetName).append("!");
         List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
@@ -61,16 +67,15 @@ public class BookingReportRepository {
         List<List<Object>> bookingReportValues = valueRange.getValues();
 
         bookingReportValues.forEach(values -> {
-            // FixMe: Surely these all should be subtracting the minIndex, rather than the raceCategoryIndex. It is implied that the raceCategoryIndex is the minimum ones anyway. These subtractions should be happening before this so that the code is more readable.
-            String fullName = values.get(firstNameIndex - raceCategoryIndex).toString().trim() + " " + values.get(surnameIndex - raceCategoryIndex).toString().trim();
+
+            String fullName = values.get(finalFirstNameIndex).toString().trim() + " " + values.get(finalSurnameIndex).toString().trim();
 
             // Differentiate between Male and Female Underage riders.
             // Tickets could be called "Under 16" or "U16".
-            String gender = String.valueOf(values.get(genderIndex - raceCategoryIndex)).trim();
+            String gender = String.valueOf(values.get(finalGenderIndex)).trim();
 
             // Remove the "(non licence)" suffix.
-            // Using 0 here, as it's faster than repeatedly calculating raceCategoryIndex - raceCategoryIndex.
-            String ticketType = values.get(0).toString()
+            String ticketType = values.get(finalRaceCategoryIndex).toString()
                     .replace(" (non licence)", "")
                     .replace(" (non-licence)", "")
                     .replace(" (leisure licence)", "")
@@ -103,7 +108,7 @@ public class BookingReportRepository {
 
             String club = "Un-Attached";
             try {
-                club = values.get(clubIndex - raceCategoryIndex).toString().trim();
+                club = values.get(finalClubIndex).toString().trim();
             } catch (IndexOutOfBoundsException ignored) {
             }
 
