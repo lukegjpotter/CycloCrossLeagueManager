@@ -23,14 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class GriddingRepositoryTest {
 
+    private final Logger logger = LoggerFactory.getLogger(GriddingRepositoryTest.class);
     @Autowired
     GriddingRepository griddingRepository;
     @Autowired
     GoogleSheetsService googleSheetsService;
     @Autowired
     TestUtils testUtils;
-
-    private final Logger logger = LoggerFactory.getLogger(GriddingRepositoryTest.class);
 
     @BeforeEach
     void setUp() {
@@ -46,30 +45,36 @@ class GriddingRepositoryTest {
     @Test
     @Order(1)
     void writeGriddingToGoogleSheet_CompareReturns() {
+        String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
+
         GriddingResultRecord actual = griddingRepository.writeGriddingToGoogleSheet(
-                new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
+                new ArrayList<>(List.of(
+                        new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
                         new RiderGriddingPositionRecord("Women", 2, "League Leader", "Club Clubbers"),
                         new RiderGriddingPositionRecord("Women", 1, "UCI Points Holder", "Team Pro"),
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
-        GriddingResultRecord expected = new GriddingResultRecord("https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
+                griddingGoogleSheetId);
+        GriddingResultRecord expected = new GriddingResultRecord("https://docs.google.com/spreadsheets/d/" + griddingGoogleSheetId + "/");
 
         assertEquals(expected, actual);
     }
 
     @Test
     void writeGriddingToGoogleSheet_CompareValues() throws IOException {
+        String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
+
         griddingRepository.writeGriddingToGoogleSheet(
-                new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
+                new ArrayList<>(List.of(
+                        new RiderGriddingPositionRecord("A-Race", 1, "UCI Points Leader", "Team Sponsor"),
                         new RiderGriddingPositionRecord("Women", 2, "League Leader", "Club Clubbers"),
                         new RiderGriddingPositionRecord("Women", 1, "UCI Points Holder", "Team Pro"),
                         new RiderGriddingPositionRecord("A-Race", 3, "High League Place", "Speedy CC"),
                         new RiderGriddingPositionRecord("A-Race", 2, "UCI Points Holder", "National CC"))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
+                griddingGoogleSheetId);
 
-        String actualRaceGridding = testUtils.aRaceGriddingToString("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec")
-                + testUtils.womensRaceGriddingToString("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec");
+        String actualRaceGridding = testUtils.aRaceGriddingToString(griddingGoogleSheetId)
+                + testUtils.womensRaceGriddingToString(griddingGoogleSheetId);
 
         String expectedRaceGridding = """
                 UCI Points Leader, Team Sponsor
@@ -84,6 +89,8 @@ class GriddingRepositoryTest {
 
     @Test
     void writeGriddingToGoogleSheet_ExceedMaxAllowableGridded() throws IOException {
+        String griddingGoogleSheetId = "1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec";
+
         griddingRepository.writeGriddingToGoogleSheet(
                 new ArrayList<>(List.of(
                         new RiderGriddingPositionRecord("Under 16s Male", 1, "LeagueLeader", "Team Sponsor"),
@@ -96,13 +103,13 @@ class GriddingRepositoryTest {
                         new RiderGriddingPositionRecord("Under 16s Male", 8, "Eighth", "National CC"),
                         new RiderGriddingPositionRecord("Under 16s Male", 9, "Ninth No Grid", "Speedy CC"),
                         new RiderGriddingPositionRecord("Under 16s Male", 10, "Tenth No Grid", "National CC"))),
-                "https://docs.google.com/spreadsheets/d/1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec/");
+                griddingGoogleSheetId);
 
         StringBuilder actualRaceGridding = new StringBuilder();
 
         // No need to replace with the TestUtils U16Boys Race Gridding method, as we're checking that the excess of
         // U16s does not overwrite the header for the next section to be gridded.
-        ValueRange actualU16RaceValueRangeResponse = googleSheetsService.readSpreadsheetValuesInRange("1cEckJyAnjl8eUrh_BaT6hvXRzwTzL7OLxl2kpqGmvec", "Gridding!B31:C40");
+        ValueRange actualU16RaceValueRangeResponse = googleSheetsService.readSpreadsheetValuesInRange(griddingGoogleSheetId, "Gridding!B31:C40");
         List<List<Object>> actualU16RaceValues = actualU16RaceValueRangeResponse.getValues();
         for (List<Object> row : actualU16RaceValues) {
             try {

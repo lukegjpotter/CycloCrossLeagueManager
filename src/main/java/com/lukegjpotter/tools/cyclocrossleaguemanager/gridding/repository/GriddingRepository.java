@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -32,25 +30,9 @@ public class GriddingRepository {
         this.googleSheetsService = googleSheetsService;
     }
 
-    public GriddingResultRecord writeGriddingToGoogleSheet(final List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheet) throws GriddingException {
+    public GriddingResultRecord writeGriddingToGoogleSheet(final List<RiderGriddingPositionRecord> ridersInGriddedOrder, final String griddingGoogleSheetId) throws GriddingException {
 
         logger.info("Writing Gridding to Google Sheet.");
-
-        // Convert Gridding Sheet to URL, and extract Sheet ID.
-        String griddingGoogleSheetId, griddingGoogleSheetUrlStringWithoutQueryString;
-        try {
-            URL griddingGoogleSheetURL = new URL(griddingGoogleSheet);
-            griddingGoogleSheetId = griddingGoogleSheetURL.getPath().split("/")[3];
-            // Strip query string from griddingGoogleSheet.
-            String[] urlPath = griddingGoogleSheetURL.getPath().split("/");
-            griddingGoogleSheetUrlStringWithoutQueryString = griddingGoogleSheetURL.getProtocol() + "://"
-                    + griddingGoogleSheetURL.getHost() + "/"
-                    + urlPath[1] + "/"
-                    + urlPath[2] + "/"
-                    + urlPath[3] + "/";
-        } catch (MalformedURLException malformedURLException) {
-            throw new GriddingException("Error when stripping Gridding Sheet URL Query String.", malformedURLException);
-        }
 
         logger.trace("Riders in Gridded Order Size: {}.", ridersInGriddedOrder.size());
         int maxIndexToSublistForLogMessage = (ridersInGriddedOrder.size() >= 5) ? 5 : (ridersInGriddedOrder.isEmpty()) ? 0 : ridersInGriddedOrder.size();
@@ -88,6 +70,6 @@ public class GriddingRepository {
         }
 
         logger.info("Gridding written to Google Sheet.");
-        return new GriddingResultRecord(griddingGoogleSheetUrlStringWithoutQueryString);
+        return new GriddingResultRecord("https://docs.google.com/spreadsheets/d/" + griddingGoogleSheetId + "/");
     }
 }

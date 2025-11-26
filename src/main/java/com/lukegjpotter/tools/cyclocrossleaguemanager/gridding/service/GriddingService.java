@@ -42,11 +42,13 @@ public class GriddingService {
 
         List<LeagueStandingsRowRecord> leagueStandings;
         List<BookingReportRowRecord> allSignups;
+        String griddingGoogleSheetId;
 
         // Ensure that the Gridding Sheet is a valid URL. Fail Fast Principle.
         try {
             URL griddingSheetURL = new URI(griddingRequestRecord.gridding()).toURL();
             griddingSheetURL.openConnection().connect();
+            griddingGoogleSheetId = griddingSheetURL.getPath().split("/")[3];
         } catch (URISyntaxException | IOException exception) {
             throw new GriddingException("Error with Gridding Sheet URL.", exception);
         }
@@ -75,6 +77,6 @@ public class GriddingService {
         ridersInGriddedOrder.addAll(leagueStandingsRepository.findLeaguePositionOfAllUngriddedSignups(
                 leagueStandings, allSignups, ridersInGriddedOrder));
 
-        return griddingRepository.writeGriddingToGoogleSheet(ridersInGriddedOrder, griddingRequestRecord.gridding());
+        return griddingRepository.writeGriddingToGoogleSheet(ridersInGriddedOrder, griddingGoogleSheetId);
     }
 }

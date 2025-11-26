@@ -22,7 +22,8 @@ public class TestUtils {
     public void wipeGriddingSheet(String griddingGoogleSheetId) {
 
         griddingRepository.writeGriddingToGoogleSheet(
-                new ArrayList<>(List.of(new RiderGriddingPositionRecord("A-Race", 1, "", ""),
+                new ArrayList<>(List.of(
+                        new RiderGriddingPositionRecord("A-Race", 1, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 2, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 3, "", ""),
                         new RiderGriddingPositionRecord("A-Race", 4, "", ""),
@@ -71,7 +72,7 @@ public class TestUtils {
                         new RiderGriddingPositionRecord("Under 12s Female", 2, "", ""),
                         new RiderGriddingPositionRecord("Under 12s Female", 3, "", ""),
                         new RiderGriddingPositionRecord("Under 12s Female", 4, "", ""))),
-                "https://docs.google.com/spreadsheets/d/" + griddingGoogleSheetId + "/");
+                griddingGoogleSheetId);
     }
 
     public String aRaceGriddingToString(String griddingGoogleSheetId) throws IOException {
