@@ -3,6 +3,8 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.LeagueStandingsRaceType;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.RangeAndMinimumIndexRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsRangeBuilderService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
@@ -30,16 +32,18 @@ public class LeagueStandingsRepository {
     private final GoogleSheetsService googleSheetsService;
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final TextUtilsComponent textUtilsComponent;
+    private final GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService;
     @Value("${common.currentseason.standings}")
     private String currentSeasonLeagueStandingsSpreadSheetId;
     @Value("${gridding.lastseason.standings}")
     private String lastSeasonLeagueStandingsSpreadSheetId;
 
     @Autowired
-    public LeagueStandingsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, TextUtilsComponent textUtilsComponent) {
+    public LeagueStandingsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, TextUtilsComponent textUtilsComponent, GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.textUtilsComponent = textUtilsComponent;
+        this.googleSheetsRangeBuilderService = googleSheetsRangeBuilderService;
     }
 
     public List<LeagueStandingsRowRecord> loadDataFromLeagueStandingsGoogleSheet(final int roundNumber) throws IOException {
@@ -63,25 +67,19 @@ public class LeagueStandingsRepository {
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().club());
         int totalPointsIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().totalPoints());
 
-        int minIndex = Stream.of(fullNameIndex, clubIndex, totalPointsIndex).min(Integer::compareTo).get();
-        int maxIndex = Stream.of(fullNameIndex, clubIndex, totalPointsIndex).max(Integer::compareTo).get();
-
         // Build the Range
-        // ToDo: Extract this functionality to a Helper Method.
-        StringBuilder range = new StringBuilder("!");
-        List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-                "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
-        range.append(alphabet.get(minIndex)).append("2:").append(alphabet.get(maxIndex));
+        RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange("", Stream.of(fullNameIndex, clubIndex, totalPointsIndex));
 
-        final int finalFullNameIndex = fullNameIndex - minIndex;
-        final int finalClubIndex = clubIndex - minIndex;
-        final int finalTotalPointsIndex = totalPointsIndex - minIndex;
+        // Adjust the Indices to account for the minIndex.
+        final int finalFullNameIndex = fullNameIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalClubIndex = clubIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalTotalPointsIndex = totalPointsIndex - rangeAndMinimumIndexRecord.minimumIndex();
 
-        // Read the sheet
+        // Read the League Standings Sheet.
         List<LeagueStandingsRowRecord> leagueStandings = new ArrayList<>();
         for (LeagueStandingsRaceType leagueStandingsRaceType : leagueStandingsRaceTypes) {
             ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(
-                    leagueStandingsSpreadSheetId, leagueStandingsRaceType.raceType() + range);
+                    leagueStandingsSpreadSheetId, leagueStandingsRaceType.raceType() + rangeAndMinimumIndexRecord.range());
             List<List<Object>> standingsValues = valueRange.getValues();
 
             // Map the league race type to the gridding output race type.

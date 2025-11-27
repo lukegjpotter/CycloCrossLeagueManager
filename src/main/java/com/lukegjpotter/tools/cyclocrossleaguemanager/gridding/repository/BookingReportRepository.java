@@ -2,6 +2,8 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.RangeAndMinimumIndexRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsRangeBuilderService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.RaceCategoryNameService;
@@ -25,13 +27,15 @@ public class BookingReportRepository {
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final RaceCategoryNameService raceCategoryNameService;
     private final TextUtilsComponent textUtilsComponent;
+    private final GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService;
 
     @Autowired
-    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent) {
+    public BookingReportRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent, GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.raceCategoryNameService = raceCategoryNameService;
         this.textUtilsComponent = textUtilsComponent;
+        this.googleSheetsRangeBuilderService = googleSheetsRangeBuilderService;
     }
 
     public List<BookingReportRowRecord> getDataFromSignUpsGoogleSheet(final String signUpsGoogleSheetId, final boolean isOutputSorted) throws IOException {
@@ -47,26 +51,20 @@ public class BookingReportRepository {
         int genderIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().gender());
         int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.bookingReportHeaders().club());
 
-        List<Integer> indices = Stream.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex).filter(index -> index >= 0).toList();
-        int minIndex = indices.stream().min(Integer::compareTo).get();
-        int maxIndex = indices.stream().max(Integer::compareTo).get();
-
-        final int finalFirstNameIndex = firstNameIndex - minIndex;
-        final int finalSurnameIndex = surnameIndex - minIndex;
-        final int finalGenderIndex = genderIndex - minIndex;
-        final int finalRaceCategoryIndex = raceCategoryIndex - minIndex;
-        final int finalClubIndex = clubIndex - minIndex;
-
         // Build the Range.
-        StringBuilder range = new StringBuilder(sheetName).append("!");
-        List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-                "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH");
-        range.append(alphabet.get(minIndex)).append("2:").append(alphabet.get(maxIndex));
+        RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange(sheetName, Stream.of(raceCategoryIndex, firstNameIndex, surnameIndex, genderIndex, clubIndex));
 
-        // Read the Sheet.
+        // Adjust the Indices to account for the minIndex.
+        final int finalFirstNameIndex = firstNameIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalSurnameIndex = surnameIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalGenderIndex = genderIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalRaceCategoryIndex = raceCategoryIndex - rangeAndMinimumIndexRecord.minimumIndex();
+        final int finalClubIndex = clubIndex - rangeAndMinimumIndexRecord.minimumIndex();
+
+        // Read the Booking Report Sheet.
         List<BookingReportRowRecord> signupsFromBookingReport = new ArrayList<>();
 
-        ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(signUpsGoogleSheetId, range.toString());
+        ValueRange valueRange = googleSheetsService.readSpreadsheetValuesInRange(signUpsGoogleSheetId, rangeAndMinimumIndexRecord.range());
         List<List<Object>> bookingReportValues = valueRange.getValues();
 
         bookingReportValues.forEach(values -> {

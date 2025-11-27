@@ -2,6 +2,8 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.RangeAndMinimumIndexRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsRangeBuilderService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsSchemaService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.RaceCategoryNameService;
@@ -26,13 +28,15 @@ public class ResultsRepository {
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final RaceCategoryNameService raceCategoryNameService;
     private final TextUtilsComponent textUtilsComponent;
+    private final GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService;
 
     @Autowired
-    public ResultsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent) {
+    public ResultsRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, RaceCategoryNameService raceCategoryNameService, TextUtilsComponent textUtilsComponent, GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.raceCategoryNameService = raceCategoryNameService;
         this.textUtilsComponent = textUtilsComponent;
+        this.googleSheetsRangeBuilderService = googleSheetsRangeBuilderService;
     }
 
     public List<ResultRowRecord> getResultRowsFromResultsGoogleSheet(final String roundResultsGoogleSheetId) {
@@ -59,26 +63,19 @@ public class ResultsRepository {
             int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.resultsSheetHeaders().club());
             int ageCategoryIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.resultsSheetHeaders().ageCategory());
 
-            // ToDo: Put this into a Helper Method, as it is duplicate code.
             // Build the Range.
-            StringBuilder range = new StringBuilder(sheetNameRaceCategory).append("!");
-            List<String> alphabet = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-                    "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH");
-            List<Integer> indices = Stream.of(positionIndex, fullNameIndex, ageCategoryIndex, clubIndex).filter(index -> index >= 0).toList();
-            int minIndex = indices.stream().min(Integer::compareTo).get();
-            int maxIndex = indices.stream().max(Integer::compareTo).get();
-            range.append(alphabet.get(minIndex)).append("2:").append(alphabet.get(maxIndex));
+            RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange(sheetNameRaceCategory, Stream.of(positionIndex, fullNameIndex, ageCategoryIndex, clubIndex));
 
             // Adjust the Indices to account for the minIndex.
-            final int finalPositionIndex = positionIndex - minIndex;
-            final int finalFullNameIndex = fullNameIndex - minIndex;
-            final int finalClubIndex = clubIndex - minIndex;
-            final int finalAgeCategoryIndex = ageCategoryIndex - minIndex;
+            final int finalPositionIndex = positionIndex - rangeAndMinimumIndexRecord.minimumIndex();
+            final int finalFullNameIndex = fullNameIndex - rangeAndMinimumIndexRecord.minimumIndex();
+            final int finalClubIndex = clubIndex - rangeAndMinimumIndexRecord.minimumIndex();
+            final int finalAgeCategoryIndex = ageCategoryIndex - rangeAndMinimumIndexRecord.minimumIndex();
 
             // Read the Results Sheet.
             ValueRange valueRange = null;
             try {
-                valueRange = googleSheetsService.readSpreadsheetValuesInRange(roundResultsGoogleSheetId, range.toString());
+                valueRange = googleSheetsService.readSpreadsheetValuesInRange(roundResultsGoogleSheetId, rangeAndMinimumIndexRecord.range());
             } catch (IOException ioException) {
                 throw new UpdateStandingsException("Error reading range from Results Sheet", ioException);
             }
