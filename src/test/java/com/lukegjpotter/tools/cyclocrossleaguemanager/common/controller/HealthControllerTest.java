@@ -26,6 +26,6 @@ class HealthControllerTest {
                 .get("/health")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("status", equalTo("up"));
+                .body("status", equalTo("alive"));
     }
 }
