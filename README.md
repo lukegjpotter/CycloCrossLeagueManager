@@ -134,9 +134,14 @@ localhost and Render supplied Environments.
 PostMan
 Collection: [CycloCross League Manager](https://www.postman.com/bold-moon-552911/workspace/cyclocrossleaguemanager/collection/3947605-8ef74542-9ee1-4d3e-b0dc-8e2fa3788ce8?action=share&creator=3947605&active-environment=3947605-0c8caa03-52fc-4d0f-9b75-1de68e9cffab).
 
-### Spring Doc Open API
+### Spring Doc Open API and Swagger
 
-Formerly known as Swagger-UI, you can append the `/swagger-ui/index.html` to your URL.
+Swagger-UI: Append `/swagger-ui/index.html` to your URL.
 
 Links: [localhost](http://localhost:8080/swagger-ui/index.html)
 or [Render coming soon](https://cyclocrossleaguemanager.onrender.com/swagger-ui/index.html).
+
+Open API: Append `/v3/api-docs` to your URL.
+
+Links: [localhost](http://localhost:8080/v3/api-docs)
+or [Render coming soon](https://cyclocrossleaguemanager.onrender.com/v3/api-docs).
