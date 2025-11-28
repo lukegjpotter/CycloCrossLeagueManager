@@ -1,4 +1,4 @@
-package com.lukegjpotter.tools.cyclocrossleaguemanager.common.controller;
+package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.controller;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandingsRequestRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
