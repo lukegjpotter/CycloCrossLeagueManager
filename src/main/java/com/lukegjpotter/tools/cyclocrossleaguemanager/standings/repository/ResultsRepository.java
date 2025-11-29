@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,10 +38,10 @@ public class ResultsRepository {
         this.googleSheetsRangeBuilderService = googleSheetsRangeBuilderService;
     }
 
-    public List<ResultRowRecord> getResultRowsFromResultsGoogleSheet(final String roundResultsGoogleSheetId) {
+    public HashMap<String, ResultRowRecord> getResultRowsFromResultsGoogleSheet(final String roundResultsGoogleSheetId) {
 
         logger.info("Getting Data from Results Google Sheet.");
-        List<ResultRowRecord> resultRows = new ArrayList<>();
+        HashMap<String, ResultRowRecord> resultRows = new HashMap<>();
 
         List.of(raceCategoryNameService.aRace(),
                 raceCategoryNameService.bRace(),
@@ -98,14 +97,14 @@ public class ResultsRepository {
 
                 ResultRowRecord resultRow = new ResultRowRecord(sheetNameRaceCategory, position, fullName, club, ageCategory, gender);
                 logger.trace("Results Sheet Row: {}", resultRow);
-                resultRows.add(resultRow);
+                resultRows.put(resultRow.raceCategory() + resultRow.fullName() + resultRow.club(), resultRow);
             });
         });
 
-        resultRows.sort(Comparator
-                .comparing(ResultRowRecord::raceCategory)
-                .thenComparingInt(ResultRowRecord::position)
-                .thenComparing(ResultRowRecord::ageCategory));
+//        resultRows.sort(Comparator
+//                .comparing(ResultRowRecord::raceCategory)
+//                .thenComparingInt(ResultRowRecord::position)
+//                .thenComparing(ResultRowRecord::ageCategory));
 
         return resultRows;
     }

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +29,13 @@ class ResultsRepositoryTest {
 
     @Test
     void getResultRowsFromResultsGoogleSheet() {
-        List<ResultRowRecord> actual = resultsRepository.getResultRowsFromResultsGoogleSheet("1CUxbgIU_gEIu3-ZKV0OD0nNM8TrvFZewf5PbXlf2fsA").subList(0, 5);
+        List<ResultRowRecord> actual = new ArrayList<>(resultsRepository.getResultRowsFromResultsGoogleSheet("1CUxbgIU_gEIu3-ZKV0OD0nNM8TrvFZewf5PbXlf2fsA").values().stream().toList());
+        actual.sort(Comparator
+                .comparing(ResultRowRecord::raceCategory)
+                .thenComparingInt(ResultRowRecord::position)
+                .thenComparing(ResultRowRecord::ageCategory));
+        actual = actual.subList(0, 5);
+
         List<ResultRowRecord> expected = List.of(
                 new ResultRowRecord("A-Race", 1, "Conor Regan", "Kilcullen Cycling Club Murphy Geospacial", "Junior", ""),
                 new ResultRowRecord("A-Race", 2, "Sean Lundy", "UCD Cycling Club", "Senior", ""),

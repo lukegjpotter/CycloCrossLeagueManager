@@ -4,6 +4,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandi
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandingsResponseRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.exception.UpdateStandingsException;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.model.ResultRowRecord;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository.LeagueStandingsWriteRepository;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository.ResultsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,19 +16,21 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
 
 @Service
 public class StandingsUpdaterService {
 
     private static final Logger logger = LoggerFactory.getLogger(StandingsUpdaterService.class);
+    private final ResultsRepository resultsRepository;
+    private final LeagueStandingsWriteRepository leagueStandingsWriteRepository;
     @Value("${common.currentseason.standings}")
     private String currentSeasonLeagueStandingsSpreadSheetId;
-    private final ResultsRepository resultsRepository;
 
     @Autowired
-    public StandingsUpdaterService(ResultsRepository resultsRepository) {
+    public StandingsUpdaterService(ResultsRepository resultsRepository, LeagueStandingsWriteRepository leagueStandingsWriteRepository) {
         this.resultsRepository = resultsRepository;
+        this.leagueStandingsWriteRepository = leagueStandingsWriteRepository;
     }
 
     public UpdateStandingsResponseRecord updateStandings(final UpdateStandingsRequestRecord updateStandingsRequestRecord) {
@@ -55,10 +58,14 @@ public class StandingsUpdaterService {
         }
 
         // Get the Race Results.
-        List<ResultRowRecord> resultRows = resultsRepository.getResultRowsFromResultsGoogleSheet(roundResultsGoogleSheetId);
-        //
-        // ToDo: Write Standings updates to League Standings Google Sheet.
-        // Sort the League Standings Google Sheet.
+        HashMap<String, ResultRowRecord> resultRows = resultsRepository.getResultRowsFromResultsGoogleSheet(roundResultsGoogleSheetId);
+
+        // Write Standings updates to League Standings Google Sheet.
+        try {
+            leagueStandingsWriteRepository.updateLeagueStandingsGoogleSheetWithRaceResults(currentSeasonLeagueStandingsSpreadSheetId, updateStandingsRequestRecord.roundNumber(), resultRows);
+        } catch (IOException ioException) {
+            throw new UpdateStandingsException("Error Updating the League Standings Sheet.", ioException);
+        }
 
         return new UpdateStandingsResponseRecord(
                 "https://docs.google.com/spreadsheets/d/"
