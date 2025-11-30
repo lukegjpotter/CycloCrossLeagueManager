@@ -2,7 +2,7 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.controller;
 
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingRequestRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.exception.GriddingException;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils.GriddingTestUtils;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GriddingControllerTest {
 
     @Autowired
-    TestUtils testUtils;
+    GriddingTestUtils testUtils;
     private final Logger logger = LoggerFactory.getLogger(GriddingControllerTest.class);
 
     @BeforeAll

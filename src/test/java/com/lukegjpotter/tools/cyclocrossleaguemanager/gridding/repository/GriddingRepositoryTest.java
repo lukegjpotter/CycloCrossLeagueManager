@@ -4,7 +4,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsService;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.dto.GriddingResultRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils.GriddingTestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -29,7 +29,7 @@ class GriddingRepositoryTest {
     @Autowired
     GoogleSheetsService googleSheetsService;
     @Autowired
-    TestUtils testUtils;
+    GriddingTestUtils testUtils;
 
     @BeforeEach
     void setUp() {

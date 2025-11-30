@@ -3,7 +3,7 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.repository;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.component.UciPointsWebsiteScraperComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.GriddingTestMocks;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils.GriddingTestMocks;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,7 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.controller;
 
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils.GriddingTestUtils;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.standings.dto.UpdateStandingsRequestRecord;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.TestUtils;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 class StandingsControllerTest {
 
     @Autowired
-    TestUtils testUtils;
+    GriddingTestUtils testUtils;
     private final Logger logger = LoggerFactory.getLogger(StandingsControllerTest.class);
 
     @BeforeAll

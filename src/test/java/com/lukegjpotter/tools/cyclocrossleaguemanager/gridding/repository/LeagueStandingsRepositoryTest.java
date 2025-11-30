@@ -4,7 +4,7 @@ import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheet
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.BookingReportRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.LeagueStandingsRowRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderGriddingPositionRecord;
-import com.lukegjpotter.tools.cyclocrossleaguemanager.testutils.GriddingTestMocks;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils.GriddingTestMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.lukegjpotter.tools.cyclocrossleaguemanager.testutils;
+package com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.testutils;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.gridding.model.RiderUciPointRecord;
