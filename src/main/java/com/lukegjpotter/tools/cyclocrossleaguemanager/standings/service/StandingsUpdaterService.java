@@ -61,11 +61,7 @@ public class StandingsUpdaterService {
         HashMap<String, ResultRowRecord> resultRows = resultsRepository.getResultRowsFromResultsGoogleSheet(roundResultsGoogleSheetId);
 
         // Write Standings updates to League Standings Google Sheet.
-        try {
-            leagueStandingsWriteRepository.updateLeagueStandingsGoogleSheetWithRaceResults(currentSeasonLeagueStandingsSpreadSheetId, updateStandingsRequestRecord.roundNumber(), resultRows);
-        } catch (IOException ioException) {
-            throw new UpdateStandingsException("Error Updating the League Standings Sheet.", ioException);
-        }
+        leagueStandingsWriteRepository.updateLeagueStandingsGoogleSheetWithRaceResults(currentSeasonLeagueStandingsSpreadSheetId, updateStandingsRequestRecord.roundNumber(), resultRows);
 
         return new UpdateStandingsResponseRecord(
                 "https://docs.google.com/spreadsheets/d/"

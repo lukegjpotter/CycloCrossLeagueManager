@@ -101,11 +101,6 @@ public class ResultsRepository {
             });
         });
 
-//        resultRows.sort(Comparator
-//                .comparing(ResultRowRecord::raceCategory)
-//                .thenComparingInt(ResultRowRecord::position)
-//                .thenComparing(ResultRowRecord::ageCategory));
-
         return resultRows;
     }
 }
