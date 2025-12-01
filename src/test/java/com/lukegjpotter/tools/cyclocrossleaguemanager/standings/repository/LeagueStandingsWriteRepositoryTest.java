@@ -41,7 +41,7 @@ class LeagueStandingsWriteRepositoryTest {
                         "A-RaceTadhg KilleenKilcullen Cycling Club Murphy Geospacial", new ResultRowRecord("A-Race", 1, "Tadhg Killeen", "Kilcullen Cycling Club Murphy Geospacial", "U23", "Male"),
                         "A-RaceConor ReganKilcullen Cycling Club Murphy Geospacial", new ResultRowRecord("A-Race", 2, "Conor Regan", "Kilcullen Cycling Club Murphy Geospacial", "Junior", "Male"),
                         "A-RaceRuairi ByrneUCD Cycling Club", new ResultRowRecord("A-Race", 3, "Ruairi Byrne", "UCD Cycling Club", "U23", "Male"),
-                        // ToDo: Add Test Rider: "A-RaceTest RiderTest Club", new ResultRowRecord("A-Race", 4, "Test Rider", "Test Club", "M50", "Male"),
+                        "A-RaceTest RiderTest Club", new ResultRowRecord("A-Race", 4, "Test Rider", "Test Club", "M50", "Male"),
                         "A-RaceRobin SeymourTeam WORC", new ResultRowRecord("A-Race", 5, "Robin Seymour", "Team WORC", "M50", "Male")
                 )));
 

@@ -122,6 +122,7 @@ public class LeagueStandingsWriteRepository {
 
         List<RiderNamePointsAndCellRecord> riderNamePointsAndCells = new ArrayList<>();
         HashMap<String, RiderNameAndCellRecord> leagueStandingsHashMap = leagueStandingsAndRoundColumn.leagueStandingsHashMap();
+        HashMap<String, Integer> newRidersAddedPerRaceCategoryHashMap = new HashMap<>();
 
         resultRowsHashMap.forEach((key, resultRowRecord) -> {
             if (leagueStandingsHashMap.containsKey(key)) {
@@ -136,7 +137,14 @@ public class LeagueStandingsWriteRepository {
                         false));
             } else {
                 char roundColumnLetter = leagueStandingsAndRoundColumn.roundColumnLetterHashMap().get(resultRowRecord.raceCategory());
-                int newRiderRow = leagueStandingsHashMap.size() + riderNamePointsAndCells.size() + 1;
+                int numNewRidersAdded = newRidersAddedPerRaceCategoryHashMap.getOrDefault(resultRowRecord.raceCategory(), 1);
+                newRidersAddedPerRaceCategoryHashMap.put(resultRowRecord.raceCategory(), numNewRidersAdded + 1);
+                int numRiderInRaceCategory = leagueStandingsHashMap.keySet().stream()
+                        .filter(leagueStandingsKey -> leagueStandingsKey.startsWith(resultRowRecord.raceCategory()))
+                        .toList().size(); // FixMe: Potentially need a -1 here.
+
+                int newRiderRow = numRiderInRaceCategory + numNewRidersAdded;
+
                 riderNamePointsAndCells.add(new RiderNamePointsAndCellRecord(
                         resultRowRecord.fullName(),
                         resultRowRecord.club(),
@@ -211,11 +219,21 @@ public class LeagueStandingsWriteRepository {
         riderNamePointsAndCells.forEach(riderNamePointsAndCell -> {
             try {
                 if (riderNamePointsAndCell.requiresNewRiderEntry()) {
-                    // ToDo: Handle New Rider Entry.
-                    throw new UpdateStandingsException("New Rider Functionality Not Yet Implemented");
-                } else {
-                    googleSheetsService.writeValuesToSpreadsheetFromCell(currentSeasonLeagueStandingsSpreadSheetId, riderNamePointsAndCell.cellToUpdate(), new ValueRange().setValues(List.of(List.of(riderNamePointsAndCell.points()))));
+                    String sheetName = riderNamePointsAndCell.cellToUpdate().split("!")[0];
+
+                    List<String> spreadsheetHeaders = googleSheetsService.getSpreadsheetHeaders(currentSeasonLeagueStandingsSpreadSheetId, sheetName);
+                    int fullNameIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().fullName());
+                    RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange(sheetName, Stream.of(fullNameIndex));
+                    String column = String.valueOf(rangeAndMinimumIndexRecord.range().split("!")[1].charAt(0));
+
+                    int rowNumber = Integer.parseInt(riderNamePointsAndCell.cellToUpdate().replaceAll("\\D+", ""));
+
+                    // Write Name, Club and Age Category to the SheetName!ColumnRowNumber
+                    googleSheetsService.writeValuesToSpreadsheetFromCell(currentSeasonLeagueStandingsSpreadSheetId, sheetName + "!" + column + rowNumber, new ValueRange().setValues(List.of(List.of(riderNamePointsAndCell.riderFullName(), riderNamePointsAndCell.club(), riderNamePointsAndCell.ageCategory()))));
                 }
+                // Write the Points to the Points Column.
+                googleSheetsService.writeValuesToSpreadsheetFromCell(currentSeasonLeagueStandingsSpreadSheetId, riderNamePointsAndCell.cellToUpdate(), new ValueRange().setValues(List.of(List.of(riderNamePointsAndCell.points()))));
+
             } catch (IOException ioException) {
                 throw new UpdateStandingsException("Error when updating standings for: " + riderNamePointsAndCell, ioException);
             }
