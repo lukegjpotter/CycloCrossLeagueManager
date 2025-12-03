@@ -73,8 +73,6 @@ public class StandingsTestUtils {
                 }
             });
         });
-
-        // ToDo: Sort Sheet.
     }
 
     public String aRaceStandingsToString(String standingsSheetId) throws IOException {
@@ -103,5 +101,9 @@ public class StandingsTestUtils {
     public String u16MaleStandingsToString(String standingsSpreadSheetId) throws IOException {
         return standingsSheetAndRangeToString(standingsSpreadSheetId, "U16 Male!A2:K");
 
+    }
+
+    public void sortStandingsSheet(String standingsSpreadSheetId, String sheetName) throws IOException {
+        googleSheetsService.sortSpreadsheetOnColumns(standingsSpreadSheetId, sheetName, List.of("B", "E", "F", "G", "H", "I", "J", "K"));
     }
 }

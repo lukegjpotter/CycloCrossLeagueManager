@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Repository
@@ -58,14 +59,14 @@ public class LeagueStandingsWriteRepository {
         // Write League Standings.
         updateLeagueStandingsToGoogleSheet(currentSeasonLeagueStandingsSpreadSheetId, riderNamePointsAndCells);
 
-        // ToDo: Sort League Standings Sheet.
+        // Sort League Standings Sheet.
+        sortAllLeagueStandingsSheets(currentSeasonLeagueStandingsSpreadSheetId);
 
         logger.info("Finished Updating League Standings.");
     }
 
     private LeagueStandingsAndRoundColumnRecord readLeagueStandingsAndCellsToWriteTo(final String currentSeasonLeagueStandingsSpreadSheetId, final int roundNumber) {
         logger.debug("Reading League Standings, to discover cells to write to.");
-        // ToDo: Read League Standings.
         HashMap<String, RiderNameAndCellRecord> riderNameAndCells = new HashMap<>();
         HashMap<String, Character> roundColumnLetterHashMap = new HashMap<>();
 
@@ -84,6 +85,10 @@ public class LeagueStandingsWriteRepository {
             int clubIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().club());
             int ageCategoryIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().ageCategory());
             int roundIndex = spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().roundPrefix() + roundNumber);
+            // Round Number needs to map to a Column.
+            if (roundIndex == -1)
+                throw new UpdateStandingsException("Round Column does not exist. Looking for column named: R" + roundNumber);
+
             // Build the Range.
             RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange(raceType.raceType(), Stream.of(positionIndex, fullNameIndex, clubIndex, ageCategoryIndex, roundIndex));
             // Adjust the Indices to account for the minIndex.
@@ -144,7 +149,7 @@ public class LeagueStandingsWriteRepository {
                 newRidersAddedPerRaceCategoryHashMap.put(resultRowRecord.raceCategory(), numNewRidersAdded + 1);
                 int numRiderInRaceCategory = leagueStandingsHashMap.keySet().stream()
                         .filter(leagueStandingsKey -> leagueStandingsKey.startsWith(resultRowRecord.raceCategory()))
-                        .toList().size(); // FixMe: Potentially need a -1 here.
+                        .toList().size();
 
                 int newRiderRow = numRiderInRaceCategory + numNewRidersAdded;
                 String cellToUpdate = resultRowRecord.raceCategory() + "!" + roundColumnLetter + newRiderRow;
@@ -240,6 +245,45 @@ public class LeagueStandingsWriteRepository {
 
             } catch (IOException ioException) {
                 throw new UpdateStandingsException("Error when updating standings for: " + riderNamePointsAndCell, ioException);
+            }
+        });
+    }
+
+    private void sortAllLeagueStandingsSheets(String currentSeasonLeagueStandingsSpreadSheetId) {
+        // Iterate through the sheets in the League Standings.
+        googleSheetsSchemaService.leagueStandingsSchema().forEach(raceType -> {
+            // Get the Spreadsheet Headers.
+            List<String> spreadsheetHeaders;
+            try {
+                spreadsheetHeaders = googleSheetsService.getSpreadsheetHeaders(currentSeasonLeagueStandingsSpreadSheetId, raceType.raceType());
+            } catch (IOException ioException) {
+                throw new UpdateStandingsException("Error getting Spreadsheet Headers.", ioException);
+            }
+            // Set the Indices for the Important Columns.
+            List<String> roundColumns = new ArrayList<>();
+            for (int rdNum = 0; rdNum < spreadsheetHeaders.size(); rdNum++) {
+                if (spreadsheetHeaders.contains(googleSheetsSchemaService.leagueStandingsHeaders().roundPrefix() + rdNum)) {
+                    roundColumns.add(googleSheetsSchemaService.leagueStandingsHeaders().roundPrefix() + rdNum);
+                }
+            }
+            List<Integer> roundAndTotalsIndices = new ArrayList<>();
+            roundColumns.forEach(roundColumn -> roundAndTotalsIndices.add(spreadsheetHeaders.indexOf(roundColumn)));
+            roundAndTotalsIndices.add(spreadsheetHeaders.indexOf(googleSheetsSchemaService.leagueStandingsHeaders().totalPoints()));
+            AtomicInteger bestXOfYIndex = new AtomicInteger();
+            spreadsheetHeaders.forEach(spreadsheetHeader -> {
+                if (spreadsheetHeader.startsWith(googleSheetsSchemaService.leagueStandingsHeaders().bestXOfYPrefix()))
+                    bestXOfYIndex.set(spreadsheetHeaders.indexOf(spreadsheetHeader));
+            });
+            roundAndTotalsIndices.add(bestXOfYIndex.intValue());
+
+            // Determine alphabet letters for each of he roundAndTotalsIndices.
+            List<String> columnLetters = new ArrayList<>();
+            roundAndTotalsIndices.forEach(index -> columnLetters.add(alphabetComponent.lettersInAlphabet().get(index)));
+
+            try {
+                googleSheetsService.sortSpreadsheetOnColumns(currentSeasonLeagueStandingsSpreadSheetId, raceType.raceType(), columnLetters);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }

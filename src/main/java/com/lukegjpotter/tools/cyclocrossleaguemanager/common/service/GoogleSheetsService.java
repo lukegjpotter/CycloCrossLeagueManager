@@ -21,6 +21,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class GoogleSheetsService {
@@ -85,36 +86,35 @@ public class GoogleSheetsService {
      * @return
      * @throws IOException
      */
-    public BatchUpdateSpreadsheetResponse sortSpreadsheetOnColumns(final String googleSpreadSheetId, final List<String> columnsToSort) throws IOException {
+    public BatchUpdateSpreadsheetResponse sortSpreadsheetOnColumns(final String googleSpreadSheetId, final String sheetName, final List<String> columnsToSort) throws IOException {
         List<String> columnsToSortDescending = new ArrayList<>(columnsToSort);
 
         Collections.reverse(columnsToSortDescending);
 
-        // Get all the Sheet IDs.
-        List<Integer> sheetIds = new ArrayList<>();
+        // Get the Sheet ID that matches sheetName.
+        AtomicInteger sheetId = new AtomicInteger();
         googleSheets.spreadsheets().get(googleSpreadSheetId).execute().getSheets().forEach(sheet -> {
-            sheetIds.add(sheet.getProperties().getSheetId());
+            if (sheet.getProperties().getTitle().equals(sheetName)) {
+                sheetId.set(sheet.getProperties().getSheetId());
+            }
         });
 
         List<Request> requests = new ArrayList<>();
 
-        sheetIds.forEach(sheetId -> {
-
-            List<SortSpec> sortSpecs = new ArrayList<>();
-            columnsToSortDescending.forEach(columnLetter -> {
-                sortSpecs.add(new SortSpec()
-                        .setDimensionIndex(alphabetComponent.positionInAlphabet(columnLetter))
-                        .setSortOrder("DESCENDING"));
-            });
-
-            SortRangeRequest srr = new SortRangeRequest().setRange(new GridRange()
-                            .setSheetId(sheetId)
-                            .setStartRowIndex(1)
-                            .setStartColumnIndex(1))
-                    .setSortSpecs(sortSpecs);
-
-            requests.add(new Request().setSortRange(srr));
+        List<SortSpec> sortSpecs = new ArrayList<>();
+        columnsToSortDescending.forEach(columnLetter -> {
+            sortSpecs.add(new SortSpec()
+                    .setDimensionIndex(alphabetComponent.positionInAlphabet(columnLetter))
+                    .setSortOrder("DESCENDING"));
         });
+
+        SortRangeRequest srr = new SortRangeRequest().setRange(new GridRange()
+                        .setSheetId(sheetId.get())
+                        .setStartRowIndex(1)
+                        .setStartColumnIndex(1))
+                .setSortSpecs(sortSpecs);
+
+        requests.add(new Request().setSortRange(srr));
 
         return googleSheets.spreadsheets().batchUpdate(
                         googleSpreadSheetId,

@@ -54,27 +54,34 @@ class LeagueStandingsWriteRepositoryTest {
         String[] womenStandings = testUtils.womensRaceStandingsToString(standingsSpreadSheetId).split("\n");
         String[] u16MaleStandings = testUtils.u16MaleStandingsToString(standingsSpreadSheetId).split("\n");
         String actual = "A-Race Standings\n"
-                + aRaceStandings[0]
-                + aRaceStandings[1]
-                + "Women Standings"
-                + womenStandings[0]
-                + "U16 Male Standings"
-                + u16MaleStandings[0];
+                + aRaceStandings[0] + "\n"
+                + aRaceStandings[10] + "\n"
+                + "Women Standings\n"
+                + womenStandings[12] + "\n"
+                + "U16 Male Standings\n"
+                + u16MaleStandings[9];
 
         String expected = """
                 A-Race Standings
                 1, Conor Regan, Kilcullen Cycling Club Murphy Geospacial, Junior, 60, 51, 60, 55, 55, 281, 230
-                2, Brian Melia, Team WORC, M40, 45, 46, 45, 37, 0, 173, 173
+                11, Tadhg Killeen, Kilcullen Cycling Club Murphy Geospacial, U23, 0, 0, 0, 60, 60, 120, 120
                 Women Standings
-                ???
+                13, Test Woman, Test Wheelers, U23, 0, 0, 0, 0, 60, 60, 60
                 U16 Male Standings
-                ???
-                """;
+                10, Test Youth, Test CC, U16, 0, 0, 0, 0, 60, 60, 60""";
 
         assertEquals(expected, actual);
 
         // Clean Up
-        testUtils.wipeStandingsSheetResultsColumnAndNames(standingsSpreadSheetId, "I", List.of(new RiderNameAndCellRecord("A-Race", "Test Rider", "Test Club", "")));
+        testUtils.wipeStandingsSheetResultsColumnAndNames(standingsSpreadSheetId, "I", List.of(
+                new RiderNameAndCellRecord("A-Race", "Test Rider", "Test Club", ""),
+                new RiderNameAndCellRecord("A-Race", "Second Testrider", "Test Club", ""),
+                new RiderNameAndCellRecord("Women", "Test Woman", "Test Wheelers", ""),
+                new RiderNameAndCellRecord("U16 Male", "Test Youth", "Test CC", "")
+        ));
+        testUtils.sortStandingsSheet(standingsSpreadSheetId, "A-Race");
+        testUtils.sortStandingsSheet(standingsSpreadSheetId, "Women");
+        testUtils.sortStandingsSheet(standingsSpreadSheetId, "U16 Male");
     }
 
     @Test

@@ -20,7 +20,7 @@ class GoogleSheetsServiceTest {
 
     @Test
     void sortSpreadsheetOnColumns() throws IOException {
-        googleSheetsService.sortSpreadsheetOnColumns("1az6xrS_QpnK3Wc8lHHVUcqvPvHZYbD243X2H9LpNjkw", List.of("E", "F", "G"));
+        googleSheetsService.sortSpreadsheetOnColumns("1az6xrS_QpnK3Wc8lHHVUcqvPvHZYbD243X2H9LpNjkw", "A-Race", List.of("E", "F", "G"));
 
         String[] aRaceStandings = testUtils.aRaceStandingsToString("1az6xrS_QpnK3Wc8lHHVUcqvPvHZYbD243X2H9LpNjkw").split("\n");
         String actual = aRaceStandings[0] + "\n" + aRaceStandings[1] + "\n" + aRaceStandings[2];
@@ -32,6 +32,6 @@ class GoogleSheetsServiceTest {
         assertEquals(expected, actual);
 
         // Clean Up.
-        googleSheetsService.sortSpreadsheetOnColumns("1az6xrS_QpnK3Wc8lHHVUcqvPvHZYbD243X2H9LpNjkw", List.of("E", "F", "G", "H", "I", "J", "K"));
+        googleSheetsService.sortSpreadsheetOnColumns("1az6xrS_QpnK3Wc8lHHVUcqvPvHZYbD243X2H9LpNjkw", "A-Race", List.of("E", "F", "G", "H", "I", "J", "K"));
     }
 }

@@ -17,7 +17,7 @@ public class GoogleSheetsSchemaService {
     @Autowired
     public GoogleSheetsSchemaService(RaceCategoryNameService raceCategoryNameService) {
         this.raceCategoryNameService = raceCategoryNameService;
-        leagueStandingsHeader = new LeagueStandingsHeader("Pos.", "Name", "Club", "Cat", "R", "Total");
+        leagueStandingsHeader = new LeagueStandingsHeader("Pos.", "Name", "Club", "Cat", "R", "Total", "Best");
         bookingreportHeader = new BookingReportHeader("TicketType", "First Name", "Last Name", "Gender", "CI Club");
         resultsSheetHeader = new ResultsSheetHeader("Pos.", "Name", "Club", "Category", "Gender");
     }

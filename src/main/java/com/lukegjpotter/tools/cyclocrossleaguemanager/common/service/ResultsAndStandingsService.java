@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+// ToDo: Delete Class.
 public class ResultsAndStandingsService {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultsAndStandingsService.class);

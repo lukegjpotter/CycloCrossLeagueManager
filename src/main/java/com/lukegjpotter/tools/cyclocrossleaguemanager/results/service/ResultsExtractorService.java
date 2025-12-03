@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+// ToDo: Delete Class and Package.
 public class ResultsExtractorService {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultsExtractorService.class);
