@@ -39,4 +39,11 @@ class AlphabetComponentTest {
         String actual = alphabetComponent.lettersInAlphabet().get(0);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void lettersInAlphabet_Z25() {
+        String expected = "Z";
+        String actual = alphabetComponent.lettersInAlphabet().get(25);
+        assertEquals(expected, actual);
+    }
 }

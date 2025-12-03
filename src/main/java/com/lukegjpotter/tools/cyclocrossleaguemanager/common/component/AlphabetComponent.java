@@ -2,6 +2,8 @@ package com.lukegjpotter.tools.cyclocrossleaguemanager.common.component;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,6 +74,8 @@ public class AlphabetComponent {
     }
 
     public List<String> lettersInAlphabet() {
-        return alphabetHashMap.keySet().stream().toList();
+        List<String> letters = new ArrayList<>(alphabetHashMap.keySet().stream().toList());
+        letters.sort(Comparator.comparing(String::length));
+        return letters;
     }
 }

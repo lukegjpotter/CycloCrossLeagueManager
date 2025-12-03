@@ -1,6 +1,7 @@
 package com.lukegjpotter.tools.cyclocrossleaguemanager.standings.repository;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.AlphabetComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.component.TextUtilsComponent;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.model.RangeAndMinimumIndexRecord;
 import com.lukegjpotter.tools.cyclocrossleaguemanager.common.service.GoogleSheetsRangeBuilderService;
@@ -30,13 +31,15 @@ public class LeagueStandingsWriteRepository {
     private final GoogleSheetsSchemaService googleSheetsSchemaService;
     private final GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService;
     private final TextUtilsComponent textUtilsComponent;
+    private final AlphabetComponent alphabetComponent;
 
     @Autowired
-    public LeagueStandingsWriteRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService, TextUtilsComponent textUtilsComponent) {
+    public LeagueStandingsWriteRepository(GoogleSheetsService googleSheetsService, GoogleSheetsSchemaService googleSheetsSchemaService, GoogleSheetsRangeBuilderService googleSheetsRangeBuilderService, TextUtilsComponent textUtilsComponent, AlphabetComponent alphabetComponent) {
         this.googleSheetsService = googleSheetsService;
         this.googleSheetsSchemaService = googleSheetsSchemaService;
         this.googleSheetsRangeBuilderService = googleSheetsRangeBuilderService;
         this.textUtilsComponent = textUtilsComponent;
+        this.alphabetComponent = alphabetComponent;
     }
 
     public void updateLeagueStandingsGoogleSheetWithRaceResults(final String currentSeasonLeagueStandingsSpreadSheetId, final int roundNumber, final HashMap<String, ResultRowRecord> resultRows) {
@@ -90,7 +93,7 @@ public class LeagueStandingsWriteRepository {
             // ToDo: Is ageCategory being used in this method? Or is it useful in the returned object?
             final int finalAgeCategoryIndex = ageCategoryIndex - rangeAndMinimumIndexRecord.minimumIndex();
             final int finalRoundIndex = roundIndex - rangeAndMinimumIndexRecord.minimumIndex();
-            final char roundColumnLetter = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R').get(finalRoundIndex);
+            final char roundColumnLetter = alphabetComponent.lettersInAlphabet().get(finalRoundIndex).toCharArray()[0];
             roundColumnLetterHashMap.put(raceType.raceType(), roundColumnLetter);
 
             // Read the League Standings Sheet.
@@ -144,13 +147,14 @@ public class LeagueStandingsWriteRepository {
                         .toList().size(); // FixMe: Potentially need a -1 here.
 
                 int newRiderRow = numRiderInRaceCategory + numNewRidersAdded;
+                String cellToUpdate = resultRowRecord.raceCategory() + "!" + roundColumnLetter + newRiderRow;
 
                 riderNamePointsAndCells.add(new RiderNamePointsAndCellRecord(
                         resultRowRecord.fullName(),
                         resultRowRecord.club(),
                         resultRowRecord.ageCategory(),
                         getPointsForPosition(resultRowRecord.position()),
-                        resultRowRecord.raceCategory() + "!" + roundColumnLetter + newRiderRow,
+                        cellToUpdate,
                         true));
             }
         });
@@ -226,7 +230,7 @@ public class LeagueStandingsWriteRepository {
                     RangeAndMinimumIndexRecord rangeAndMinimumIndexRecord = googleSheetsRangeBuilderService.buildGoogleSheetsRange(sheetName, Stream.of(fullNameIndex));
                     String column = String.valueOf(rangeAndMinimumIndexRecord.range().split("!")[1].charAt(0));
 
-                    int rowNumber = Integer.parseInt(riderNamePointsAndCell.cellToUpdate().replaceAll("\\D+", ""));
+                    int rowNumber = Integer.parseInt(riderNamePointsAndCell.cellToUpdate().split("!")[1].replaceAll("\\D+", ""));
 
                     // Write Name, Club and Age Category to the SheetName!ColumnRowNumber
                     googleSheetsService.writeValuesToSpreadsheetFromCell(currentSeasonLeagueStandingsSpreadSheetId, sheetName + "!" + column + rowNumber, new ValueRange().setValues(List.of(List.of(riderNamePointsAndCell.riderFullName(), riderNamePointsAndCell.club(), riderNamePointsAndCell.ageCategory()))));

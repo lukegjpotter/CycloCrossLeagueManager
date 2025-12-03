@@ -82,7 +82,7 @@ public class StandingsTestUtils {
     }
 
     public String womensRaceStandingsToString(String standingsSheetId) throws IOException {
-        return standingsSheetAndRangeToString(standingsSheetId, "Women!A2:k");
+        return standingsSheetAndRangeToString(standingsSheetId, "Women!A2:K");
     }
 
     private String standingsSheetAndRangeToString(String standingsGoogleSheetId, String range) throws IOException {
@@ -98,5 +98,10 @@ public class StandingsTestUtils {
         }
 
         return standings.toString();
+    }
+
+    public String u16MaleStandingsToString(String standingsSpreadSheetId) throws IOException {
+        return standingsSheetAndRangeToString(standingsSpreadSheetId, "U16 Male!A2:K");
+
     }
 }
